@@ -25,11 +25,14 @@ class EditDeleteCardItem extends StatelessWidget {
             ),
           ),
           itemBuilder: (context) {
-            return List.generate(5, (index) {
-              return PopupMenuItem(
-                child: Text('button no $index'),
-              );
-            });
+            return [
+              PopupMenuItem(
+                child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                child: Text('Delete'),
+              ),
+            ];
           },
         ),
       ],
