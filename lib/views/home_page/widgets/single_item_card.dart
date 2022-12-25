@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/views/widgets/bold_first_word_text.dart';
-import 'package:mood_tracker/views/widgets/edit_delete_card_item.dart';
+
+import 'bold_first_word_text.dart';
+import 'edit_delete_card_item.dart';
 
 /// This card is design to show only one mood
 
