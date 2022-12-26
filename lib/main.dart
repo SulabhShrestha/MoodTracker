@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/views/home_page/home_page.dart';
+
+import 'views/root_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +12,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Mood Tracker',
-      home: const HomePage(),
+      home: RootPage(),
     );
   }
 }

@@ -73,16 +73,14 @@ class AddNewMood extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Photo"),
+                const Text("Photo"),
                 Center(
                   child: TextButton(
                     onPressed: () {},
-                    child: Text("Add a photo"),
                     style: ButtonStyle(
-                      side: MaterialStateProperty.all(
-                        BorderSide(),
-                      ),
+                      side: MaterialStateProperty.all(const BorderSide()),
                     ),
+                    child: const Text("Add a photo"),
                   ),
                 ),
               ],
