@@ -19,7 +19,7 @@ class _RootPageState extends State<RootPage> {
   final _pages = <Widget>[
     const HomePage(),
     const CalendarPage(),
-    SimpleTable(),
+    const StatsPage(),
   ];
 
   int index = 0;
