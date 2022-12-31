@@ -7,7 +7,7 @@ class FeelingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Column(
-        children: [
+        children: const [
           CircleAvatar(),
           Text("60 times"),
           Text("Feeling awesome"),
