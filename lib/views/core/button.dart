@@ -4,10 +4,13 @@ class Button extends StatelessWidget {
   final Widget child;
   final VoidCallback onTap;
 
+  final Color? backgroundColor;
+
   const Button({
     Key? key,
     required this.child,
     required this.onTap,
+    this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -15,6 +18,7 @@ class Button extends StatelessWidget {
     return TextButton(
       onPressed: onTap,
       style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(backgroundColor),
         shape: MaterialStateProperty.all(
           const ContinuousRectangleBorder(
             side: BorderSide(),
