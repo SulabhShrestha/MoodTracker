@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/views/sign_in_page/sign_in.dart';
+import 'package:mood_tracker/views/sign_up_page/sign_up.dart';
+
+/// This widget is used in [SignInPage] and [SignUpPage] only
 
 class Button extends StatelessWidget {
   final Widget child;

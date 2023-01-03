@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/views/core/heading_textfield.dart';
-import 'package:mood_tracker/views/sign_up/sign_up.dart';
 
 import '../core/button.dart';
+import '../core/heading_textfield.dart';
+import '../sign_in_page/sign_in.dart';
 
-class SignInPage extends StatelessWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,22 +28,27 @@ class SignInPage extends StatelessWidget {
                   obscureText: true,
                 ),
 
+                const HeadingTextField(
+                  heading: "Confirm password",
+                  obscureText: true,
+                ),
+
                 Button(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const SignInPage()));
+                  },
                   backgroundColor: Colors.blueGrey,
-                  child: const Text("Sign in"),
+                  child: const Text("Sign Up"),
                 ),
 
                 // Navigating to sign up screen
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account?"),
+                    const Text("Have an account?"),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => const SignUpPage()));
-                      },
+                      onTap: () {},
                       child: const Text(
                         "Sign up",
                         style: TextStyle(decoration: TextDecoration.underline),

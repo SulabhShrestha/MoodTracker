@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/stats/stats_page.dart';
 
-import 'calendar/calendar_page.dart';
+import 'calendar_page/calendar_page.dart';
 import 'home_page/home_page.dart';
 
 /// This page is the main page, that hols [HomePage], [Calendar] and [Stats] pages
