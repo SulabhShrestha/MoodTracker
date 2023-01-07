@@ -1,11 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/views/add_new_mood/widgets/bordered_container.dart';
+import 'package:mood_tracker/view_models/mood_list_view_model.dart';
+
+import 'widgets/bordered_container.dart';
+import 'widgets/emoji_panel.dart';
 
 /// This is responsible for adding new mood to current date
 ///
 
 class AddNewMood extends StatelessWidget {
-  const AddNewMood({Key? key}) : super(key: key);
+  AddNewMood({Key? key}) : super(key: key);
+
+  final _whyController = TextEditingController();
+  final _feedbackController = TextEditingController();
+  int rating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,16 @@ class AddNewMood extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
-            onPressed: () {},
+            onPressed: () {
+              if (rating == 0) {
+                debugPrint("Rating is necessary");
+              } else {
+                MoodListViewModel().addNewMood(
+                    rating: rating,
+                    why: _whyController.text.trim(),
+                    feedback: _feedbackController.text.trim());
+              }
+            },
           ),
         ],
       ),
@@ -31,12 +49,11 @@ class AddNewMood extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text("How was your day?"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    5,
-                    (index) => const CircleAvatar(),
-                  ),
+                EmojiPanel(
+                  onSelected: (index) {
+                    rating = index + 1;
+                    log(rating.toString());
+                  },
                 ),
               ],
             ),
@@ -44,10 +61,11 @@ class AddNewMood extends StatelessWidget {
           BorderedContainer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("Why did you feel this way?"),
+              children: [
+                const Text("Why did you feel this way?"),
                 TextField(
-                  decoration: InputDecoration(
+                  controller: _whyController,
+                  decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(),
                   ),
@@ -58,10 +76,11 @@ class AddNewMood extends StatelessWidget {
           BorderedContainer(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("What could go better?"),
+              children: [
+                const Text("What could go better?"),
                 TextField(
-                  decoration: InputDecoration(
+                  controller: _feedbackController,
+                  decoration: const InputDecoration(
                     enabledBorder: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(),
                   ),
