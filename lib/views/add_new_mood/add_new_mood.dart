@@ -10,7 +10,12 @@ import 'widgets/emoji_panel.dart';
 ///
 
 class AddNewMood extends StatelessWidget {
-  AddNewMood({Key? key}) : super(key: key);
+  final MoodListViewModel moodListViewModel;
+
+  AddNewMood({
+    Key? key,
+    required this.moodListViewModel,
+  }) : super(key: key);
 
   final _whyController = TextEditingController();
   final _feedbackController = TextEditingController();
@@ -23,6 +28,7 @@ class AddNewMood extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
+            moodListViewModel.fetchAllMoods();
             Navigator.pop(context);
           },
         ),

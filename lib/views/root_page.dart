@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/stats/stats_page.dart';
+import 'package:provider/provider.dart';
 
 import 'calendar_page/calendar_page.dart';
 import 'home_page/home_page.dart';
@@ -17,7 +19,9 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   // Storing list of pages
   final _pages = <Widget>[
-    const HomePage(),
+    ChangeNotifierProvider(
+        create: (BuildContext context) => MoodListViewModel(),
+        child: HomePage()),
     const CalendarPage(),
     const StatsPage(),
   ];
