@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/time_stamp.dart';
 import 'bold_first_word_text.dart';
 import 'edit_delete_card_item.dart';
 
 /// This card is design to show more than one mood
 
 class MultiItemCard extends StatelessWidget {
-  const MultiItemCard({Key? key}) : super(key: key);
+  final String date;
+  final List<String?> feedbacks;
+  final List<int> ratings;
+  final List<TimeStamp> timestamps;
+  final List<String?> reasons;
+
+  const MultiItemCard({
+    Key? key,
+    required this.date,
+    required this.feedbacks,
+    required this.ratings,
+    required this.timestamps,
+    required this.reasons,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,89 +41,61 @@ class MultiItemCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 8),
               color: Colors.greenAccent,
-              child: const Text("Today, December 12"),
+              child: Text("Today, $date"),
             ),
 
-            // Item one
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Emoji
-                Image.network(
-                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F17%2Fe8%2Fc1%2F17e8c10cbad011079e3c25b960e9c8a1.png&f=1&nofb=1&ipt=54fb33cf9ac23bcba5da9a777450f84a592ca60dfd4896deab2bd6a85b5f34aa&ipo=images",
-                  height: 60,
-                  width: 60,
-                ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(ratings.length, (index) {
+                return Column(
+                  children: [
+                    // Item one
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Emoji
+                        Image.network(
+                          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F17%2Fe8%2Fc1%2F17e8c10cbad011079e3c25b960e9c8a1.png&f=1&nofb=1&ipt=54fb33cf9ac23bcba5da9a777450f84a592ca60dfd4896deab2bd6a85b5f34aa&ipo=images",
+                          height: 60,
+                          width: 60,
+                        ),
 
-                // Description
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      BoldFirstWordText(
-                        boldWord: "Amazing ",
-                        normalWord: "11:39 PM",
-                      ),
-                      BoldFirstWordText(
-                        boldWord: "Because ",
-                        normalWord: "...",
-                      ),
-                      BoldFirstWordText(
-                        boldWord: "I could have ",
-                        normalWord: "...",
-                      ),
-                    ],
-                  ),
-                ),
+                        // Description
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BoldFirstWordText(
+                                boldWord: "Amazing ",
+                                normalWord: timestamps[index].toHumanFormat,
+                              ),
+                              BoldFirstWordText(
+                                boldWord: "Because ",
+                                normalWord: reasons[index] ?? "",
+                              ),
+                              BoldFirstWordText(
+                                  boldWord: "I could have ",
+                                  normalWord: feedbacks[index] ?? ""),
+                            ],
+                          ),
+                        ),
 
-                // editing and deleting option
-                const Expanded(child: EditDeleteCardItem()),
-              ],
-            ),
+                        // editing and deleting option
+                        const Expanded(child: EditDeleteCardItem()),
+                      ],
+                    ),
 
-            const Divider(
-              color: Colors.green,
-            ),
-
-            // Item two
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Emoji
-                Image.network(
-                  "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F17%2Fe8%2Fc1%2F17e8c10cbad011079e3c25b960e9c8a1.png&f=1&nofb=1&ipt=54fb33cf9ac23bcba5da9a777450f84a592ca60dfd4896deab2bd6a85b5f34aa&ipo=images",
-                  height: 60,
-                  width: 60,
-                ),
-
-                // Description
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      BoldFirstWordText(
-                        boldWord: "Amazing ",
-                        normalWord: "11:39 PM",
+                    if (index + 1 == ratings.length)
+                      const SizedBox()
+                    else
+                      const Divider(
+                        color: Colors.green,
                       ),
-                      BoldFirstWordText(
-                        boldWord: "Because ",
-                        normalWord: "...",
-                      ),
-                      BoldFirstWordText(
-                        boldWord: "I could have ",
-                        normalWord: "...",
-                      ),
-                    ],
-                  ),
-                ),
-
-                // editing and deleting option
-                const Expanded(child: EditDeleteCardItem()),
-              ],
+                  ],
+                );
+              }),
             ),
           ],
         ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/add_new_mood/add_new_mood.dart';
+import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
 import 'package:mood_tracker/views/home_page/widgets/single_item_card.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/time_stamp.dart';
+import '../../view_models/mood_view_model.dart';
 import 'widgets/popup_menu_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,8 +32,9 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                AddNewMood(moodListViewModel: moodListViewModel),
+            builder: (context) => AddNewMood(
+              moodListViewModel: moodListViewModel,
+            ),
           ));
         },
       ),
@@ -49,8 +53,43 @@ class _HomePageState extends State<HomePage> {
           ];
         },
         body: ListView(
-          children: List.generate(moodListViewModel.moods.length,
-              (index) => const SingleItemCard()),
+          children:
+              List.generate(moodListViewModel.moods.entries.length, (index) {
+            List<MoodViewModel> values =
+                moodListViewModel.moods.entries.elementAt(index).value;
+            if (values.length == 1) {
+              return SingleItemCard(
+                date: values.first.date,
+                rating: values.first.rating,
+                timestamp: values.first.timestamp,
+                reason: values.first.reason,
+                feedback: values.first.feedback,
+              );
+            }
+
+            // Means we have more than one mood in a single day
+            else {
+              List<String?> feedbacks = [];
+              List<int> ratings = [];
+              List<TimeStamp> timestamps = [];
+              List<String?> reasons = [];
+
+              for (var element in values) {
+                feedbacks.add(element.feedback);
+                ratings.add(element.rating);
+                timestamps.add(element.timestamp);
+                reasons.add(element.reason);
+              }
+
+              return MultiItemCard(
+                date: values.first.date,
+                feedbacks: feedbacks,
+                ratings: ratings,
+                reasons: reasons,
+                timestamps: timestamps,
+              );
+            }
+          }),
         ),
       ),
     );

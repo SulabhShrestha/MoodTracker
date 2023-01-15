@@ -28,21 +28,31 @@ class AddNewMood extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
-            moodListViewModel.fetchAllMoods();
             Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
-            onPressed: () {
+            onPressed: () async {
               if (rating == 0) {
                 debugPrint("Rating is necessary");
               } else {
-                MoodListViewModel().addNewMood(
+                var timestamp = DateTime.now()
+                    .millisecondsSinceEpoch; // So that it wont be different in addToMoods and in dB
+
+                await moodListViewModel.addNewMoodDB(
                     rating: rating,
+                    timestamp: timestamp,
                     why: _whyController.text.trim(),
                     feedback: _feedbackController.text.trim());
+
+                await moodListViewModel.addNewMoodLocal(
+                  rating: rating,
+                  timestamp: timestamp,
+                  why: _whyController.text.trim(),
+                  feedback: _feedbackController.text.trim(),
+                );
               }
             },
           ),
