@@ -1,5 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
+import '../../view_models/calendar_list_view_model.dart';
+import '../../view_models/mood_view_model.dart';
 import 'widgets/calendar.dart';
 
 /// This page is responsible for showing what happened in a specific month
@@ -9,8 +13,12 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: TableEventsExample(),
-    );
+    return FutureBuilder<LinkedHashMap<DateTime, List<MoodViewModel>>>(
+        future: CalendarListViewModel().populateCalendar(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) return Calendar(moods: snapshot.data!);
+
+          return const CircularProgressIndicator();
+        });
   }
 }

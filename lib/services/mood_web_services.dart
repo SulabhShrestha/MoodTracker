@@ -33,7 +33,8 @@ class MoodWebServices {
         .catchError((error) => log("Failed to add user: $error"));
   }
 
-  Future<Map<String, List<Mood>>> getAllMoods() async {
+  /// returns Map<String, List>
+  Future<Map<String, List<Mood>>> getAllMoodsString() async {
     // Date : List<>
     final Map<String, List<Mood>> groupedData = {};
     String groupedKey;
@@ -55,6 +56,40 @@ class MoodWebServices {
         groupedData[groupedKey]?.add(Mood.fromJSON(json));
       } else {
         groupedData[groupedKey] = [Mood.fromJSON(json)];
+      }
+    }
+
+    return groupedData;
+  }
+
+  /// returns Map<DateTime, List>
+  Future<Map<DateTime, List<Mood>>> getAllMoodsDateTime() async {
+    // Date : List<>
+    final Map<DateTime, List<Mood>> groupedData = {};
+
+    var firebaseData = await FirebaseFirestore.instance
+        .collection('Mood')
+        .orderBy("timestamp", descending: true)
+        .get();
+
+    for (var element in firebaseData.docs) {
+      // First converting to json, and decoding to json
+      // Maybe in the future, db will be placed and instead of Object?, actual JSON be returned
+      final Map<String, dynamic> json = jsonDecode(jsonEncode(element.data()));
+
+      var res = element.get("date").split(" ").first.split("-"); // 1920-12-11
+
+      DateTime dateTimeKey = DateTime.utc(
+        int.parse(res[0]),
+        int.parse(res[1]),
+        int.parse(res[2]),
+      );
+
+      // This means that the current date mood is more than once
+      if (groupedData.containsKey(dateTimeKey)) {
+        groupedData[dateTimeKey]?.add(Mood.fromJSON(json));
+      } else {
+        groupedData[dateTimeKey] = [Mood.fromJSON(json)];
       }
     }
 

@@ -52,13 +52,11 @@ class MoodListViewModel extends ChangeNotifier {
       moods.addAll(dummyMap);
     }
 
-    log("MoodListViewModel: $moods");
-
     notifyListeners();
   }
 
   Future<void> fetchAllMoods() async {
-    Map<String, List<Mood>> res = await _moodWebServices.getAllMoods();
+    Map<String, List<Mood>> res = await _moodWebServices.getAllMoodsString();
 
     for (var element in res.entries) {
       List<MoodViewModel> list = [];
@@ -69,7 +67,6 @@ class MoodListViewModel extends ChangeNotifier {
 
       moods[element.key] = list;
     }
-    log("MOOD: $moods");
     notifyListeners();
   }
 }

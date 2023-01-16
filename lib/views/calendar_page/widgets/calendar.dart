@@ -1,25 +1,44 @@
-import 'dart:developer';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/mood_view_model.dart';
+import 'package:mood_tracker/views/home_page/widgets/single_item_card.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../utils.dart';
 
-class TableEventsExample extends StatefulWidget {
+class Calendar extends StatefulWidget {
+  final LinkedHashMap<DateTime, List<MoodViewModel>> moods;
+
+  const Calendar({super.key, required this.moods});
+
   @override
-  State<TableEventsExample> createState() => _TableEventsExampleState();
+  State<Calendar> createState() => _CalendarState();
 }
 
-class _TableEventsExampleState extends State<TableEventsExample> {
+class _CalendarState extends State<Calendar> {
   // for knowing if the selected days have any event to display
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late final ValueNotifier<List<MoodViewModel>> _selectedEvents;
 
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
+  var kEvents = LinkedHashMap<DateTime, List<MoodViewModel>>(
+    equals: (DateTime? a, DateTime? b) {
+      if (a == null || b == null) {
+        return false;
+      }
+      return a.year == b.year && a.month == b.month && a.day == b.day;
+    },
+    hashCode: (DateTime key) =>
+        key.day * 1000000 + key.month * 10000 + key.year,
+  );
+
   @override
   void initState() {
     super.initState();
+
+    kEvents.addAll(widget.moods);
 
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
@@ -31,9 +50,9 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     super.dispose();
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
+  List<MoodViewModel> _getEventsForDay(DateTime date) {
     // if selected days has no event then return empty
-    return kEvents[day] ?? [];
+    return kEvents[date] ?? [];
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -55,11 +74,25 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       ),
       body: Column(
         children: [
-          TableCalendar<Event>(
+          TableCalendar<MoodViewModel>(
             firstDay: kFirstDay,
             headerStyle: const HeaderStyle(
               formatButtonVisible: false,
               titleCentered: true,
+            ),
+            calendarBuilders: CalendarBuilders(
+              defaultBuilder: (context, date, _) {
+                final isAfterToday = date.isAfter(DateTime.now());
+
+                return Center(
+                  child: Text(
+                    date.day.toString(),
+                    style: TextStyle(
+                      color: isAfterToday ? Colors.grey : Colors.black,
+                    ),
+                  ),
+                );
+              },
             ),
             lastDay: kLastDay,
             focusedDay: _focusedDay,
@@ -70,31 +103,24 @@ class _TableEventsExampleState extends State<TableEventsExample> {
               markerSize: 10,
               markersMaxCount: 24,
               outsideDaysVisible: false,
-              canMarkersOverflow: false,
+              canMarkersOverflow: true,
             ),
             onDaySelected: _onDaySelected,
           ),
           const SizedBox(height: 8.0),
           Expanded(
-            child: ValueListenableBuilder<List<Event>>(
+            child: ValueListenableBuilder<List<MoodViewModel>>(
               valueListenable: _selectedEvents,
-              builder: (context, value, _) {
+              builder: (context, moodViewModels, _) {
                 return ListView.builder(
-                  itemCount: value.length,
+                  itemCount: moodViewModels.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () => log('${value[index]}'),
-                        title: Text('${value[index]}'),
-                      ),
+                    return SingleItemCard(
+                      date: moodViewModels[index].date,
+                      rating: moodViewModels[index].rating,
+                      timestamp: moodViewModels[index].timestamp,
+                      feedback: moodViewModels[index].feedback,
+                      reason: moodViewModels[index].reason,
                     );
                   },
                 );
