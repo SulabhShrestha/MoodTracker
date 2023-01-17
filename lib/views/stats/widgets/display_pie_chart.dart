@@ -1,15 +1,21 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/extension/double_ext.dart';
+
+import '../../../models/mood_stats.dart';
+import 'indicator.dart';
 
 //https://github.com/imaNNeoFighT/fl_chart/blob/master/example/lib/pie_chart/samples/pie_chart_sample2.dart
 class DisplayPieChart extends StatefulWidget {
-  const DisplayPieChart({super.key});
+  final List<MoodStats> moodsStats;
+
+  const DisplayPieChart({super.key, required this.moodsStats});
 
   @override
   State<StatefulWidget> createState() => PieChartState();
 }
 
-class PieChartState extends State {
+class PieChartState extends State<DisplayPieChart> {
   int touchedIndex = -1;
 
   @override
@@ -43,17 +49,60 @@ class PieChartState extends State {
                       },
                     ),
                     borderData: FlBorderData(
-                      show: false,
+                      show: true,
                     ),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
-                    sections: showingSections(),
+                    sections: showingSections(widget.moodsStats),
                   ),
                 ),
               ),
             ),
-            const SizedBox(
-              width: 28,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Indicator(
+                  color: Color(0xff0293ee),
+                  text: '${widget.moodsStats[0].rating}',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xfff8b250),
+                  text: '${widget.moodsStats[1].rating}',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xff845bef),
+                  text: '${widget.moodsStats[2].rating}',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xff13d38e),
+                  text: '${widget.moodsStats[3].rating}',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: Color(0xffd93085),
+                  text: '${widget.moodsStats[4].rating}',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 18,
+                ),
+              ],
             ),
           ],
         ),
@@ -61,8 +110,8 @@ class PieChartState extends State {
     );
   }
 
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+  List<PieChartSectionData> showingSections(List<MoodStats> moodsStats) {
+    return List.generate(moodsStats.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
@@ -70,8 +119,8 @@ class PieChartState extends State {
         case 0:
           return PieChartSectionData(
             color: const Color(0xff0293ee),
-            value: 40,
-            title: '40%',
+            value: moodsStats[i].percentage,
+            title: moodsStats[i].percentage.removeDecimalZeroFormat.toString(),
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -82,8 +131,8 @@ class PieChartState extends State {
         case 1:
           return PieChartSectionData(
             color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
+            value: moodsStats[i].percentage,
+            title: moodsStats[i].percentage.removeDecimalZeroFormat.toString(),
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -94,8 +143,8 @@ class PieChartState extends State {
         case 2:
           return PieChartSectionData(
             color: const Color(0xff845bef),
-            value: 15,
-            title: '15%',
+            value: moodsStats[i].percentage,
+            title: moodsStats[i].percentage.removeDecimalZeroFormat.toString(),
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -106,8 +155,20 @@ class PieChartState extends State {
         case 3:
           return PieChartSectionData(
             color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
+            value: moodsStats[i].percentage,
+            title: moodsStats[i].percentage.removeDecimalZeroFormat.toString(),
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+            ),
+          );
+        case 4:
+          return PieChartSectionData(
+            color: const Color(0xffd93085),
+            value: moodsStats[i].percentage,
+            title: moodsStats[i].percentage.removeDecimalZeroFormat.toString(),
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

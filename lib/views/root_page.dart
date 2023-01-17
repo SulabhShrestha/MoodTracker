@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
+import 'package:mood_tracker/view_models/stats_list_view_model.dart';
 import 'package:mood_tracker/views/stats/stats_page.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +22,12 @@ class _RootPageState extends State<RootPage> {
   final _pages = <Widget>[
     ChangeNotifierProvider(
         create: (BuildContext context) => MoodListViewModel(),
-        child: HomePage()),
+        child: const HomePage()),
     const CalendarPage(),
-    const StatsPage(),
+    ChangeNotifierProvider(
+      create: (_) => StatsListViewModel(),
+      child: const StatsPage(),
+    ),
   ];
 
   int index = 0;
