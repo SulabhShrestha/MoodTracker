@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 class FeelingCard extends StatelessWidget {
   final int totalOccurrence;
-  final int rating;
+  final String feeling;
+  final Color? color;
   const FeelingCard(
-      {Key? key, required this.rating, required this.totalOccurrence})
+      {Key? key,
+      required this.feeling,
+      required this.totalOccurrence,
+      this.color})
       : super(key: key);
 
   @override
@@ -12,9 +16,9 @@ class FeelingCard extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          const CircleAvatar(),
+          CircleAvatar(backgroundColor: color),
           Text("$totalOccurrence times"),
-          Text("Feeling $rating"),
+          Text("Feeling $feeling"),
         ],
       ),
     );

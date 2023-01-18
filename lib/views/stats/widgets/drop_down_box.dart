@@ -2,31 +2,23 @@ import 'package:flutter/material.dart';
 
 /// Responsible for displaying dropdownbox
 ///
-class DropDownButton extends StatefulWidget {
-  const DropDownButton({Key? key}) : super(key: key);
-
-  @override
-  State<DropDownButton> createState() => _DropDownButtonState();
-}
-
-class _DropDownButtonState extends State<DropDownButton> {
-  String textToDisplay = "All time";
+class DropDownButton extends StatelessWidget {
+  final ValueChanged<String> onChanged;
+  final String text;
+  const DropDownButton({Key? key, required this.onChanged, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: PopupMenuButton<String>(
-        onSelected: (value) {
-          setState(() {
-            textToDisplay = value;
-          });
-        },
+        onSelected: onChanged,
         itemBuilder: (context) {
           return [
-            const PopupMenuItem(child: Text("All time"), value: "All time"),
-            const PopupMenuItem(child: Text("Last week"), value: "Last week"),
-            const PopupMenuItem(child: Text("Last month"), value: "Last month"),
-            const PopupMenuItem(child: Text("Set date"), value: "Set date"),
+            const PopupMenuItem(value: "All time", child: Text("All time")),
+            const PopupMenuItem(value: "This month", child: Text("This month")),
+            const PopupMenuItem(value: "This week", child: Text("This week")),
+            const PopupMenuItem(value: "Set date", child: Text("Set date")),
           ];
         },
         child: Padding(
@@ -36,7 +28,7 @@ class _DropDownButtonState extends State<DropDownButton> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(textToDisplay),
+                Text(text),
                 const Icon(Icons.arrow_drop_down),
               ],
             ),

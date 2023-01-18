@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/stats/widgets/feeling_card.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +18,15 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage> {
-  Filters filters = Filters.allTime;
+  Filters filter = Filters.allTime;
+  bool showLoading = false; // when filtering takes place
+
+  String dropDownButtonText = "All time";
 
   @override
   void initState() {
-    Provider.of<StatsListViewModel>(context, listen: false).fetchAllTime();
+    Provider.of<StatsListViewModel>(context, listen: false)
+        .fetch(filter: filter);
     super.initState();
   }
 
@@ -31,20 +37,39 @@ class _StatsPageState extends State<StatsPage> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<List<MoodStats>>(
-          future: statsListViewModel.fetchAllTime(),
+          future: statsListViewModel.fetch(filter: filter),
           builder: (_, snapshot) {
-            if (snapshot.hasData) {
+            log("Stats page building");
+            if (snapshot.hasData &&
+                snapshot.connectionState == ConnectionState.done) {
               return Column(
                 children: <Widget>[
-                  const DropDownButton(),
+                  DropDownButton(
+                    text: dropDownButtonText,
+                    onChanged: (value) {
+                      setState(() {
+                        dropDownButtonText = value;
+                        if (value == "All time") {
+                          filter = Filters.allTime;
+                        } else if (value == "This week") {
+                          filter = Filters.thisWeek;
+                        } else if (value == "This month") {
+                          filter = Filters.thisMonth;
+                        } else {
+                          filter = Filters.rangeDate;
+                        }
+                      });
+                    },
+                  ),
                   DisplayPieChart(moodsStats: snapshot.data!),
                   Wrap(
                     alignment: WrapAlignment.center,
                     children: List.generate(
                         snapshot.data!.length,
                         (index) => FeelingCard(
-                              rating: snapshot.data![index].rating,
+                              feeling: snapshot.data![index].feeling,
                               totalOccurrence: snapshot.data![index].occurrence,
+                              color: colors[index],
                             )),
                   ),
                 ],
