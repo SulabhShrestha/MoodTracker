@@ -105,4 +105,34 @@ class StatsWebServices {
     }
     return moodsStats;
   }
+
+  Future<List<MoodStats>> fetchRange(
+      {required var startTimestamp, required var endTimestamp}) async {
+    // Contains all rating moods stats
+    // if rating = 1, it's index position is rating-1
+    List<MoodStats> moodsStats = List.generate(5,
+        (index) => MoodStats(occurrence: 0, rating: index + 1, percentage: 0));
+
+    var firebaseData = await FirebaseFirestore.instance
+        .collection('Mood')
+        .where("timestamp", isGreaterThanOrEqualTo: startTimestamp)
+        .where("timestamp", isLessThanOrEqualTo: endTimestamp)
+        .get();
+
+    int totalOccurrence = 0;
+
+    for (var element in firebaseData.docs) {
+      var rating = element.get("rating");
+      totalOccurrence++;
+
+      moodsStats[rating - 1]
+          .occurrence++; // Increasing occurrence by one on each loop
+    }
+
+    // for adding percentage
+    for (var elem in moodsStats) {
+      elem.percentage = (elem.occurrence / totalOccurrence) * 100;
+    }
+    return moodsStats;
+  }
 }

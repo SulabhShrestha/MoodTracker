@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/stats/widgets/feeling_card.dart';
+import 'package:mood_tracker/views/stats/widgets/start_end_date_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/mood_stats.dart';
@@ -23,6 +24,10 @@ class _StatsPageState extends State<StatsPage> {
 
   String dropDownButtonText = "All time";
 
+  int? startTimestamp, endTimestamp;
+
+  bool rebuildWidget = false;
+
   @override
   void initState() {
     Provider.of<StatsListViewModel>(context, listen: false)
@@ -37,7 +42,11 @@ class _StatsPageState extends State<StatsPage> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<List<MoodStats>>(
-          future: statsListViewModel.fetch(filter: filter),
+          future: statsListViewModel.fetch(
+            filter: filter,
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp,
+          ),
           builder: (_, snapshot) {
             log("Stats page building");
             if (snapshot.hasData &&
@@ -46,19 +55,41 @@ class _StatsPageState extends State<StatsPage> {
                 children: <Widget>[
                   DropDownButton(
                     text: dropDownButtonText,
-                    onChanged: (value) {
-                      setState(() {
+                    onChanged: (value) async {
+                      if (value == "All time") {
+                        filter = Filters.allTime;
                         dropDownButtonText = value;
-                        if (value == "All time") {
-                          filter = Filters.allTime;
-                        } else if (value == "This week") {
-                          filter = Filters.thisWeek;
-                        } else if (value == "This month") {
-                          filter = Filters.thisMonth;
-                        } else {
+                        rebuildWidget = true;
+                      } else if (value == "This week") {
+                        filter = Filters.thisWeek;
+                        dropDownButtonText = value;
+                        rebuildWidget = true;
+                      } else if (value == "This month") {
+                        filter = Filters.thisMonth;
+                        dropDownButtonText = value;
+                        rebuildWidget = true;
+                      } else {
+                        var res = await showDialog<dynamic>(
+                            context: context,
+                            builder: (_) {
+                              return const StartEndDatePicker();
+                            });
+
+                        if (res != null) {
+                          rebuildWidget = true;
+                          dropDownButtonText = value;
                           filter = Filters.rangeDate;
+                          log("StartDate: ${res["startDate"]}, EndDate: ${res["endDate"]}");
+                          startTimestamp =
+                              res["startDate"].millisecondsSinceEpoch;
+                          endTimestamp = res["endDate"].millisecondsSinceEpoch;
                         }
-                      });
+                        log("Stats page: ${res.toString()}");
+                      }
+                      if (rebuildWidget) {
+                        rebuildWidget = false;
+                        setState(() {});
+                      }
                     },
                   ),
                   DisplayPieChart(moodsStats: snapshot.data!),
