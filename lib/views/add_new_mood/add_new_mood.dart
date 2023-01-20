@@ -21,6 +21,26 @@ class AddNewMood extends StatelessWidget {
   final _feedbackController = TextEditingController();
   int rating = 0;
 
+  Future<void> addStuffs({required VoidCallback onComplete}) async {
+    var timestamp = DateTime.now()
+        .millisecondsSinceEpoch; // So that it wont be different in addToMoods and in dB
+
+    await moodListViewModel.addNewMoodDB(
+        rating: rating,
+        timestamp: timestamp,
+        why: _whyController.text.trim(),
+        feedback: _feedbackController.text.trim());
+
+    await moodListViewModel.addNewMoodLocal(
+      rating: rating,
+      timestamp: timestamp,
+      why: _whyController.text.trim(),
+      feedback: _feedbackController.text.trim(),
+    );
+
+    onComplete.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,21 +58,9 @@ class AddNewMood extends StatelessWidget {
               if (rating == 0) {
                 debugPrint("Rating is necessary");
               } else {
-                var timestamp = DateTime.now()
-                    .millisecondsSinceEpoch; // So that it wont be different in addToMoods and in dB
-
-                await moodListViewModel.addNewMoodDB(
-                    rating: rating,
-                    timestamp: timestamp,
-                    why: _whyController.text.trim(),
-                    feedback: _feedbackController.text.trim());
-
-                await moodListViewModel.addNewMoodLocal(
-                  rating: rating,
-                  timestamp: timestamp,
-                  why: _whyController.text.trim(),
-                  feedback: _feedbackController.text.trim(),
-                );
+                await addStuffs(onComplete: () {
+                  Navigator.pop(context);
+                });
               }
             },
           ),

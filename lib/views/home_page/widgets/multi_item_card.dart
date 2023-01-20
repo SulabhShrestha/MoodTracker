@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../models/time_stamp.dart';
+import '../../core/edit_delete_card_item.dart';
 import 'bold_first_word_text.dart';
-import 'edit_delete_card_item.dart';
 
 /// This card is design to show more than one mood
 
@@ -10,7 +10,7 @@ class MultiItemCard extends StatelessWidget {
   final String date;
   final List<String?> feedbacks;
   final List<int> ratings;
-  final List<TimeStamp> timestamps;
+  final List<TimeStamp> timeStamps;
   final List<String?> reasons;
 
   const MultiItemCard({
@@ -18,7 +18,7 @@ class MultiItemCard extends StatelessWidget {
     required this.date,
     required this.feedbacks,
     required this.ratings,
-    required this.timestamps,
+    required this.timeStamps,
     required this.reasons,
   }) : super(key: key);
 
@@ -69,7 +69,7 @@ class MultiItemCard extends StatelessWidget {
                             children: [
                               BoldFirstWordText(
                                 boldWord: "Amazing ",
-                                normalWord: timestamps[index].toHumanFormat,
+                                normalWord: timeStamps[index].toHumanFormat,
                               ),
                               BoldFirstWordText(
                                 boldWord: "Because ",
@@ -83,7 +83,11 @@ class MultiItemCard extends StatelessWidget {
                         ),
 
                         // editing and deleting option
-                        const Expanded(child: EditDeleteCardItem()),
+                        Expanded(
+                            child: EditDeleteCardItem(
+                          timestamp: timeStamps[index].timestamp,
+                          date: date,
+                        )),
                       ],
                     ),
 

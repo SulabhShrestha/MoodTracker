@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/add_new_mood/add_new_mood.dart';
+import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
-import 'package:mood_tracker/views/home_page/widgets/single_item_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/time_stamp.dart';
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
               return SingleItemCard(
                 date: values.first.date,
                 rating: values.first.rating,
-                timestamp: values.first.timestamp,
+                timeStamp: values.first.timestamp,
                 reason: values.first.reason,
                 feedback: values.first.feedback,
               );
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                 feedbacks: feedbacks,
                 ratings: ratings,
                 reasons: reasons,
-                timestamps: timestamps,
+                timeStamps: timestamps,
               );
             }
           }),

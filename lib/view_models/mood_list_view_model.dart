@@ -69,4 +69,22 @@ class MoodListViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> deleteMood(
+      {required int timestamp, required String date}) async {
+    //TODO: It's not working
+    moods[date]?.removeWhere((element) {
+      log("Timestamp: ${element.timestamp.timestamp}");
+      return element.timestamp.timestamp == timestamp;
+    });
+
+    // removing entries if it had no value
+    if (moods[date]!.isEmpty) {
+      moods.remove(date);
+    }
+
+    _moodWebServices.deleteMood(timestamp: timestamp);
+
+    notifyListeners();
+  }
 }

@@ -18,10 +18,11 @@ class Mood {
 
   factory Mood.fromJSON(Map<String, dynamic> json) {
     return Mood(
-        rating: json["rating"],
-        date: json["date"],
-        why: json["why"],
-        feedback: json["feedback"],
-        timestamp: TimeStamp(json["timestamp"]));
+      rating: json["rating"],
+      date: json["date"],
+      why: json["why"],
+      feedback: json["feedback"],
+      timestamp: TimeStamp(json["timestamp"]),
+    );
   }
 }

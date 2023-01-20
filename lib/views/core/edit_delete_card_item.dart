@@ -1,10 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/mood_list_view_model.dart';
+import 'package:provider/provider.dart';
 
 class EditDeleteCardItem extends StatelessWidget {
-  const EditDeleteCardItem({Key? key}) : super(key: key);
+  final int timestamp;
+  final String date;
+
+  const EditDeleteCardItem(
+      {Key? key, required this.timestamp, required this.date})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final moodListViewModel = Provider.of<MoodListViewModel>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -27,10 +37,17 @@ class EditDeleteCardItem extends StatelessWidget {
           itemBuilder: (context) {
             return [
               PopupMenuItem(
-                child: Text('Edit'),
+                child: const Text('Edit'),
+                onTap: () {
+                  log("Timestamp: $timestamp");
+                },
               ),
               PopupMenuItem(
-                child: Text('Delete'),
+                child: const Text('Delete'),
+                onTap: () {
+                  moodListViewModel.deleteMood(
+                      timestamp: timestamp, date: date);
+                },
               ),
             ];
           },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 
-import 'bold_first_word_text.dart';
+import '../home_page/widgets/bold_first_word_text.dart';
 import 'edit_delete_card_item.dart';
 
 /// This card is design to show only one mood
@@ -9,7 +9,7 @@ import 'edit_delete_card_item.dart';
 class SingleItemCard extends StatelessWidget {
   final String date;
   final int rating;
-  final TimeStamp timestamp;
+  final TimeStamp timeStamp;
   final String? reason;
   final String? feedback;
 
@@ -17,7 +17,7 @@ class SingleItemCard extends StatelessWidget {
     Key? key,
     required this.date,
     required this.rating,
-    required this.timestamp,
+    required this.timeStamp,
     this.reason,
     this.feedback,
   }) : super(key: key);
@@ -53,7 +53,7 @@ class SingleItemCard extends StatelessWidget {
                   Text("Today, $date"),
                   BoldFirstWordText(
                     boldWord: "Amazing ",
-                    normalWord: timestamp.toHumanFormat,
+                    normalWord: timeStamp.toHumanFormat,
                   ),
                   BoldFirstWordText(
                     boldWord: "Because ",
@@ -68,7 +68,11 @@ class SingleItemCard extends StatelessWidget {
             ),
 
             // editing and deleting option
-            const Expanded(child: EditDeleteCardItem()),
+            Expanded(
+                child: EditDeleteCardItem(
+              timestamp: timeStamp.timestamp,
+              date: date,
+            )),
           ],
         ),
       ),

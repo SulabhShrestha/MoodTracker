@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
-import 'package:mood_tracker/views/home_page/widgets/single_item_card.dart';
+import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../utils.dart';
@@ -118,7 +118,7 @@ class _CalendarState extends State<Calendar> {
                     return SingleItemCard(
                       date: moodViewModels[index].date,
                       rating: moodViewModels[index].rating,
-                      timestamp: moodViewModels[index].timestamp,
+                      timeStamp: moodViewModels[index].timestamp,
                       feedback: moodViewModels[index].feedback,
                       reason: moodViewModels[index].reason,
                     );
