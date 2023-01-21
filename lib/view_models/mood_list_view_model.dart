@@ -87,4 +87,18 @@ class MoodListViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> updateMoodDB(
+      {required int rating,
+      required int timestamp,
+      required String date,
+      String? why,
+      String? feedback}) async {
+    await _moodWebServices.updateMood(
+        timestamp: timestamp,
+        rating: rating,
+        date: date,
+        feedback: feedback,
+        why: why);
+  }
 }

@@ -95,6 +95,7 @@ class MoodWebServices {
   Future<void> deleteMood({required int timestamp}) async {
     var moodRef = FirebaseFirestore.instance.collection('Mood');
 
+    // getting doc
     var firebaseData =
         await moodRef.where("timestamp", isEqualTo: timestamp).get();
 
@@ -103,5 +104,29 @@ class MoodWebServices {
 
     await moodRef.doc(docId).delete();
     log("Deleted");
+  }
+
+  Future<void> updateMood(
+      {required int rating,
+      required int timestamp,
+      required String date,
+      String? why = "",
+      String? feedback = ""}) async {
+    CollectionReference moodRef = FirebaseFirestore.instance.collection('Mood');
+
+    // getting doc
+    var firebaseData =
+        await moodRef.where("timestamp", isEqualTo: timestamp).get();
+
+    // There will be only one document having same timestamp
+    String docId = firebaseData.docs.first.id;
+
+    moodRef.doc(docId).update({
+      "date": date,
+      "feedback": feedback,
+      "rating": rating,
+      "timestamp": timestamp,
+      "why": why,
+    });
   }
 }

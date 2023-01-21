@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/extension/double_ext.dart';
-import 'package:mood_tracker/views/stats/utils.dart';
+import 'package:mood_tracker/views/stats_page/utils.dart';
 
 import '../../../models/mood_stats.dart';
 import 'indicator.dart';

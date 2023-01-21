@@ -1,0 +1,1 @@
+int rating = 0;

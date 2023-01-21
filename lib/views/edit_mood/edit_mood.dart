@@ -2,42 +2,50 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
+import 'package:mood_tracker/views/core/bordered_container.dart';
 
-import '../core/bordered_container.dart';
 import '../core/emoji_panel.dart';
-import 'utils.dart';
 
 /// This is responsible for adding new mood to current date
 ///
 
-class AddNewMood extends StatelessWidget {
+class EditMood extends StatelessWidget {
+  final String date;
+  final int rating;
+  final int timestamp;
   final MoodListViewModel moodListViewModel;
 
-  AddNewMood({
-    Key? key,
-    required this.moodListViewModel,
-  }) : super(key: key);
+  final String? reason;
+  final String? feedback;
 
+  EditMood({
+    Key? key,
+    required this.date,
+    required this.rating,
+    required this.timestamp,
+    required this.moodListViewModel,
+    this.reason,
+    this.feedback,
+  }) : super(key: key) {
+    newRating = rating;
+  }
+
+  var newRating = 0;
   final _whyController = TextEditingController();
   final _feedbackController = TextEditingController();
 
-  Future<void> addStuffs({required VoidCallback onComplete}) async {
-    var timestamp = DateTime.now()
-        .millisecondsSinceEpoch; // So that it wont be different in addToMoods and in dB
+  Future<void> editStuffs({required VoidCallback onComplete}) async {
+    var newReason = _whyController.text.trim();
+    var newFeedback = _feedbackController.text.trim();
 
-    await moodListViewModel.addNewMoodDB(
-        rating: rating,
-        timestamp: timestamp,
-        why: _whyController.text.trim(),
-        feedback: _feedbackController.text.trim());
-
-    await moodListViewModel.addNewMoodLocal(
-      rating: rating,
+    await moodListViewModel.updateMoodDB(
+      rating: newRating,
       timestamp: timestamp,
-      why: _whyController.text.trim(),
-      feedback: _feedbackController.text.trim(),
+      date: date,
+      why: newReason.isEmpty ? reason : newReason,
+      feedback: newFeedback.isEmpty ? feedback : newFeedback,
     );
-
+    log("EDIT: $newRating, $newReason,  $newFeedback");
     onComplete.call();
   }
 
@@ -58,7 +66,7 @@ class AddNewMood extends StatelessWidget {
               if (rating == 0) {
                 debugPrint("Rating is necessary");
               } else {
-                await addStuffs(onComplete: () {
+                await editStuffs(onComplete: () {
                   Navigator.pop(context);
                 });
               }
@@ -75,8 +83,8 @@ class AddNewMood extends StatelessWidget {
                 const Text("How was your day?"),
                 EmojiPanel(
                   onSelected: (index) {
-                    rating = index + 1;
-                    log(rating.toString());
+                    newRating = index + 1;
+                    log("New Rating: $newRating");
                   },
                 ),
               ],
@@ -89,9 +97,10 @@ class AddNewMood extends StatelessWidget {
                 const Text("Why did you feel this way?"),
                 TextField(
                   controller: _whyController,
-                  decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: reason,
+                    enabledBorder: const OutlineInputBorder(),
+                    focusedBorder: const OutlineInputBorder(),
                   ),
                 ),
               ],
@@ -104,9 +113,10 @@ class AddNewMood extends StatelessWidget {
                 const Text("What could go better?"),
                 TextField(
                   controller: _feedbackController,
-                  decoration: const InputDecoration(
-                    enabledBorder: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: feedback,
+                    enabledBorder: const OutlineInputBorder(),
+                    focusedBorder: const OutlineInputBorder(),
                   ),
                 ),
               ],

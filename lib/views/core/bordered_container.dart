@@ -13,7 +13,6 @@ class BorderedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         border: Border.all(),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/services/stats_web_services.dart';
 
 import '../models/mood_stats.dart';
-import '../views/stats/utils.dart';
+import '../views/stats_page/utils.dart';
 
 class StatsListViewModel extends ChangeNotifier {
   final _statsWebServices = StatsWebServices();

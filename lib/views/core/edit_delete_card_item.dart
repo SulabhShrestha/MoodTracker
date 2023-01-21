@@ -1,15 +1,24 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../edit_mood/edit_mood.dart';
+
 class EditDeleteCardItem extends StatelessWidget {
-  final int timestamp;
   final String date;
+  final int rating;
+  final int timestamp;
+
+  final String? reason;
+  final String? feedback;
 
   const EditDeleteCardItem(
-      {Key? key, required this.timestamp, required this.date})
+      {Key? key,
+      required this.timestamp,
+      required this.date,
+      required this.rating,
+      this.reason,
+      this.feedback})
       : super(key: key);
 
   @override
@@ -34,12 +43,22 @@ class EditDeleteCardItem extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          itemBuilder: (context) {
+          itemBuilder: (parentContext) {
             return [
               PopupMenuItem(
                 child: const Text('Edit'),
-                onTap: () {
-                  log("Timestamp: $timestamp");
+                onTap: () async {
+                  Future.delayed(
+                      const Duration(seconds: 0),
+                      () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => EditMood(
+                                rating: rating,
+                                date: date,
+                                timestamp: timestamp,
+                                reason: reason,
+                                feedback: feedback,
+                                moodListViewModel: moodListViewModel,
+                              ))));
                 },
               ),
               PopupMenuItem(

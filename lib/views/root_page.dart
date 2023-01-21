@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/view_models/stats_list_view_model.dart';
-import 'package:mood_tracker/views/stats/stats_page.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar_page/calendar_page.dart';
 import 'home_page/home_page.dart';
+import 'stats_page/stats_page.dart';
 
 /// This page is the main page, that hols [HomePage], [Calendar] and [Stats] pages
 ///

@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/views/stats/widgets/feeling_card.dart';
-import 'package:mood_tracker/views/stats/widgets/start_end_date_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/mood_stats.dart';
@@ -10,6 +8,8 @@ import '../../view_models/stats_list_view_model.dart';
 import 'utils.dart';
 import 'widgets/display_pie_chart.dart';
 import 'widgets/drop_down_box.dart';
+import 'widgets/feeling_card.dart';
+import 'widgets/start_end_date_picker.dart';
 
 class StatsPage extends StatefulWidget {
   const StatsPage({Key? key}) : super(key: key);

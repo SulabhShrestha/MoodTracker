@@ -87,6 +87,9 @@ class MultiItemCard extends StatelessWidget {
                             child: EditDeleteCardItem(
                           timestamp: timeStamps[index].timestamp,
                           date: date,
+                          rating: ratings[index],
+                          feedback: feedbacks[index],
+                          reason: reasons[index],
                         )),
                       ],
                     ),

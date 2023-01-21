@@ -69,10 +69,14 @@ class SingleItemCard extends StatelessWidget {
 
             // editing and deleting option
             Expanded(
-                child: EditDeleteCardItem(
-              timestamp: timeStamp.timestamp,
-              date: date,
-            )),
+              child: EditDeleteCardItem(
+                timestamp: timeStamp.timestamp,
+                date: date,
+                rating: rating,
+                reason: reason,
+                feedback: feedback,
+              ),
+            ),
           ],
         ),
       ),
