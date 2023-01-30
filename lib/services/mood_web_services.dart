@@ -6,6 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/mood.dart';
 
 class MoodWebServices {
+  var today = DateTime.now();
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> get moodsStream {
+    return FirebaseFirestore.instance.collection('Mood').snapshots();
+  }
+
   Future<void> addNewMood(
       {required int rating,
       required int timestamp,
@@ -14,10 +20,11 @@ class MoodWebServices {
     CollectionReference moodRef = FirebaseFirestore.instance.collection('Mood');
 
     // Getting today's date, however it's system date
-    var today = DateTime.now();
-    var date = "${today.year}-${today.month}-${today.day}";
+    String date = "${today.year}-${today.month}-${today.day}";
 
     await moodRef
+        .doc("D:2023-01-30")
+        .collection('List')
         .add({
           'rating': rating,
           'why': why ?? "",
