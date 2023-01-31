@@ -23,7 +23,7 @@ class MoodWebServices {
     String date = "${today.year}-${today.month}-${today.day}";
 
     await moodRef
-        .doc("D:2023-01-30")
+        .doc(date)
         .collection('List')
         .add({
           'rating': rating,
@@ -99,17 +99,23 @@ class MoodWebServices {
     return groupedData;
   }
 
-  Future<void> deleteMood({required int timestamp}) async {
-    var moodRef = FirebaseFirestore.instance.collection('Mood');
+  Future<void> deleteMood(
+      {required int timestamp, required String date}) async {
+    var moodsRef = FirebaseFirestore.instance
+        .collection('Mood')
+        .doc(date)
+        .collection("List");
 
     // getting doc
     var firebaseData =
-        await moodRef.where("timestamp", isEqualTo: timestamp).get();
+        await moodsRef.where("timestamp", isEqualTo: timestamp).get();
+
+    log(firebaseData.toString());
 
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
 
-    await moodRef.doc(docId).delete();
+    await moodsRef.doc(docId).delete();
     log("Deleted");
   }
 

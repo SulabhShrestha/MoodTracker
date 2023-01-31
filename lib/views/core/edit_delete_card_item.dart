@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +66,7 @@ class EditDeleteCardItem extends StatelessWidget {
               PopupMenuItem(
                 child: const Text('Delete'),
                 onTap: () {
+                  log("I am to be deleting $timestamp");
                   moodListViewModel.deleteMood(
                       timestamp: timestamp, date: date);
                 },
