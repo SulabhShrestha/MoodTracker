@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
-import 'package:provider/provider.dart';
 
 import '../edit_mood/edit_mood.dart';
 
@@ -14,7 +13,7 @@ class EditDeleteCardItem extends StatelessWidget {
   final String? reason;
   final String? feedback;
 
-  const EditDeleteCardItem(
+  EditDeleteCardItem(
       {Key? key,
       required this.timestamp,
       required this.date,
@@ -23,9 +22,9 @@ class EditDeleteCardItem extends StatelessWidget {
       this.feedback})
       : super(key: key);
 
+  final moodListViewModel = MoodListViewModel();
   @override
   Widget build(BuildContext context) {
-    final moodListViewModel = Provider.of<MoodListViewModel>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

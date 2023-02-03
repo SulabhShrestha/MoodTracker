@@ -70,12 +70,12 @@ class MoodWebServices {
     // Date : List<>
     final Map<DateTime, List<Mood>> groupedData = {};
 
-    var firebaseData = await FirebaseFirestore.instance
-        .collection('Mood')
-        .orderBy("timestamp", descending: true)
-        .get();
+    var firebaseData =
+        await FirebaseFirestore.instance.collectionGroup('List').get();
 
+    log("Size: ${firebaseData.docs.length}");
     for (var element in firebaseData.docs) {
+      log("Element: $element");
       // First converting to json, and decoding to json
       // Maybe in the future, db will be placed and instead of Object?, actual JSON be returned
       final Map<String, dynamic> json = jsonDecode(jsonEncode(element.data()));
