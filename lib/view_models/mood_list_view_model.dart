@@ -14,10 +14,9 @@ class MoodListViewModel extends ChangeNotifier {
       _moodWebServices.moodsStream;
 
   Future<void> addNewMoodDB(
-      {required int rating,
-      required int timestamp,
-      String? why,
-      String? feedback}) async {
+      {required int rating, String? why, String? feedback}) async {
+    var timestamp = DateTime.now().millisecondsSinceEpoch;
+
     await _moodWebServices.addNewMood(
         rating: rating, timestamp: timestamp, why: why, feedback: feedback);
   }

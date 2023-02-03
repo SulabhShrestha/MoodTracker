@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../../view_models/mood_list_view_model.dart';
 import '../core/bordered_container.dart';
 import '../core/emoji_panel.dart';
 import 'utils.dart';
@@ -10,25 +11,19 @@ import 'utils.dart';
 ///
 
 class AddNewMood extends StatelessWidget {
-  // final MoodListViewModel moodListViewModel;
-
   AddNewMood({
     Key? key,
-    // required this.moodListViewModel,
   }) : super(key: key);
 
   final _whyController = TextEditingController();
   final _feedbackController = TextEditingController();
+  final moodListViewModel = MoodListViewModel();
 
   Future<void> addStuffs({required VoidCallback onComplete}) async {
-    var timestamp = DateTime.now()
-        .millisecondsSinceEpoch; // So that it wont be different in addToMoods and in dB
-
-    // await moodListViewModel.addNewMoodDB(
-    //     rating: rating,
-    //     timestamp: timestamp,
-    //     why: _whyController.text.trim(),
-    //     feedback: _feedbackController.text.trim());
+    await moodListViewModel.addNewMoodDB(
+        rating: rating,
+        why: _whyController.text.trim(),
+        feedback: _feedbackController.text.trim());
 
     onComplete.call();
   }

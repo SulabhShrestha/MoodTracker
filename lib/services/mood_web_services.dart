@@ -125,16 +125,19 @@ class MoodWebServices {
       required String date,
       String? why = "",
       String? feedback = ""}) async {
-    CollectionReference moodRef = FirebaseFirestore.instance.collection('Mood');
+    var moodsRef = FirebaseFirestore.instance
+        .collection('Mood')
+        .doc(date)
+        .collection("List");
 
     // getting doc
     var firebaseData =
-        await moodRef.where("timestamp", isEqualTo: timestamp).get();
+        await moodsRef.where("timestamp", isEqualTo: timestamp).get();
 
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
 
-    moodRef.doc(docId).update({
+    moodsRef.doc(docId).update({
       "date": date,
       "feedback": feedback,
       "rating": rating,
