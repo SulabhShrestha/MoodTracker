@@ -3,15 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/services/stats_web_services.dart';
 
-import '../models/mood_stats.dart';
 import '../views/stats_page/utils.dart';
 
 class StatsListViewModel extends ChangeNotifier {
   final _statsWebServices = StatsWebServices();
 
-  Future<List<MoodStats>> fetch(
+  Future<Map<String, dynamic>> fetch(
       {required Filters filter, int? startTimestamp, int? endTimestamp}) async {
-    List<MoodStats> stats;
+    Map<String, dynamic> stats;
 
     switch (filter) {
       case Filters.allTime:

@@ -41,73 +41,84 @@ class _StatsPageState extends State<StatsPage> {
 
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder<List<MoodStats>>(
-          future: statsListViewModel.fetch(
-            filter: filter,
-            startTimestamp: startTimestamp,
-            endTimestamp: endTimestamp,
-          ),
-          builder: (_, snapshot) {
-            log("Stats page building");
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              return Column(
-                children: <Widget>[
-                  DropDownButton(
-                    text: dropDownButtonText,
-                    onChanged: (value) async {
-                      if (value == "All time") {
-                        filter = Filters.allTime;
-                        dropDownButtonText = value;
-                        rebuildWidget = true;
-                      } else if (value == "This week") {
-                        filter = Filters.thisWeek;
-                        dropDownButtonText = value;
-                        rebuildWidget = true;
-                      } else if (value == "This month") {
-                        filter = Filters.thisMonth;
-                        dropDownButtonText = value;
-                        rebuildWidget = true;
-                      } else {
-                        var res = await showDialog<dynamic>(
-                            context: context,
-                            builder: (_) {
-                              return const StartEndDatePicker();
-                            });
+        child: Container(
+          width: double.infinity,
+          child: FutureBuilder<Map<String, dynamic>>(
+            future: statsListViewModel.fetch(
+              filter: filter,
+              startTimestamp: startTimestamp,
+              endTimestamp: endTimestamp,
+            ),
+            builder: (_, snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                List<MoodStats> moodsStats = snapshot.data!["data"];
+                int docsSize = snapshot.data!["docsSize"];
+                log("Stats page building and size: $docsSize}");
 
-                        if (res != null) {
-                          rebuildWidget = true;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    DropDownButton(
+                      text: dropDownButtonText,
+                      onChanged: (value) async {
+                        if (value == "All time") {
+                          filter = Filters.allTime;
                           dropDownButtonText = value;
-                          filter = Filters.rangeDate;
-                          log("StartDate: ${res["startDate"]}, EndDate: ${res["endDate"]}");
-                          startTimestamp =
-                              res["startDate"].millisecondsSinceEpoch;
-                          endTimestamp = res["endDate"].millisecondsSinceEpoch;
+                          rebuildWidget = true;
+                        } else if (value == "This week") {
+                          filter = Filters.thisWeek;
+                          dropDownButtonText = value;
+                          rebuildWidget = true;
+                        } else if (value == "This month") {
+                          filter = Filters.thisMonth;
+                          dropDownButtonText = value;
+                          rebuildWidget = true;
+                        } else {
+                          var res = await showDialog<dynamic>(
+                              context: context,
+                              builder: (_) {
+                                return const StartEndDatePicker();
+                              });
+
+                          if (res != null) {
+                            rebuildWidget = true;
+                            dropDownButtonText = value;
+                            filter = Filters.rangeDate;
+                            log("StartDate: ${res["startDate"]}, EndDate: ${res["endDate"]}");
+                            startTimestamp =
+                                res["startDate"].millisecondsSinceEpoch;
+                            endTimestamp =
+                                res["endDate"].millisecondsSinceEpoch;
+                          }
+                          log("Stats page: ${res.toString()}");
                         }
-                        log("Stats page: ${res.toString()}");
-                      }
-                      if (rebuildWidget) {
-                        rebuildWidget = false;
-                        setState(() {});
-                      }
-                    },
-                  ),
-                  DisplayPieChart(moodsStats: snapshot.data!),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    children: List.generate(
-                        snapshot.data!.length,
-                        (index) => FeelingCard(
-                              feeling: snapshot.data![index].feeling,
-                              totalOccurrence: snapshot.data![index].occurrence,
-                              color: colors[index],
-                            )),
-                  ),
-                ],
-              );
-            }
-            return const CircularProgressIndicator();
-          },
+                        if (rebuildWidget) {
+                          rebuildWidget = false;
+                          setState(() {});
+                        }
+                      },
+                    ),
+                    if (docsSize == 0) const Text("Nothing to display."),
+                    if (docsSize > 0) ...[
+                      DisplayPieChart(moodsStats: snapshot.data!["data"]),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        children: List.generate(
+                            moodsStats.length, // currently 5
+                            (index) => FeelingCard(
+                                  feeling: moodsStats[index].feeling,
+                                  totalOccurrence: moodsStats[index].occurrence,
+                                  color: colors[index],
+                                )),
+                      ),
+                    ],
+                  ],
+                );
+              }
+              return const CircularProgressIndicator();
+            },
+          ),
         ),
       ),
     );

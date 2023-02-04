@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/mood_stats.dart';
 
+/// Return type Map<String, dynamic> which return data as well as size of the docs returned from db
+
 class StatsWebServices {
-  Future<List<MoodStats>> fetchAllTime() async {
+  Future<Map<String, dynamic>> fetchAllTime() async {
     // Contains all rating moods stats
     // if rating = 1, it's index position is rating-1
     List<MoodStats> moodsStats = List.generate(5,
@@ -30,10 +32,10 @@ class StatsWebServices {
       elem.percentage = (elem.occurrence / totalOccurrence) * 100;
       log("${elem.rating} ${elem.occurrence} ${elem.percentage}");
     }
-    return moodsStats;
+    return {"data": moodsStats, "docsSize": firebaseData.docs.length};
   }
 
-  Future<List<MoodStats>> fetchThisMonth() async {
+  Future<Map<String, dynamic>> fetchThisMonth() async {
     // Contains all rating moods stats
     // if rating = 1, it's index position is rating-1
     List<MoodStats> moodsStats = List.generate(5,
@@ -53,8 +55,6 @@ class StatsWebServices {
 
     int totalOccurrence = 0;
 
-    log("Size: ${firebaseData.docs.length} and timestamp: $timestamp");
-
     for (var element in firebaseData.docs) {
       var rating = element.get("rating");
       totalOccurrence++;
@@ -68,10 +68,10 @@ class StatsWebServices {
     for (var elem in moodsStats) {
       elem.percentage = (elem.occurrence / totalOccurrence) * 100;
     }
-    return moodsStats;
+    return {"data": moodsStats, "docsSize": firebaseData.docs.length};
   }
 
-  Future<List<MoodStats>> fetchThisWeek() async {
+  Future<Map<String, dynamic>> fetchThisWeek() async {
     // Contains all rating moods stats
     // if rating = 1, it's index position is rating-1
     List<MoodStats> moodsStats = List.generate(5,
@@ -105,10 +105,10 @@ class StatsWebServices {
     for (var elem in moodsStats) {
       elem.percentage = (elem.occurrence / totalOccurrence) * 100;
     }
-    return moodsStats;
+    return {"data": moodsStats, "docsSize": firebaseData.docs.length};
   }
 
-  Future<List<MoodStats>> fetchRange(
+  Future<Map<String, dynamic>> fetchRange(
       {required var startTimestamp, required var endTimestamp}) async {
     // Contains all rating moods stats
     // if rating = 1, it's index position is rating-1
@@ -135,6 +135,6 @@ class StatsWebServices {
     for (var elem in moodsStats) {
       elem.percentage = (elem.occurrence / totalOccurrence) * 100;
     }
-    return moodsStats;
+    return {"data": moodsStats, "docsSize": firebaseData.docs.length};
   }
 }
