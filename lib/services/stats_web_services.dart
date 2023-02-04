@@ -12,7 +12,7 @@ class StatsWebServices {
         (index) => MoodStats(occurrence: 0, rating: index + 1, percentage: 0));
 
     var firebaseData =
-        await FirebaseFirestore.instance.collection('Mood').get();
+        await FirebaseFirestore.instance.collectionGroup('List').get();
 
     int totalOccurrence = 0;
 
@@ -47,11 +47,13 @@ class StatsWebServices {
     int timestamp = startOfMonth.millisecondsSinceEpoch;
 
     var firebaseData = await FirebaseFirestore.instance
-        .collection('Mood')
+        .collectionGroup('List')
         .where("timestamp", isGreaterThanOrEqualTo: timestamp)
         .get();
 
     int totalOccurrence = 0;
+
+    log("Size: ${firebaseData.docs.length} and timestamp: $timestamp");
 
     for (var element in firebaseData.docs) {
       var rating = element.get("rating");
@@ -85,7 +87,7 @@ class StatsWebServices {
     int timestamp = startOfWeek.millisecondsSinceEpoch;
 
     var firebaseData = await FirebaseFirestore.instance
-        .collection('Mood')
+        .collectionGroup('List')
         .where("timestamp", isGreaterThanOrEqualTo: timestamp)
         .get();
 
@@ -114,7 +116,7 @@ class StatsWebServices {
         (index) => MoodStats(occurrence: 0, rating: index + 1, percentage: 0));
 
     var firebaseData = await FirebaseFirestore.instance
-        .collection('Mood')
+        .collectionGroup('List')
         .where("timestamp", isGreaterThanOrEqualTo: startTimestamp)
         .where("timestamp", isLessThanOrEqualTo: endTimestamp)
         .get();
