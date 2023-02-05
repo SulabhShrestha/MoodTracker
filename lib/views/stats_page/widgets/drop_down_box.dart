@@ -17,7 +17,6 @@ class DropDownButton extends StatelessWidget {
           return [
             const PopupMenuItem(value: "All time", child: Text("All time")),
             const PopupMenuItem(value: "This month", child: Text("This month")),
-            const PopupMenuItem(value: "This week", child: Text("This week")),
             const PopupMenuItem(value: "Set date", child: Text("Set date")),
           ];
         },

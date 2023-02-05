@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 // Used for filtering stats pages
 enum Filters {
   allTime,
-  thisWeek,
   thisMonth,
   rangeDate,
 }

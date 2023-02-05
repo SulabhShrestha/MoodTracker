@@ -41,7 +41,7 @@ class _StatsPageState extends State<StatsPage> {
 
     return Scaffold(
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           child: FutureBuilder<Map<String, dynamic>>(
             future: statsListViewModel.fetch(
@@ -64,10 +64,6 @@ class _StatsPageState extends State<StatsPage> {
                       onChanged: (value) async {
                         if (value == "All time") {
                           filter = Filters.allTime;
-                          dropDownButtonText = value;
-                          rebuildWidget = true;
-                        } else if (value == "This week") {
-                          filter = Filters.thisWeek;
                           dropDownButtonText = value;
                           rebuildWidget = true;
                         } else if (value == "This month") {

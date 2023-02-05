@@ -21,10 +21,6 @@ class StatsListViewModel extends ChangeNotifier {
         stats = await _statsWebServices.fetchThisMonth();
         break;
 
-      case Filters.thisWeek:
-        stats = await _statsWebServices.fetchThisWeek();
-        break;
-
       case Filters.rangeDate:
         log("I came here: $startTimestamp $endTimestamp $filter");
         stats = await _statsWebServices.fetchRange(
