@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/views/auth_deciding.dart';
 
 import 'firebase_options.dart';
-import 'views/root_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Mood Tracker',
-      home: RootPage(),
+      home: AuthDeciding(),
     );
   }
 }

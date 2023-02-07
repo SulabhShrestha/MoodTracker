@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/auth_view_model.dart';
 
 import '../../profile_page/profile_page.dart';
 import 'button_for_pop_up_menu_item.dart';
@@ -32,7 +33,10 @@ class PopUpMenuList extends StatelessWidget {
             PopupMenuItem(
               value: 3,
               child: ButtonForPopUpMenuItem(
-                onTap: () {},
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  await AuthViewModel().signOut();
+                },
                 icon: Icons.exit_to_app,
                 text: "Log out",
               ),

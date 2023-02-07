@@ -121,6 +121,7 @@ class _CalendarState extends State<Calendar> {
                       timeStamp: moodViewModels[index].timestamp,
                       feedback: moodViewModels[index].feedback,
                       reason: moodViewModels[index].reason,
+                      showEditDeleteButton: false,
                     );
                   },
                 );

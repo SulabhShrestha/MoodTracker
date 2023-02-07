@@ -14,17 +14,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final moodListViewModel = Provider.of<MoodListViewModel>(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => AddNewMood(
-                // moodListViewModel: moodListViewModel,
-                ),
-          ));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddNewMood()));
         },
       ),
       body: NestedScrollView(

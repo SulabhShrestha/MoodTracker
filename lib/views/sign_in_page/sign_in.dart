@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/core/heading_textfield.dart';
 
+import '../../view_models/auth_view_model.dart';
 import '../core/button.dart';
 import '../sign_up_page/sign_up.dart';
 
@@ -53,7 +54,11 @@ class SignInPage extends StatelessWidget {
                 ),
                 Text("OR"),
 
-                Button(child: Text("Google"), onTap: () {}),
+                Button(
+                    child: Text("Google"),
+                    onTap: () async {
+                      await AuthViewModel().signInWithGoogle();
+                    }),
               ],
             ),
           ),

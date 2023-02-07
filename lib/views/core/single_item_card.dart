@@ -10,6 +10,7 @@ class SingleItemCard extends StatelessWidget {
   final String date;
   final int rating;
   final TimeStamp timeStamp;
+  final bool showEditDeleteButton;
   final String? reason;
   final String? feedback;
 
@@ -18,6 +19,7 @@ class SingleItemCard extends StatelessWidget {
     required this.date,
     required this.rating,
     required this.timeStamp,
+    this.showEditDeleteButton = true,
     this.reason,
     this.feedback,
   }) : super(key: key);
@@ -68,15 +70,16 @@ class SingleItemCard extends StatelessWidget {
             ),
 
             // editing and deleting option
-            Expanded(
-              child: EditDeleteCardItem(
-                timestamp: timeStamp.timestamp,
-                date: date,
-                rating: rating,
-                reason: reason,
-                feedback: feedback,
+            if (showEditDeleteButton)
+              Expanded(
+                child: EditDeleteCardItem(
+                  timestamp: timeStamp.timestamp,
+                  date: date,
+                  rating: rating,
+                  reason: reason,
+                  feedback: feedback,
+                ),
               ),
-            ),
           ],
         ),
       ),

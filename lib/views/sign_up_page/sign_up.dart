@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/auth_view_model.dart';
 
 import '../core/button.dart';
 import '../core/heading_textfield.dart';
@@ -50,7 +51,7 @@ class SignUpPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {},
                       child: const Text(
-                        "Sign up",
+                        "Sign In",
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     )
@@ -58,7 +59,11 @@ class SignUpPage extends StatelessWidget {
                 ),
                 Text("OR"),
 
-                Button(child: Text("Google"), onTap: () {}),
+                Button(
+                    child: Text("Continue with Google"),
+                    onTap: () async {
+                      await AuthViewModel().signInWithGoogle();
+                    }),
               ],
             ),
           ),
