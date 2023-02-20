@@ -11,4 +11,12 @@ class UserViewModel extends ChangeNotifier {
   String get getUserName {
     return _userWebServices.getUserName;
   }
+
+  String? get getEmail {
+    return _userWebServices.getEmail;
+  }
+
+  String get getPhotoURL {
+    return _userWebServices.userProfileURL;
+  }
 }

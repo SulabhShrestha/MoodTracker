@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../view_models/user_view_model.dart';
 import 'widgets/bordered_container.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
+
+  final _userViewModel = UserViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +18,27 @@ class ProfilePage extends StatelessWidget {
             children: [
               BorderedContainer(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CircleAvatar(),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(),
+                      ),
+                      child: _userViewModel.getPhotoURL.isNotEmpty
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(_userViewModel.getPhotoURL))
+                          : const CircleAvatar(
+                              child: Icon(Icons.face, size: 50)),
+                    ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Sulabh Shrestha"),
-                        Text("abc@gmail.com"),
+                        Text(_userViewModel.getUserName),
+                        Text(_userViewModel.getEmail ?? ""),
                       ],
                     ),
                   ],

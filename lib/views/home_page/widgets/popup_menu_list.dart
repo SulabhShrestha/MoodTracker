@@ -23,7 +23,7 @@ class PopUpMenuList extends StatelessWidget {
               child: ButtonForPopUpMenuItem(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ProfilePage()),
+                    MaterialPageRoute(builder: (_) => ProfilePage()),
                   );
                 },
                 icon: Icons.person,

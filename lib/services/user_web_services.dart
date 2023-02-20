@@ -4,12 +4,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 ///
 
 class UserWebServices {
+  final _auth = FirebaseAuth.instance;
   Future<void> updateUserName(String name) async {
-    await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+    await _auth.currentUser?.updateDisplayName(name);
   }
 
   String get getUserName {
-    return FirebaseAuth.instance.currentUser!.displayName ??
-        "Invisible Character";
+    return _auth.currentUser!.displayName ?? "Invisible Character";
+  }
+
+  String? get getEmail {
+    return _auth.currentUser?.email;
+  }
+
+  String get userProfileURL {
+    return _auth.currentUser?.photoURL ??
+        ""; // It won't affect in the building part as it will be checked before building
   }
 }
