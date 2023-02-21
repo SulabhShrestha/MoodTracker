@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../models/time_stamp.dart';
+import '../../../utils/emoji_utils.dart';
 import '../../core/edit_delete_card_item.dart';
 import 'bold_first_word_text.dart';
 
@@ -54,11 +56,11 @@ class MultiItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Emoji
-                        Image.network(
-                          "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F17%2Fe8%2Fc1%2F17e8c10cbad011079e3c25b960e9c8a1.png&f=1&nofb=1&ipt=54fb33cf9ac23bcba5da9a777450f84a592ca60dfd4896deab2bd6a85b5f34aa&ipo=images",
-                          height: 60,
-                          width: 60,
-                        ),
+                        SvgPicture.string(
+                            Uri.decodeFull(
+                                EmojiUtils.getSvgPath(ratings[index])),
+                            width: 60,
+                            height: 60),
 
                         // Description
                         Padding(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 
+import '../../utils/emoji_utils.dart';
 import '../home_page/widgets/bold_first_word_text.dart';
 import 'edit_delete_card_item.dart';
 
@@ -36,14 +38,11 @@ class SingleItemCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Emoji
-            Image.network(
-              "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F17%2Fe8%2Fc1%2F17e8c10cbad011079e3c25b960e9c8a1.png&f=1&nofb=1&ipt=54fb33cf9ac23bcba5da9a777450f84a592ca60dfd4896deab2bd6a85b5f34aa&ipo=images",
-              height: 60,
-              width: 60,
-            ),
+            SvgPicture.string(EmojiUtils.getSvgPath(rating),
+                width: 60, height: 60),
 
             // Description
             Padding(
