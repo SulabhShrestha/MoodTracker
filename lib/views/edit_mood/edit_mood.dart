@@ -82,6 +82,7 @@ class EditMood extends StatelessWidget {
               children: [
                 const Text("How was your day?"),
                 EmojiPanel(
+                  previousRating: rating - 1,
                   onSelected: (index) {
                     newRating = index + 1;
                     log("New Rating: $newRating");
