@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/mood.dart';
 
@@ -15,6 +18,7 @@ class MoodWebServices {
   Future<void> addNewMood(
       {required int rating,
       required int timestamp,
+      required List<String?> imagesPath,
       String? why,
       String? feedback}) async {
     CollectionReference moodRef = FirebaseFirestore.instance.collection('Mood');
@@ -34,6 +38,35 @@ class MoodWebServices {
         })
         .then((value) => log("Mood Added"))
         .catchError((error) => log("Failed to add user: $error"));
+
+    if (imagesPath.isNotEmpty) {
+      await uploadImage(paths: imagesPath, date: date, timestamp: timestamp);
+    }
+  }
+
+  // Responsible for uploading images
+  Future<void> uploadImage({
+    required List<String?> paths,
+    required String date,
+    required int timestamp,
+  }) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    User? user = FirebaseAuth.instance.currentUser;
+    int index = 1;
+
+    for (var path in paths) {
+      File file = File(path!);
+
+      // same path leads to overwrite of the image
+      final profileRef = storageRef
+          .child("moodsImages/${user?.uid}/$date/$timestamp/$index.jpg");
+
+      index += 1;
+
+      await profileRef
+          .putFile(file)
+          .then((value) => log("Successfully inserted ${value.state}"));
+    }
   }
 
   /// returns Map<String, List>
