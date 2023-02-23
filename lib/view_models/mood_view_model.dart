@@ -13,4 +13,6 @@ class MoodViewModel {
 
   String? get reason => mood.why;
   String? get feedback => mood.feedback;
+
+  List<dynamic> get imagesURL => mood.imagesPath;
 }

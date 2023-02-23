@@ -4,7 +4,9 @@ import 'package:mood_tracker/views/core/image_viewer.dart';
 
 class ImageCollection extends StatefulWidget {
   final List<dynamic> dbImagesPath;
-  const ImageCollection({Key? key, required this.dbImagesPath})
+  final bool showImageDeleteBtn;
+  const ImageCollection(
+      {Key? key, required this.dbImagesPath, required this.showImageDeleteBtn})
       : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class _ImageCollectionState extends State<ImageCollection> {
                           size: imageMinSize,
                           path: path,
                           isURL: true,
+                          showImageDeleteBtn: widget.showImageDeleteBtn,
                           callback: () {
                             setState(() {
                               imagesURL.remove(path);

@@ -17,6 +17,7 @@ class SingleItemCard extends StatelessWidget {
   final String? reason;
   final String? feedback;
   final List<dynamic> dbImagesPath;
+  final bool showImageDeleteBtn;
 
   const SingleItemCard({
     Key? key,
@@ -25,6 +26,7 @@ class SingleItemCard extends StatelessWidget {
     required this.timeStamp,
     required this.dbImagesPath,
     this.showEditDeleteButton = true,
+    this.showImageDeleteBtn = true,
     this.reason,
     this.feedback,
   }) : super(key: key);
@@ -90,7 +92,10 @@ class SingleItemCard extends StatelessWidget {
 
             // Displaying images
             if (dbImagesPath.isNotEmpty)
-              ImageCollection(dbImagesPath: dbImagesPath),
+              ImageCollection(
+                dbImagesPath: dbImagesPath,
+                showImageDeleteBtn: showImageDeleteBtn,
+              ),
           ],
         ),
       ),

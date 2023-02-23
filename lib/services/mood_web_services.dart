@@ -132,7 +132,6 @@ class MoodWebServices {
     var firebaseData =
         await FirebaseFirestore.instance.collectionGroup('List').get();
 
-    log("Size: ${firebaseData.docs.length}");
     for (var element in firebaseData.docs) {
       log("Element: $element");
       // First converting to json, and decoding to json
