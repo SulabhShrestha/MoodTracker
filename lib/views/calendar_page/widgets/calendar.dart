@@ -122,6 +122,7 @@ class _CalendarState extends State<Calendar> {
                       feedback: moodViewModels[index].feedback,
                       reason: moodViewModels[index].reason,
                       showEditDeleteButton: false,
+                      dbImagesPath: [],
                     );
                   },
                 );

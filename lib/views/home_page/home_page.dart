@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
                           timeStamp: TimeStamp(values.first.get("timestamp")),
                           reason: values.first.get("why"),
                           feedback: values.first.get("feedback"),
+                          dbImagesPath: values.first.get("imagesPath"),
                         );
                       }
 

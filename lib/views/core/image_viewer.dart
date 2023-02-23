@@ -2,28 +2,33 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class DisplayImage extends StatelessWidget {
+// Responsible for displaying list of images
+class ImageViewer extends StatelessWidget {
   final double size;
   final String path;
   final VoidCallback callback;
-  const DisplayImage(
+  final bool isURL;
+  const ImageViewer(
       {Key? key,
       required this.size,
       required this.path,
-      required this.callback})
+      required this.callback,
+      required this.isURL})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.file(
-          File(path),
-          width: size,
-          fit: BoxFit.cover,
-        ),
+        if (!isURL)
+          Image.file(
+            File(path),
+            width: size,
+            fit: BoxFit.cover,
+          ),
+        if (isURL) Image.network(path, width: size, fit: BoxFit.cover),
         Positioned(
-          right: 12,
+          right: 0,
           child: Material(
             color: Colors.transparent,
             child: IconButton(

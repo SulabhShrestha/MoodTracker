@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
-import 'package:mood_tracker/views/add_new_mood/widget/display_image.dart';
+import 'package:mood_tracker/views/core/image_viewer.dart';
 
 import '../../view_models/mood_list_view_model.dart';
 import '../core/bordered_container.dart';
@@ -132,11 +132,12 @@ class _AddNewMoodState extends State<AddNewMood> {
                             for (var path in imagesPath)
                               Padding(
                                 padding: const EdgeInsets.only(right: 12),
-                                child: DisplayImage(
+                                child: ImageViewer(
                                   size: math.max(
                                       constraints.maxWidth / imagesPath.length,
                                       imageMinSize),
                                   path: path!,
+                                  isURL: false,
                                   callback: () {
                                     setState(() {
                                       imagesPath.remove(path);

@@ -49,4 +49,8 @@ class MoodListViewModel extends ChangeNotifier {
         feedback: feedback,
         why: why);
   }
+
+  Future<List<String>> getImagesURL(List<dynamic> paths) async {
+    return await _moodWebServices.getImagesURL(paths);
+  }
 }

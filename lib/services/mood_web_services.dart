@@ -26,6 +26,16 @@ class MoodWebServices {
     // Getting today's date, however it's system date
     String date = "${today.year}-${today.month}-${today.day}";
 
+    // Location of images
+    List<String?> imagesDbPaths = [];
+
+    if (imagesPath.isNotEmpty) {
+      imagesDbPaths = await uploadImage(
+          paths: imagesPath, date: date, timestamp: timestamp);
+    }
+
+    log("Paths: $imagesDbPaths");
+
     await moodRef
         .doc(date)
         .collection('List')
@@ -35,17 +45,14 @@ class MoodWebServices {
           'feedback': feedback ?? "",
           'timestamp': timestamp,
           'date': date,
+          'imagesPath': imagesDbPaths,
         })
         .then((value) => log("Mood Added"))
         .catchError((error) => log("Failed to add user: $error"));
-
-    if (imagesPath.isNotEmpty) {
-      await uploadImage(paths: imagesPath, date: date, timestamp: timestamp);
-    }
   }
 
-  // Responsible for uploading images
-  Future<void> uploadImage({
+  // Responsible for uploading images and returns the location of images
+  Future<List<String?>> uploadImage({
     required List<String?> paths,
     required String date,
     required int timestamp,
@@ -54,12 +61,17 @@ class MoodWebServices {
     User? user = FirebaseAuth.instance.currentUser;
     int index = 1;
 
+    // Location of images
+    List<String?> imagesDbPaths = [];
+
     for (var path in paths) {
       File file = File(path!);
 
+      String location = "moodsImages/${user?.uid}/$date/$timestamp/$index.jpg";
+      imagesDbPaths.add(location);
+
       // same path leads to overwrite of the image
-      final profileRef = storageRef
-          .child("moodsImages/${user?.uid}/$date/$timestamp/$index.jpg");
+      final profileRef = storageRef.child(location);
 
       index += 1;
 
@@ -67,6 +79,20 @@ class MoodWebServices {
           .putFile(file)
           .then((value) => log("Successfully inserted ${value.state}"));
     }
+
+    return imagesDbPaths;
+  }
+
+  // Responsible for getting images
+  Future<List<String>> getImagesURL(List<dynamic> paths) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    List<String> downloadURLs = [];
+
+    for (var path in paths) {
+      var imageUrl = await storageRef.child(path).getDownloadURL();
+      downloadURLs.add(imageUrl);
+    }
+    return downloadURLs;
   }
 
   /// returns Map<String, List>
