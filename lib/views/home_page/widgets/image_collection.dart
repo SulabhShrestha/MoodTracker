@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
@@ -5,9 +7,17 @@ import 'package:mood_tracker/views/core/image_viewer.dart';
 class ImageCollection extends StatefulWidget {
   final List<dynamic> dbImagesPath;
   final bool showImageDeleteBtn;
-  const ImageCollection(
-      {Key? key, required this.dbImagesPath, required this.showImageDeleteBtn})
-      : super(key: key);
+  final bool isRemoveImageRemotely;
+  final String date;
+  final int timestamp;
+  const ImageCollection({
+    Key? key,
+    required this.dbImagesPath,
+    required this.showImageDeleteBtn,
+    required this.date,
+    required this.timestamp,
+    this.isRemoveImageRemotely = false,
+  }) : super(key: key);
 
   @override
   State<ImageCollection> createState() => _ImageCollectionState();
@@ -31,9 +41,15 @@ class _ImageCollectionState extends State<ImageCollection> {
     super.initState();
   }
 
+  void removeImageLocally(String path) {
+    setState(() {
+      imagesURL.remove("");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<String>>(
         future: MoodListViewModel().getImagesURL(widget.dbImagesPath),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -51,9 +67,28 @@ class _ImageCollectionState extends State<ImageCollection> {
                           isURL: true,
                           showImageDeleteBtn: widget.showImageDeleteBtn,
                           callback: () {
-                            setState(() {
-                              imagesURL.remove(path);
-                            });
+                            if (widget.isRemoveImageRemotely) {
+                              log("Before: ${widget.dbImagesPath}");
+                              // Received snapshot is the url path.
+                              // So, Getting the index of the path in the snapshot
+                              int index = snapshot.data!.indexOf(path);
+
+                              // Getting the db path using index
+                              var imageDbPath = widget.dbImagesPath[index];
+
+                              // removing the old storage path
+                              widget.dbImagesPath.remove(imageDbPath);
+
+                              log("DB path: ${widget.dbImagesPath}");
+                              MoodListViewModel().deleteImageRemotely(
+                                deletingImagePath: imageDbPath,
+                                date: widget.date,
+                                timestamp: widget.timestamp,
+                                updatedImagesPath: widget.dbImagesPath,
+                              );
+                            } else {
+                              removeImageLocally(path);
+                            }
                           },
                         ),
                       ),

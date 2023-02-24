@@ -95,6 +95,9 @@ class SingleItemCard extends StatelessWidget {
               ImageCollection(
                 dbImagesPath: dbImagesPath,
                 showImageDeleteBtn: showImageDeleteBtn,
+                isRemoveImageRemotely: true,
+                date: date,
+                timestamp: timeStamp.timestamp,
               ),
           ],
         ),
