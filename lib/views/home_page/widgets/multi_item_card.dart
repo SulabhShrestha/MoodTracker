@@ -5,6 +5,7 @@ import '../../../models/time_stamp.dart';
 import '../../../utils/emoji_utils.dart';
 import '../../core/edit_delete_card_item.dart';
 import 'bold_first_word_text.dart';
+import 'image_collection.dart';
 
 /// This card is design to show more than one mood
 
@@ -14,6 +15,7 @@ class MultiItemCard extends StatelessWidget {
   final List<int> ratings;
   final List<TimeStamp> timeStamps;
   final List<String?> reasons;
+  final List<List<dynamic>> imagesStoragePaths;
 
   const MultiItemCard({
     Key? key,
@@ -22,6 +24,7 @@ class MultiItemCard extends StatelessWidget {
     required this.ratings,
     required this.timeStamps,
     required this.reasons,
+    required this.imagesStoragePaths,
   }) : super(key: key);
 
   @override
@@ -95,6 +98,15 @@ class MultiItemCard extends StatelessWidget {
                         )),
                       ],
                     ),
+
+                    // Displaying images
+                    if (imagesStoragePaths[index].isNotEmpty)
+                      ImageCollection(
+                        dbImagesPath: imagesStoragePaths[index],
+                        isRemoveImageRemotely: true,
+                        date: date,
+                        timestamp: timeStamps[index].timestamp,
+                      ),
 
                     if (index + 1 == ratings.length)
                       const SizedBox()

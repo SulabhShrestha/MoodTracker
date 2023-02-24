@@ -124,12 +124,17 @@ class _HomePageState extends State<HomePage> {
                         List<int> ratings = [];
                         List<TimeStamp> timestamps = [];
                         List<String?> reasons = [];
+                        List<List<dynamic>> imagesStoragePaths =
+                            []; // List of array of paths
 
+                        // Combining all the data
                         for (var element in values) {
                           feedbacks.add(element.get("feedback"));
                           ratings.add(element.get("rating"));
                           timestamps.add(TimeStamp(element.get("timestamp")));
                           reasons.add(element.get("why"));
+
+                          imagesStoragePaths.add(element.get('imagesPath'));
                         }
 
                         return MultiItemCard(
@@ -138,6 +143,7 @@ class _HomePageState extends State<HomePage> {
                           ratings: ratings,
                           reasons: reasons,
                           timeStamps: timestamps,
+                          imagesStoragePaths: imagesStoragePaths,
                         );
                       }
                     }),

@@ -13,7 +13,7 @@ class ImageCollection extends StatefulWidget {
   const ImageCollection({
     Key? key,
     required this.dbImagesPath,
-    required this.showImageDeleteBtn,
+    this.showImageDeleteBtn = true,
     required this.date,
     required this.timestamp,
     this.isRemoveImageRemotely = false,

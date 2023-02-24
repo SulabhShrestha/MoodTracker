@@ -13,7 +13,7 @@ class SingleItemCard extends StatelessWidget {
   final String date;
   final int rating;
   final TimeStamp timeStamp;
-  final bool showEditDeleteButton;
+  final bool showEditDeleteButton; // For deleting card
   final String? reason;
   final String? feedback;
   final List<dynamic> dbImagesPath;
