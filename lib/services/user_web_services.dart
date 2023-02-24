@@ -13,8 +13,20 @@ class UserWebServices {
     return _auth.currentUser!.displayName ?? "Invisible Character";
   }
 
-  String? get getEmail {
-    return _auth.currentUser?.email;
+  String get firstLetters {
+    var fullName = _auth.currentUser!.displayName ?? "Invisible Character";
+    List<String> words = fullName.split(" ");
+    String initials = "";
+
+    for (String word in words) {
+      initials += word.substring(0, 1);
+    }
+    return initials;
+  }
+
+  String get getEmail {
+    return _auth.currentUser?.email ??
+        ""; // email is never empty since it is log in using email
   }
 
   String get userProfileURL {
