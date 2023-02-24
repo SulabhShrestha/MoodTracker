@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
+import 'package:mood_tracker/utils/date_helper.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/home_page/widgets/get_user_name.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
@@ -107,9 +108,16 @@ class _HomePageState extends State<HomePage> {
                       List<QueryDocumentSnapshot> values =
                           groupedData.entries.elementAt(index).value;
 
+                      // Labelling date {today, yesterday, tomorrow }
+                      var dateLabel =
+                          DateHelper().getDateLabel(values.first.get('date'));
+
+                      log("DateHelpder: $dateLabel");
+
                       if (values.length == 1) {
                         return SingleItemCard(
                           date: values.first.get("date"),
+                          dateLabel: dateLabel,
                           rating: values.first.get("rating"),
                           timeStamp: TimeStamp(values.first.get("timestamp")),
                           reason: values.first.get("why"),
@@ -139,6 +147,7 @@ class _HomePageState extends State<HomePage> {
 
                         return MultiItemCard(
                           date: values.first.get("date"),
+                          dateLabel: dateLabel,
                           feedbacks: feedbacks,
                           ratings: ratings,
                           reasons: reasons,

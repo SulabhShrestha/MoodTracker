@@ -18,6 +18,7 @@ class SingleItemCard extends StatelessWidget {
   final String? feedback;
   final List<dynamic> dbImagesPath;
   final bool showImageDeleteBtn;
+  final String dateLabel; // Today, Yesterday or DayName
 
   const SingleItemCard({
     Key? key,
@@ -25,6 +26,7 @@ class SingleItemCard extends StatelessWidget {
     required this.rating,
     required this.timeStamp,
     required this.dbImagesPath,
+    required this.dateLabel,
     this.showEditDeleteButton = true,
     this.showImageDeleteBtn = true,
     this.reason,
@@ -59,7 +61,7 @@ class SingleItemCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Today, $date"),
+                      Text("$dateLabel, $date"),
                       BoldFirstWordText(
                         boldWord: "Amazing ",
                         normalWord: timeStamp.toHumanFormat,

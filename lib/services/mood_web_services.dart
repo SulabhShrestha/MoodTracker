@@ -24,7 +24,8 @@ class MoodWebServices {
     CollectionReference moodRef = FirebaseFirestore.instance.collection('Mood');
 
     // Getting today's date, however it's system date
-    String date = "${today.year}-${today.month}-${today.day}";
+    String date =
+        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day}";
 
     // Location of images
     List<String?> imagesDbPaths = [];

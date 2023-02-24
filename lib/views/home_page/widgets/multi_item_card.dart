@@ -11,6 +11,7 @@ import 'image_collection.dart';
 
 class MultiItemCard extends StatelessWidget {
   final String date;
+  final String dateLabel;
   final List<String?> feedbacks;
   final List<int> ratings;
   final List<TimeStamp> timeStamps;
@@ -20,6 +21,7 @@ class MultiItemCard extends StatelessWidget {
   const MultiItemCard({
     Key? key,
     required this.date,
+    required this.dateLabel,
     required this.feedbacks,
     required this.ratings,
     required this.timeStamps,
@@ -46,7 +48,7 @@ class MultiItemCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 8),
               color: Colors.greenAccent,
-              child: Text("Today, $date"),
+              child: Text("$dateLabel, $date"),
             ),
 
             Column(
