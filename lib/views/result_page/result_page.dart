@@ -1,11 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/models/mood.dart';
+import 'package:mood_tracker/models/time_stamp.dart';
+import 'package:mood_tracker/utils/date_helper.dart';
+import 'package:mood_tracker/views/core/single_item_card.dart';
+
+import '../home_page/widgets/multi_item_card.dart';
 
 class ResultPage extends StatelessWidget {
-  final String textToSearch;
-  const ResultPage({Key? key, required this.textToSearch}) : super(key: key);
+  final Map<String, List<Mood>> resultMoods;
+  const ResultPage({Key? key, required this.resultMoods}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Result"),
+      ),
+      body: ListView(
+        children: List.generate(resultMoods.entries.length, (index) {
+          List<Mood> values = resultMoods.entries.elementAt(index).value;
+
+          // Labelling date {today, yesterday, tomorrow }
+          var dateLabel = DateHelper().getDateLabel(values.first.date);
+
+          if (values.length == 1) {
+            return SingleItemCard(
+              date: values.first.date,
+              dateLabel: dateLabel,
+              rating: values.first.rating,
+              timeStamp: values.first.timestamp,
+              reason: values.first.why,
+              feedback: values.first.feedback,
+              dbImagesPath: values.first.imagesPath,
+            );
+          }
+
+          // Means we have more than one mood in a single day
+          else {
+            List<String?> feedbacks = [];
+            List<int> ratings = [];
+            List<TimeStamp> timestamps = [];
+            List<String?> reasons = [];
+            List<List<dynamic>> imagesStoragePaths =
+                []; // List of array of paths
+
+            // Combining all the data
+            for (var element in values) {
+              feedbacks.add(element.feedback);
+              ratings.add(element.rating);
+              timestamps.add(element.timestamp);
+              reasons.add(element.why);
+
+              imagesStoragePaths.add(element.imagesPath);
+            }
+
+            return MultiItemCard(
+              date: values.first.date,
+              dateLabel: dateLabel,
+              feedbacks: feedbacks,
+              ratings: ratings,
+              reasons: reasons,
+              timeStamps: timestamps,
+              imagesStoragePaths: imagesStoragePaths,
+            );
+          }
+        }),
+      ),
+    );
   }
 }

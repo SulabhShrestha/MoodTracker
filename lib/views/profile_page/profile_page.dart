@@ -38,7 +38,7 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(_userViewModel.getUserName),
-                        Text(_userViewModel.getEmail ?? ""),
+                        Text(_userViewModel.getEmail),
                       ],
                     ),
                   ],
