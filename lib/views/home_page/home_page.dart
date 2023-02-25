@@ -9,11 +9,11 @@ import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/drawer/home_drawer.dart';
 import 'package:mood_tracker/views/home_page/widgets/get_user_name.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
+import 'package:mood_tracker/views/search_page/search_page.dart';
 import 'package:provider/provider.dart';
 
 import '../add_new_mood/add_new_mood.dart';
 import '../core/single_item_card.dart';
-import 'widgets/popup_menu_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -40,8 +40,8 @@ class _HomePageState extends State<HomePage> {
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AddNewMood()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const AddNewMood()));
         },
       ),
       drawer: const HomeDrawer(),
@@ -59,7 +59,15 @@ class _HomePageState extends State<HomePage> {
                   );
                 }),
               ),
-              actions: const [PopUpMenuList()],
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SearchPage()));
+                  },
+                  icon: Icon(Icons.search),
+                ),
+              ],
             ),
           ];
         },

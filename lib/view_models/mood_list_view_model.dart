@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mood_tracker/models/mood.dart';
 import 'package:mood_tracker/services/mood_web_services.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
 
@@ -27,6 +28,12 @@ class MoodListViewModel extends ChangeNotifier {
       feedback: feedback,
       imagesPath: imagesPath,
     );
+  }
+
+  Future<Map<String, List<Mood>>> searchMoodsByKeyword(
+      {required String searchKeyword}) async {
+    return await _moodWebServices.searchMoodsByKeyword(
+        searchKeyword: searchKeyword.toLowerCase());
   }
 
   Future<void> deleteMood(

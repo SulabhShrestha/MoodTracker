@@ -35,7 +35,10 @@ class MoodWebServices {
           paths: imagesPath, date: date, timestamp: timestamp);
     }
 
-    log("Paths: $imagesDbPaths");
+    // useful when searching, since firebase allows query for specific word in text
+    // lowercase cause don't know how to search for 'not' with 'NOt'
+    List<String> whyArray = why?.toLowerCase().split(" ") ?? [];
+    List<String> feedbackArray = feedback?.toLowerCase().split(" ") ?? [];
 
     await moodRef
         .doc(date)
@@ -47,6 +50,8 @@ class MoodWebServices {
           'timestamp': timestamp,
           'date': date,
           'imagesPath': imagesDbPaths,
+          'whyArray': whyArray,
+          'feedbackArray': feedbackArray,
         })
         .then((value) => log("Mood Added"))
         .catchError((error) => log("Failed to add user: $error"));
@@ -124,22 +129,37 @@ class MoodWebServices {
     return downloadURLs;
   }
 
-  /// returns Map<String, List>
-  Future<Map<String, List<Mood>>> getAllMoodsString() async {
+  /// Returns Map<String(Date), List>.
+  /// Also combines the result in a group according to the date
+  Future<Map<String, List<Mood>>> searchMoodsByKeyword(
+      {required String searchKeyword}) async {
     // Date : List<>
     final Map<String, List<Mood>> groupedData = {};
     String groupedKey;
 
-    var firebaseData = await FirebaseFirestore.instance
-        .collection('Mood')
-        .orderBy("timestamp", descending: true)
+    log("Search '$searchKeyword'");
+
+    var whyData = await FirebaseFirestore.instance
+        .collectionGroup('List')
+        .where('whyArray', arrayContains: searchKeyword)
         .get();
 
-    for (var element in firebaseData.docs) {
+    var feedbackData = await FirebaseFirestore.instance
+        .collectionGroup('List')
+        .where('feedbackArray', arrayContains: searchKeyword)
+        .get();
+
+    var dataCollection = [...whyData.docs, ...feedbackData.docs];
+
+    dataCollection
+        .sort((a, b) => b.get('timestamp').compareTo(a.get('timestamp')));
+
+    for (var element in dataCollection) {
       // First converting to json, and decoding to json
       // Maybe in the future, db will be placed and instead of Object?, actual JSON be returned
       final Map<String, dynamic> json = jsonDecode(jsonEncode(element.data()));
 
+      log("firebase: $json");
       groupedKey = element.get("date");
 
       // This means that the current date mood is more than once
@@ -149,6 +169,8 @@ class MoodWebServices {
         groupedData[groupedKey] = [Mood.fromJSON(json)];
       }
     }
+
+    log("Keyword: $groupedData");
 
     return groupedData;
   }
