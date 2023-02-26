@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/root_page.dart';
-import 'package:mood_tracker/views/sign_up_page/sign_up.dart';
+
+import 'continue_with_page/continue_with.dart';
 
 class AuthDeciding extends StatelessWidget {
   const AuthDeciding({Key? key}) : super(key: key);
@@ -12,9 +13,9 @@ class AuthDeciding extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (_, snapshot) {
         if (snapshot.hasData) {
-          return RootPage();
+          return const RootPage();
         }
-        return SignUpPage();
+        return const ContinueWithPage();
       },
     );
   }
