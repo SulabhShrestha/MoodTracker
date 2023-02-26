@@ -23,13 +23,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _userID = FirebaseAuth.instance.currentUser!.uid;
   final username = FirebaseAuth.instance.currentUser?.displayName ?? "";
   late bool isDialogToShow;
 
   @override
   void initState() {
     isDialogToShow = username.isEmpty ? true : false;
-    // FirebaseAuth.instance.currentUser?.updateDisplayName("");
     super.initState();
   }
 
@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collectionGroup('List')
+                  .where("userID", isEqualTo: _userID)
                   .snapshots(),
               builder: (context, snapshot) {
                 log("data: ${snapshot.hasData} && ${snapshot.connectionState}, ${snapshot.data?.docs}");

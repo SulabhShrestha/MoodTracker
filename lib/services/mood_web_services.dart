@@ -12,7 +12,13 @@ class MoodWebServices {
   var today = DateTime.now();
 
   Stream<QuerySnapshot<Map<String, dynamic>>> get moodsStream {
-    return FirebaseFirestore.instance.collection('Mood').snapshots();
+    var user = FirebaseAuth.instance.currentUser;
+
+    return FirebaseFirestore.instance
+        .collection('Mood')
+        .doc(user!.uid)
+        .collection("Date")
+        .snapshots();
   }
 
   Future<void> addNewMood(
@@ -22,6 +28,7 @@ class MoodWebServices {
       String? why,
       String? feedback}) async {
     CollectionReference moodRef = FirebaseFirestore.instance.collection('Mood');
+    var user = FirebaseAuth.instance.currentUser;
 
     // Getting today's date, however it's system date
     String date =
@@ -44,6 +51,7 @@ class MoodWebServices {
         .doc(date)
         .collection('List')
         .add({
+          'userID': user!.uid,
           'rating': rating,
           'why': why ?? "",
           'feedback': feedback ?? "",
@@ -133,6 +141,7 @@ class MoodWebServices {
   /// Also combines the result in a group according to the date
   Future<Map<String, List<Mood>>> searchMoodsByKeyword(
       {required String searchKeyword}) async {
+    final userID = FirebaseAuth.instance.currentUser!.uid;
     // Date : List<>
     final Map<String, List<Mood>> groupedData = {};
     String groupedKey;
@@ -141,11 +150,13 @@ class MoodWebServices {
 
     var whyData = await FirebaseFirestore.instance
         .collectionGroup('List')
+        .where("userID", isEqualTo: userID)
         .where('whyArray', arrayContains: searchKeyword)
         .get();
 
     var feedbackData = await FirebaseFirestore.instance
         .collectionGroup('List')
+        .where("userID", isEqualTo: userID)
         .where('feedbackArray', arrayContains: searchKeyword)
         .get();
 
@@ -180,11 +191,14 @@ class MoodWebServices {
     // Date : List<>
     final Map<DateTime, List<Mood>> groupedData = {};
 
-    var firebaseData =
-        await FirebaseFirestore.instance.collectionGroup('List').get();
+    final userID = FirebaseAuth.instance.currentUser!.uid;
+
+    var firebaseData = await FirebaseFirestore.instance
+        .collectionGroup('List')
+        .where("userID", isEqualTo: userID)
+        .get();
 
     for (var element in firebaseData.docs) {
-      log("Element: $element");
       // First converting to json, and decoding to json
       // Maybe in the future, db will be placed and instead of Object?, actual JSON be returned
       final Map<String, dynamic> json = jsonDecode(jsonEncode(element.data()));
@@ -215,9 +229,13 @@ class MoodWebServices {
         .doc(date)
         .collection("List");
 
+    final userID = FirebaseAuth.instance.currentUser!.uid;
+
     // getting doc
-    var firebaseData =
-        await moodsRef.where("timestamp", isEqualTo: timestamp).get();
+    var firebaseData = await moodsRef
+        .where("userID", isEqualTo: userID)
+        .where("timestamp", isEqualTo: timestamp)
+        .get();
 
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
@@ -237,9 +255,13 @@ class MoodWebServices {
         .doc(date)
         .collection("List");
 
+    final userID = FirebaseAuth.instance.currentUser!.uid;
+
     // getting doc
-    var firebaseData =
-        await moodsRef.where("timestamp", isEqualTo: timestamp).get();
+    var firebaseData = await moodsRef
+        .where("userID", isEqualTo: userID)
+        .where("timestamp", isEqualTo: timestamp)
+        .get();
 
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;

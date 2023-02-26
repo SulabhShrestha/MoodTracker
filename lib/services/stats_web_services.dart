@@ -1,20 +1,25 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/mood_stats.dart';
 
 /// Return type Map<String, dynamic> which return data as well as size of the docs returned from db
 
 class StatsWebServices {
+  final userID = FirebaseAuth.instance.currentUser!.uid;
+
   Future<Map<String, dynamic>> fetchAllTime() async {
     // Contains all rating moods stats
     // if rating = 1, it's index position is rating-1
     List<MoodStats> moodsStats = List.generate(5,
         (index) => MoodStats(occurrence: 0, rating: index + 1, percentage: 0));
 
-    var firebaseData =
-        await FirebaseFirestore.instance.collectionGroup('List').get();
+    var firebaseData = await FirebaseFirestore.instance
+        .collectionGroup('List')
+        .where("userID", isEqualTo: userID)
+        .get();
 
     int totalOccurrence = 0;
 
@@ -50,6 +55,7 @@ class StatsWebServices {
 
     var firebaseData = await FirebaseFirestore.instance
         .collectionGroup('List')
+        .where("userID", isEqualTo: userID)
         .where("timestamp", isGreaterThanOrEqualTo: timestamp)
         .get();
 
@@ -82,6 +88,7 @@ class StatsWebServices {
         .collectionGroup('List')
         .where("timestamp", isGreaterThanOrEqualTo: startTimestamp)
         .where("timestamp", isLessThanOrEqualTo: endTimestamp)
+        .where("userID", isEqualTo: userID)
         .get();
 
     int totalOccurrence = 0;
