@@ -123,8 +123,6 @@ class _HomePageState extends State<HomePage> {
                       var dateLabel =
                           DateHelper().getDateLabel(values.first.get('date'));
 
-                      log("DateHelpder: $dateLabel");
-
                       if (values.length == 1) {
                         return SingleItemCard(
                           date: values.first.get("date"),

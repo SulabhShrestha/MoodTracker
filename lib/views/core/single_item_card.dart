@@ -63,7 +63,7 @@ class SingleItemCard extends StatelessWidget {
                     children: [
                       Text("$dateLabel, $date"),
                       BoldFirstWordText(
-                        boldWord: "Amazing ",
+                        boldWord: "${EmojiUtils.getEmotion(rating)} ",
                         normalWord: timeStamp.toHumanFormat,
                       ),
                       if (reason?.isNotEmpty ==

@@ -73,7 +73,7 @@ class _RootPageState extends State<RootPage> {
               iconSize: 24,
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               gap: 10,
-              tabs: [
+              tabs: const [
                 GButton(
                   icon: Icons.home,
                   text: 'Home',
@@ -97,46 +97,6 @@ class _RootPageState extends State<RootPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class Dummy extends StatelessWidget {
-  const Dummy({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.greenAccent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            onPressed: () {
-              // setState(() {
-              //   index = 0;
-              // });
-            },
-            icon: Icon(Icons.book_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              // setState(() {
-              //   index = 1;
-              // });
-            },
-            icon: Icon(Icons.calendar_today),
-          ),
-          IconButton(
-            onPressed: () {
-              // setState(() {
-              //   index = 2;
-              // });
-            },
-            icon: Icon(Icons.query_stats),
-          ),
-        ],
       ),
     );
   }

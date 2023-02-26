@@ -78,7 +78,8 @@ class MultiItemCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               BoldFirstWordText(
-                                boldWord: "Amazing ",
+                                boldWord:
+                                    "${EmojiUtils.getEmotion(ratings[index])} ",
                                 normalWord: timeStamps[index].toHumanFormat,
                               ),
                               if (reasons[index]?.isNotEmpty ==
