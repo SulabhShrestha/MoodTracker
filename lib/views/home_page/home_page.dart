@@ -62,10 +62,10 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SearchPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const SearchPage()));
                   },
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                 ),
               ],
             ),

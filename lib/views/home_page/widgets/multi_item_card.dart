@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -54,6 +56,7 @@ class MultiItemCard extends StatelessWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(ratings.length, (index) {
+                log("Why and Feedback: '${reasons[index]?.isEmpty}' '${feedbacks[index]}'");
                 return Column(
                   children: [
                     // Item one
@@ -78,13 +81,16 @@ class MultiItemCard extends StatelessWidget {
                                 boldWord: "Amazing ",
                                 normalWord: timeStamps[index].toHumanFormat,
                               ),
-                              BoldFirstWordText(
-                                boldWord: "Because ",
-                                normalWord: reasons[index] ?? "",
-                              ),
-                              BoldFirstWordText(
-                                  boldWord: "I could have ",
-                                  normalWord: feedbacks[index] ?? ""),
+                              if (reasons[index]?.isNotEmpty ==
+                                  true) // if == not provided, gives error
+                                BoldFirstWordText(
+                                  boldWord: "Because ",
+                                  normalWord: reasons[index] ?? "",
+                                ),
+                              if (feedbacks[index]?.isNotEmpty == true)
+                                BoldFirstWordText(
+                                    boldWord: "I could have ",
+                                    normalWord: feedbacks[index] ?? ""),
                             ],
                           ),
                         ),

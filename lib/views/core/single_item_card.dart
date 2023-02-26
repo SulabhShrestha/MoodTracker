@@ -66,14 +66,17 @@ class SingleItemCard extends StatelessWidget {
                         boldWord: "Amazing ",
                         normalWord: timeStamp.toHumanFormat,
                       ),
-                      BoldFirstWordText(
-                        boldWord: "Because ",
-                        normalWord: reason ?? "",
-                      ),
-                      BoldFirstWordText(
-                        boldWord: "I could have ",
-                        normalWord: feedback ?? "",
-                      ),
+                      if (reason?.isNotEmpty ==
+                          true) // if == not provided, gives error
+                        BoldFirstWordText(
+                          boldWord: "Because ",
+                          normalWord: reason ?? "",
+                        ),
+                      if (feedback?.isNotEmpty == true)
+                        BoldFirstWordText(
+                          boldWord: "I could have ",
+                          normalWord: feedback ?? "",
+                        ),
                     ],
                   ),
                 ),
