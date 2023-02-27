@@ -160,15 +160,18 @@ class _AddNewMoodState extends State<AddNewMood> {
                             onPressed: () async {
                               String? path =
                                   await LocalImage.pickImageFromCamera();
-                              setState(() {
-                                imagesPath.add(path);
 
-                                if (imagesPath.length == 3) {
-                                  imageMinSize = 180;
-                                } else if (imagesPath.length == 4) {
-                                  imageMinSize = 160;
-                                }
-                              });
+                              if (path != null) {
+                                setState(() {
+                                  imagesPath.add(path);
+
+                                  if (imagesPath.length == 3) {
+                                    imageMinSize = 180;
+                                  } else if (imagesPath.length == 4) {
+                                    imageMinSize = 160;
+                                  }
+                                });
+                              }
                             },
                             style: ButtonStyle(
                               side:
@@ -186,15 +189,18 @@ class _AddNewMoodState extends State<AddNewMood> {
                             onPressed: () async {
                               String? path =
                                   await LocalImage.pickImageFromGallery();
-                              setState(() {
-                                imagesPath.add(path);
 
-                                if (imagesPath.length == 3) {
-                                  imageMinSize = 180;
-                                } else if (imagesPath.length == 4) {
-                                  imageMinSize = 160;
-                                }
-                              });
+                              if (path != null) {
+                                setState(() {
+                                  imagesPath.add(path);
+
+                                  if (imagesPath.length == 3) {
+                                    imageMinSize = 180;
+                                  } else if (imagesPath.length == 4) {
+                                    imageMinSize = 160;
+                                  }
+                                });
+                              }
                             },
                             style: ButtonStyle(
                               side:
