@@ -78,45 +78,46 @@ class MultiItemCard extends StatelessWidget {
                             height: 60),
 
                         // Description
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              BoldFirstWordText(
-                                boldWord:
-                                    "${EmojiUtils.getEmotion(ratings[index])} ",
-                                normalWord: timeStamps[index].toHumanFormat,
-                              ),
-                              if (reasons[index]?.isNotEmpty ==
-                                  true) // if '==' is not provided then it gives error
-                                TextUtils().returnText(
-                                    type: "Because",
-                                    text: reasons[index] ?? "",
-                                    keyword: keyword,
-                                    keywordIncludesIn:
-                                        keywordsIncludesIn?[index]),
-                              if (feedbacks[index]?.isNotEmpty == true)
-                                TextUtils().returnText(
-                                    text: feedbacks[index] ?? "",
-                                    type: "I could have",
-                                    keyword: keyword,
-                                    keywordIncludesIn:
-                                        keywordsIncludesIn?[index])
-                            ],
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                BoldFirstWordText(
+                                  boldWord:
+                                      "${EmojiUtils.getEmotion(ratings[index])} ",
+                                  normalWord: timeStamps[index].toHumanFormat,
+                                ),
+                                if (reasons[index]?.isNotEmpty ==
+                                    true) // if '==' is not provided then it gives error
+                                  TextUtils().returnText(
+                                      type: "Because",
+                                      text: reasons[index] ?? "",
+                                      keyword: keyword,
+                                      keywordIncludesIn:
+                                          keywordsIncludesIn?[index]),
+                                if (feedbacks[index]?.isNotEmpty == true)
+                                  TextUtils().returnText(
+                                      text: feedbacks[index] ?? "",
+                                      type: "I could have",
+                                      keyword: keyword,
+                                      keywordIncludesIn:
+                                          keywordsIncludesIn?[index])
+                              ],
+                            ),
                           ),
                         ),
 
                         // editing and deleting option
-                        Expanded(
-                            child: EditDeleteCardItem(
+                        EditDeleteCardItem(
                           timestamp: timeStamps[index].timestamp,
                           date: date,
                           rating: ratings[index],
                           feedback: feedbacks[index],
                           reason: reasons[index],
-                        )),
+                        ),
                       ],
                     ),
 

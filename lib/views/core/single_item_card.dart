@@ -50,54 +50,54 @@ class SingleItemCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // Written
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Emoji
                 SvgPicture.string(EmojiUtils.getSvgPath(rating),
                     width: 60, height: 60),
 
                 // Description
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("$dateLabel, $date"),
-                      BoldFirstWordText(
-                        boldWord: "${EmojiUtils.getEmotion(rating)} ",
-                        normalWord: timeStamp.toHumanFormat,
-                      ),
-                      if (reason?.isNotEmpty ==
-                          true) // if '==' is not provided then it gives error
-                        TextUtils().returnText(
-                            type: "Because",
-                            text: reason ?? "",
-                            keyword: keyword,
-                            keywordIncludesIn: keywordIncludesIn),
-                      if (feedback?.isNotEmpty == true)
-                        TextUtils().returnText(
-                            text: feedback ?? "",
-                            type: "I could have",
-                            keyword: keyword,
-                            keywordIncludesIn: keywordIncludesIn)
-                    ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("$dateLabel, $date"),
+                        BoldFirstWordText(
+                          boldWord: "${EmojiUtils.getEmotion(rating)} ",
+                          normalWord: timeStamp.toHumanFormat,
+                        ),
+                        if (reason?.isNotEmpty ==
+                            true) // if '==' is not provided then it gives error
+                          TextUtils().returnText(
+                              type: "Because",
+                              text: reason ?? "",
+                              keyword: keyword,
+                              keywordIncludesIn: keywordIncludesIn),
+                        if (feedback?.isNotEmpty == true)
+                          TextUtils().returnText(
+                              text: feedback ?? "",
+                              type: "I could have",
+                              keyword: keyword,
+                              keywordIncludesIn: keywordIncludesIn)
+                      ],
+                    ),
                   ),
                 ),
 
                 // editing and deleting option
                 if (showEditDeleteButton)
-                  Expanded(
-                    child: EditDeleteCardItem(
-                      timestamp: timeStamp.timestamp,
-                      date: date,
-                      rating: rating,
-                      reason: reason,
-                      feedback: feedback,
-                    ),
+                  EditDeleteCardItem(
+                    timestamp: timeStamp.timestamp,
+                    date: date,
+                    rating: rating,
+                    reason: reason,
+                    feedback: feedback,
                   ),
               ],
             ),

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -35,7 +33,6 @@ class StatsWebServices {
     // for adding percentage
     for (var elem in moodsStats) {
       elem.percentage = (elem.occurrence / totalOccurrence) * 100;
-      log("${elem.rating} ${elem.occurrence} ${elem.percentage}");
     }
     return {"data": moodsStats, "docsSize": firebaseData.docs.length};
   }

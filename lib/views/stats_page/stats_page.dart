@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +52,6 @@ class _StatsPageState extends State<StatsPage> {
                   snapshot.connectionState == ConnectionState.done) {
                 List<MoodStats> moodsStats = snapshot.data!["data"];
                 int docsSize = snapshot.data!["docsSize"];
-                log("Stats page building and size: $docsSize}");
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,13 +78,11 @@ class _StatsPageState extends State<StatsPage> {
                             rebuildWidget = true;
                             dropDownButtonText = value;
                             filter = Filters.rangeDate;
-                            log("StartDate: ${res["startDate"]}, EndDate: ${res["endDate"]}");
                             startTimestamp =
                                 res["startDate"].millisecondsSinceEpoch;
                             endTimestamp =
                                 res["endDate"].millisecondsSinceEpoch;
                           }
-                          log("Stats page: ${res.toString()}");
                         }
                         if (rebuildWidget) {
                           rebuildWidget = false;
