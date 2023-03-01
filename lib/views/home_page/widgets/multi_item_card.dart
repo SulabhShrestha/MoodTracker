@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mood_tracker/utils/text_utils.dart';
 
 import '../../../models/time_stamp.dart';
 import '../../../utils/emoji_utils.dart';
@@ -20,6 +21,10 @@ class MultiItemCard extends StatelessWidget {
   final List<String?> reasons;
   final List<List<dynamic>> imagesStoragePaths;
 
+  // For highlighting texts
+  final List<String?>? keywordsIncludesIn;
+  final String? keyword;
+
   const MultiItemCard({
     Key? key,
     required this.date,
@@ -29,6 +34,8 @@ class MultiItemCard extends StatelessWidget {
     required this.timeStamps,
     required this.reasons,
     required this.imagesStoragePaths,
+    this.keywordsIncludesIn,
+    this.keyword,
   }) : super(key: key);
 
   @override
@@ -83,15 +90,20 @@ class MultiItemCard extends StatelessWidget {
                                 normalWord: timeStamps[index].toHumanFormat,
                               ),
                               if (reasons[index]?.isNotEmpty ==
-                                  true) // if == not provided, gives error
-                                BoldFirstWordText(
-                                  boldWord: "Because ",
-                                  normalWord: reasons[index] ?? "",
-                                ),
+                                  true) // if '==' is not provided then it gives error
+                                TextUtils().returnText(
+                                    type: "Because",
+                                    text: reasons[index] ?? "",
+                                    keyword: keyword,
+                                    keywordIncludesIn:
+                                        keywordsIncludesIn?[index]),
                               if (feedbacks[index]?.isNotEmpty == true)
-                                BoldFirstWordText(
-                                    boldWord: "I could have ",
-                                    normalWord: feedbacks[index] ?? ""),
+                                TextUtils().returnText(
+                                    text: feedbacks[index] ?? "",
+                                    type: "I could have",
+                                    keyword: keyword,
+                                    keywordIncludesIn:
+                                        keywordsIncludesIn?[index])
                             ],
                           ),
                         ),

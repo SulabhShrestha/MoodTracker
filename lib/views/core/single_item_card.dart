@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
+import 'package:mood_tracker/utils/text_utils.dart';
 
 import '../../utils/emoji_utils.dart';
 import '../home_page/widgets/bold_first_word_text.dart';
@@ -13,12 +14,14 @@ class SingleItemCard extends StatelessWidget {
   final String date;
   final int rating;
   final TimeStamp timeStamp;
+  final String dateLabel; // Today, Yesterday or DayName
+  final List<dynamic> dbImagesPath;
   final bool showEditDeleteButton; // For deleting card
+  final bool showImageDeleteBtn;
+  final String? keywordIncludesIn;
+  final String? keyword;
   final String? reason;
   final String? feedback;
-  final List<dynamic> dbImagesPath;
-  final bool showImageDeleteBtn;
-  final String dateLabel; // Today, Yesterday or DayName
 
   const SingleItemCard({
     Key? key,
@@ -29,6 +32,8 @@ class SingleItemCard extends StatelessWidget {
     required this.dateLabel,
     this.showEditDeleteButton = true,
     this.showImageDeleteBtn = true,
+    this.keywordIncludesIn = "none",
+    this.keyword,
     this.reason,
     this.feedback,
   }) : super(key: key);
@@ -67,16 +72,18 @@ class SingleItemCard extends StatelessWidget {
                         normalWord: timeStamp.toHumanFormat,
                       ),
                       if (reason?.isNotEmpty ==
-                          true) // if == not provided, gives error
-                        BoldFirstWordText(
-                          boldWord: "Because ",
-                          normalWord: reason ?? "",
-                        ),
+                          true) // if '==' is not provided then it gives error
+                        TextUtils().returnText(
+                            type: "Because",
+                            text: reason ?? "",
+                            keyword: keyword,
+                            keywordIncludesIn: keywordIncludesIn),
                       if (feedback?.isNotEmpty == true)
-                        BoldFirstWordText(
-                          boldWord: "I could have ",
-                          normalWord: feedback ?? "",
-                        ),
+                        TextUtils().returnText(
+                            text: feedback ?? "",
+                            type: "I could have",
+                            keyword: keyword,
+                            keywordIncludesIn: keywordIncludesIn)
                     ],
                   ),
                 ),

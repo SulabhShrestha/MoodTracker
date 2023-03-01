@@ -1,4 +1,4 @@
-class DateHelper {
+class DateHelperUtils {
   String getDateLabel(String dateString) {
     DateTime date = DateTime.parse(dateString);
     DateTime today = DateTime.now();

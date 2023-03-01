@@ -41,14 +41,15 @@ class _SearchPageState extends State<SearchPage> {
                       setState(() {
                         showLoading = true;
                       });
+                      var keyword = _textController.text.trim();
                       await MoodListViewModel()
-                          .searchMoodsByKeyword(
-                              searchKeyword: _textController.text.trim())
+                          .searchMoodsByKeyword(searchKeyword: keyword)
                           .then((value) {
                         if (value.isNotEmpty) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => ResultPage(
                                     resultMoods: value,
+                                    keyword: keyword,
                                   )));
                         }
                       });

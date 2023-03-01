@@ -32,7 +32,7 @@ class MoodWebServices {
 
     // Getting today's date, however it's system date
     String date =
-        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day}";
+        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
 
     // Location of images
     List<String?> imagesDbPaths = [];
@@ -137,7 +137,7 @@ class MoodWebServices {
     return downloadURLs;
   }
 
-  /// Returns Map<String(Date), List>.
+  /// Returns Map<String(Date), Map<String, dynamic>>
   /// Also combines the result in a group according to the date
   Future<Map<String, List<Mood>>> searchMoodsByKeyword(
       {required String searchKeyword}) async {
@@ -162,6 +162,7 @@ class MoodWebServices {
 
     var dataCollection = [...whyData.docs, ...feedbackData.docs];
 
+    // in descending order
     dataCollection
         .sort((a, b) => b.get('timestamp').compareTo(a.get('timestamp')));
 
@@ -173,11 +174,26 @@ class MoodWebServices {
       log("firebase: $json");
       groupedKey = element.get("date");
 
+      String keywordIncludesIn = "";
+
+      // stating where the keyword is
+      List<dynamic> whyArray = element.get("whyArray");
+      if (whyArray.contains(searchKeyword)) {
+        keywordIncludesIn = "why";
+      }
+      // that means feedback contains the keyword
+      else {
+        keywordIncludesIn = "feedback";
+      }
+
       // This means that the current date mood is more than once
       if (groupedData.containsKey(groupedKey)) {
-        groupedData[groupedKey]?.add(Mood.fromJSON(json));
+        groupedData[groupedKey]
+            ?.add(Mood.fromJSON(json, keywordIncludesIn: keywordIncludesIn));
       } else {
-        groupedData[groupedKey] = [Mood.fromJSON(json)];
+        groupedData[groupedKey] = [
+          Mood.fromJSON(json, keywordIncludesIn: keywordIncludesIn)
+        ];
       }
     }
 

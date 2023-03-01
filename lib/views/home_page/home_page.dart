@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
-import 'package:mood_tracker/utils/date_helper.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/drawer/home_drawer.dart';
 import 'package:mood_tracker/views/home_page/widgets/get_user_name.dart';
@@ -12,6 +11,7 @@ import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
 import 'package:mood_tracker/views/search_page/search_page.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/date_helper_utils.dart';
 import '../add_new_mood/add_new_mood.dart';
 import '../core/single_item_card.dart';
 
@@ -120,8 +120,8 @@ class _HomePageState extends State<HomePage> {
                           groupedData.entries.elementAt(index).value;
 
                       // Labelling date {today, yesterday, tomorrow }
-                      var dateLabel =
-                          DateHelper().getDateLabel(values.first.get('date'));
+                      var dateLabel = DateHelperUtils()
+                          .getDateLabel(values.first.get('date'));
 
                       if (values.length == 1) {
                         return SingleItemCard(
