@@ -9,20 +9,20 @@ class EditDeleteCardItem extends StatelessWidget {
   final String date;
   final int rating;
   final int timestamp;
-
+  final List<dynamic> dbImagesPath;
   final String? reason;
   final String? feedback;
 
-  EditDeleteCardItem(
+  const EditDeleteCardItem(
       {Key? key,
       required this.timestamp,
       required this.date,
       required this.rating,
+      required this.dbImagesPath,
       this.reason,
       this.feedback})
       : super(key: key);
 
-  final moodListViewModel = MoodListViewModel();
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -57,7 +57,7 @@ class EditDeleteCardItem extends StatelessWidget {
                                 timestamp: timestamp,
                                 reason: reason,
                                 feedback: feedback,
-                                moodListViewModel: moodListViewModel,
+                                dbImagesPath: dbImagesPath,
                               ))));
                 },
               ),
@@ -65,8 +65,8 @@ class EditDeleteCardItem extends StatelessWidget {
                 child: const Text('Delete'),
                 onTap: () {
                   log("I am to be deleting $timestamp");
-                  moodListViewModel.deleteMood(
-                      timestamp: timestamp, date: date);
+                  MoodListViewModel()
+                      .deleteMood(timestamp: timestamp, date: date);
                 },
               ),
             ];

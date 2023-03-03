@@ -4,53 +4,50 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
 
-class ImageCollection extends StatefulWidget {
+/// This widget works with remote connection only
+class ImageCollectionRemotely extends StatefulWidget {
   final List<dynamic> dbImagesPath;
   final bool showImageDeleteBtn;
-  final bool isRemoveImageRemotely;
   final String date;
   final int timestamp;
-  const ImageCollection({
+
+  const ImageCollectionRemotely({
     Key? key,
     required this.dbImagesPath,
-    this.showImageDeleteBtn = true,
     required this.date,
     required this.timestamp,
-    this.isRemoveImageRemotely = false,
+    this.showImageDeleteBtn = true,
   }) : super(key: key);
 
   @override
-  State<ImageCollection> createState() => _ImageCollectionState();
+  State<ImageCollectionRemotely> createState() =>
+      _ImageCollectionRemotelyState();
 }
 
-class _ImageCollectionState extends State<ImageCollection> {
+class _ImageCollectionRemotelyState extends State<ImageCollectionRemotely> {
   double imageMinSize =
       200; // the size of the image when the user adds the image
 
-  List<String> imagesURL = [];
   bool showLoading = true;
+  List<dynamic> dbImagesPath = [];
 
   @override
   void initState() {
-    if (widget.dbImagesPath.length == 3) {
+    dbImagesPath = widget.dbImagesPath;
+
+    if (dbImagesPath.length == 3) {
       imageMinSize = 180;
-    } else if (widget.dbImagesPath.length == 4) {
+    } else if (dbImagesPath.length == 4) {
       imageMinSize = 160;
     }
 
     super.initState();
   }
 
-  void removeImageLocally(String path) {
-    setState(() {
-      imagesURL.remove("");
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
-        future: MoodListViewModel().getImagesURL(widget.dbImagesPath),
+        future: MoodListViewModel().getImagesURL(dbImagesPath),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return LayoutBuilder(builder: (context, constraints) {
@@ -67,28 +64,27 @@ class _ImageCollectionState extends State<ImageCollection> {
                           isURL: true,
                           showImageDeleteBtn: widget.showImageDeleteBtn,
                           callback: () {
-                            if (widget.isRemoveImageRemotely) {
-                              log("Before: ${widget.dbImagesPath}");
-                              // Received snapshot is the url path.
-                              // So, Getting the index of the path in the snapshot
-                              int index = snapshot.data!.indexOf(path);
+                            log("Before: $dbImagesPath");
+                            // Received snapshot is the url path.
+                            // So, Getting the index of the path in the snapshot
+                            int index = snapshot.data!.indexOf(path);
 
-                              // Getting the db path using index
-                              var imageDbPath = widget.dbImagesPath[index];
+                            // Getting the db path using index
+                            var imageDbPath = dbImagesPath[index];
 
-                              // removing the old storage path
-                              widget.dbImagesPath.remove(imageDbPath);
+                            // removing the path from the list and sending the updated again to the db
+                            setState(() {
+                              dbImagesPath.remove(imageDbPath);
+                            });
 
-                              log("DB path: ${widget.dbImagesPath}");
-                              MoodListViewModel().deleteImageRemotely(
-                                deletingImagePath: imageDbPath,
-                                date: widget.date,
-                                timestamp: widget.timestamp,
-                                updatedImagesPath: widget.dbImagesPath,
-                              );
-                            } else {
-                              removeImageLocally(path);
-                            }
+                            MoodListViewModel().deleteImages(
+                              deletingImagePaths: [
+                                imageDbPath
+                              ], // since imageDbPath is a single string
+                              date: widget.date,
+                              timestamp: widget.timestamp,
+                              updatedImagesPath: dbImagesPath,
+                            );
                           },
                         ),
                       ),

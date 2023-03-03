@@ -46,11 +46,11 @@ class ProfilePage extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {},
-                title: Text("Change email"),
+                title: const Text("Change email"),
               ),
               ListTile(
                 onTap: () {},
-                title: Text("Change password"),
+                title: const Text("Change password"),
               ),
             ],
           ),

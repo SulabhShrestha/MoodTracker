@@ -98,22 +98,24 @@ class MoodWebServices {
   }
 
   // Responsible for removing images
-  Future<void> deleteImage({
-    required String deletingImagePath,
+  Future<void> deleteImages({
+    required List<String> deletingImagePaths,
     required String date,
     required int timestamp,
     required List<dynamic> updatedImagesPath,
   }) async {
-    //1.  Removing from firebase storage
+    // creating references
     final storageRef = FirebaseStorage.instance.ref();
-    final pathRef = storageRef.child(deletingImagePath);
-    await pathRef.delete();
-
-    //2. updating to firestore
     var moodsRef = FirebaseFirestore.instance
         .collection('Mood')
         .doc(date)
         .collection("List");
+
+    //1.  Removing from firebase storage
+    for (String deletingImagePath in deletingImagePaths) {
+      final pathRef = storageRef.child(deletingImagePath);
+      await pathRef.delete();
+    }
 
     // getting doc
     var firebaseData =
@@ -121,7 +123,7 @@ class MoodWebServices {
 
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
-
+    //2. updating to firestore
     await moodsRef.doc(docId).update({'imagesPath': updatedImagesPath});
   }
 
@@ -282,7 +284,7 @@ class MoodWebServices {
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
 
-    moodsRef.doc(docId).update({
+    await moodsRef.doc(docId).update({
       "date": date,
       "feedback": feedback,
       "rating": rating,

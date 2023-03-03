@@ -59,7 +59,7 @@ class _RootPageState extends State<RootPage> {
                 spreadRadius: -10,
                 blurRadius: 60,
                 color: Colors.black.withOpacity(.4),
-                offset: Offset(0, 25),
+                offset: const Offset(0, 25),
               )
             ],
           ),

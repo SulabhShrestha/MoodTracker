@@ -4,12 +4,11 @@ import 'package:mood_tracker/models/time_stamp.dart';
 import 'package:mood_tracker/utils/text_utils.dart';
 
 import '../../utils/emoji_utils.dart';
-import '../home_page/widgets/bold_first_word_text.dart';
-import '../home_page/widgets/image_collection.dart';
+import '../home_page/widgets/image_collection_remotely.dart';
+import 'bold_first_word_text.dart';
 import 'edit_delete_card_item.dart';
 
 /// This card is design to show only one mood
-
 class SingleItemCard extends StatelessWidget {
   final String date;
   final int rating;
@@ -98,16 +97,16 @@ class SingleItemCard extends StatelessWidget {
                     rating: rating,
                     reason: reason,
                     feedback: feedback,
+                    dbImagesPath: dbImagesPath,
                   ),
               ],
             ),
 
             // Displaying images
             if (dbImagesPath.isNotEmpty)
-              ImageCollection(
+              ImageCollectionRemotely(
                 dbImagesPath: dbImagesPath,
                 showImageDeleteBtn: showImageDeleteBtn,
-                isRemoveImageRemotely: true,
                 date: date,
                 timestamp: timeStamp.timestamp,
               ),

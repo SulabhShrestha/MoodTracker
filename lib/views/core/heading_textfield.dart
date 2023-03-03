@@ -20,7 +20,7 @@ class HeadingTextField extends StatelessWidget {
         Text(heading),
         TextField(
           obscureText: obscureText,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             focusedBorder: OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(),
             isDense: true,

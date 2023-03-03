@@ -20,7 +20,7 @@ class ContinueWithPage extends StatelessWidget {
               children: [
                 const Placeholder(),
                 Button(
-                    child: Text("Continue with Google"),
+                    child: const Text("Continue with Google"),
                     onTap: () async {
                       await AuthViewModel().signInWithGoogle();
                     }),

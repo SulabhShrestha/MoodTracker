@@ -6,9 +6,9 @@ import 'package:mood_tracker/utils/text_utils.dart';
 
 import '../../../models/time_stamp.dart';
 import '../../../utils/emoji_utils.dart';
+import '../../core/bold_first_word_text.dart';
 import '../../core/edit_delete_card_item.dart';
-import 'bold_first_word_text.dart';
-import 'image_collection.dart';
+import 'image_collection_remotely.dart';
 
 /// This card is design to show more than one mood
 
@@ -117,15 +117,15 @@ class MultiItemCard extends StatelessWidget {
                           rating: ratings[index],
                           feedback: feedbacks[index],
                           reason: reasons[index],
+                          dbImagesPath: imagesStoragePaths[index],
                         ),
                       ],
                     ),
 
                     // Displaying images
                     if (imagesStoragePaths[index].isNotEmpty)
-                      ImageCollection(
+                      ImageCollectionRemotely(
                         dbImagesPath: imagesStoragePaths[index],
-                        isRemoveImageRemotely: true,
                         date: date,
                         timestamp: timeStamps[index].timestamp,
                       ),

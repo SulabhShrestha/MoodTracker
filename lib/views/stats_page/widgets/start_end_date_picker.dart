@@ -85,8 +85,8 @@ class DatePicker extends StatelessWidget {
         decoration: BoxDecoration(border: Border.all()),
         child: Row(
           children: [
-            Icon(Icons.calendar_today),
-            SizedBox(width: 4),
+            const Icon(Icons.calendar_today),
+            const SizedBox(width: 4),
             Text(text),
           ],
         ),

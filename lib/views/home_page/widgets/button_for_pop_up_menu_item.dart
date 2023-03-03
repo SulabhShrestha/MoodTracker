@@ -17,7 +17,8 @@ class ButtonForPopUpMenuItem extends StatelessWidget {
     return TextButton(
       onPressed: onTap,
       style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 4)),
+        padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(horizontal: 4)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

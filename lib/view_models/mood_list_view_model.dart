@@ -61,14 +61,14 @@ class MoodListViewModel extends ChangeNotifier {
     return await _moodWebServices.getImagesURL(paths);
   }
 
-  Future<void> deleteImageRemotely({
-    required String deletingImagePath,
+  Future<void> deleteImages({
+    required List<String> deletingImagePaths,
     required String date,
     required int timestamp,
     required List<dynamic> updatedImagesPath,
   }) async {
-    await _moodWebServices.deleteImage(
-      deletingImagePath: deletingImagePath,
+    await _moodWebServices.deleteImages(
+      deletingImagePaths: deletingImagePaths,
       date: date,
       timestamp: timestamp,
       updatedImagesPath: updatedImagesPath,

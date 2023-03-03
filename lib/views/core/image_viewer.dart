@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-// Responsible for displaying list of images
+/// Responsible for displaying a single image
 class ImageViewer extends StatelessWidget {
   final double size;
   final String path;

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/views/home_page/widgets/bold_first_word_text.dart';
+import 'package:mood_tracker/views/core/bold_first_word_text.dart';
 
 import '../views/core/highlight_text.dart';
 

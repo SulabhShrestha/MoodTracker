@@ -22,7 +22,7 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("$keyword"),
+        title: Text(keyword),
       ),
       body: ListView(
         children: List.generate(resultMoods.entries.length, (index) {
