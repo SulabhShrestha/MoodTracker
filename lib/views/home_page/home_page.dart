@@ -151,7 +151,9 @@ class _HomePageState extends State<HomePage> {
                           timestamps.add(TimeStamp(element.get("timestamp")));
                           reasons.add(element.get("why"));
 
-                          imagesStoragePaths.add(element.get('imagesPath'));
+                          var imagesPath = element.get("imagesPath");
+
+                          imagesStoragePaths.add(imagesPath);
                         }
 
                         return MultiItemCard(

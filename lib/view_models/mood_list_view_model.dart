@@ -43,35 +43,49 @@ class MoodListViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateMoodDB(
-      {required int rating,
-      required int timestamp,
-      required String date,
-      String? why,
-      String? feedback}) async {
+  Future<void> updateMoodDB({
+    required int rating,
+    required int timestamp,
+    required String date,
+    String? why,
+    String? feedback,
+    List<String?>? storageImagesPath,
+  }) async {
     await _moodWebServices.updateMood(
-        timestamp: timestamp,
-        rating: rating,
-        date: date,
-        feedback: feedback,
-        why: why);
+      timestamp: timestamp,
+      rating: rating,
+      date: date,
+      feedback: feedback,
+      why: why,
+      storageImagesPath: storageImagesPath,
+    );
   }
 
   Future<List<String>> getImagesURL(List<dynamic> paths) async {
     return await _moodWebServices.getImagesURL(paths);
   }
 
+  Future<List<String>> uploadImages({
+    required List<String?> localPaths,
+    required String date,
+    required int timestamp,
+  }) async {
+    return await _moodWebServices.uploadImages(
+        localPaths: localPaths, date: date, timestamp: timestamp);
+  }
+
   Future<void> deleteImages({
     required List<String> deletingImagePaths,
     required String date,
     required int timestamp,
-    required List<dynamic> updatedImagesPath,
+    List<dynamic> updatedImagesPath = const [],
+    bool updateToFirestore = true,
   }) async {
     await _moodWebServices.deleteImages(
-      deletingImagePaths: deletingImagePaths,
-      date: date,
-      timestamp: timestamp,
-      updatedImagesPath: updatedImagesPath,
-    );
+        deletingImagePaths: deletingImagePaths,
+        date: date,
+        timestamp: timestamp,
+        updatedImagesPath: updatedImagesPath,
+        updateToFirestore: updateToFirestore);
   }
 }

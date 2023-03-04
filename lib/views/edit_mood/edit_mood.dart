@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/core/bordered_container.dart';
+import 'package:mood_tracker/views/edit_mood/utils/images_editing_handler.dart';
 import 'package:mood_tracker/views/edit_mood/widgets/image_handler_locally.dart';
 
 import '../core/emoji_panel.dart';
@@ -46,58 +47,40 @@ class _EditMoodState extends State<EditMood> {
   Future<void> editStuffs({required VoidCallback onComplete}) async {
     var newReason = _whyController.text.trim();
     var newFeedback = _feedbackController.text.trim();
+    List<String> storageImagesPath = [];
+
+    // Images edit can be of following types
+    // 1. Only Deletion
+    // 2. Only Insertion
+    // 3. Both deletion and insertion
 
     // getting any difference to the url paths
     var beforeImagesUrlPath =
         await MoodListViewModel().getImagesURL(widget.dbImagesPath);
 
-    // if [afterImagesUrlPath] < [beforeImagesUrlPath], user has deleted something
-    List<String> afterImagesUrlPath = editedPaths["urlImagesPath"];
+    // images user wants to save
+    List<String> imagesToSavePath = editedPaths['localImagesPath'];
 
-    // what is to be deleted
-    List<String> urlDifference = beforeImagesUrlPath
-        .where((element) => !afterImagesUrlPath.contains(element))
-        .toList();
-
-    log("Any difference: $urlDifference");
-
-    // what images I want to store, contains path of images of database
-    List<String> updatedImagesStoragePath = [];
-
-    // contains the paths of images that user wants to delete
-    List<String> deletingImagesPaths = [];
-
-    // getting database storagePath of images that the user wants to save
-    if (afterImagesUrlPath.isNotEmpty) {
-      for (var url in afterImagesUrlPath) {
-        var storagePath = Uri.parse(url).pathSegments.last;
-        updatedImagesStoragePath.add(storagePath);
-      }
+    if (imagesToSavePath.isNotEmpty) {
+      // images is handled and updated to the firestore and storage
+      storageImagesPath = await ImagesEditingHandler().handleImages(
+          beforeImagesUrlPath: beforeImagesUrlPath,
+          afterImagesPath: imagesToSavePath,
+          date: widget.date,
+          timestamp: widget.timestamp);
     }
 
-    // Getting the database path from the url
-    if (urlDifference.isNotEmpty) {
-      for (var url in urlDifference) {
-        // Getting the storage path
-        var path = Uri.parse(url).pathSegments.last;
-        deletingImagesPaths.add(path);
-      }
-      await MoodListViewModel().deleteImages(
-        deletingImagePaths: deletingImagesPaths,
-        date: widget.date,
-        timestamp: widget.timestamp,
-        updatedImagesPath: updatedImagesStoragePath,
-      );
-    }
-
-    await MoodListViewModel().updateMoodDB(
-      rating: rating,
-      timestamp: widget.timestamp,
-      date: widget.date,
-      why: newReason.isEmpty ? widget.reason : newReason,
-      feedback: newFeedback.isEmpty ? widget.feedback : newFeedback,
-    );
-    onComplete.call();
+    // every other field except images is updated
+    await MoodListViewModel()
+        .updateMoodDB(
+          rating: rating,
+          timestamp: widget.timestamp,
+          date: widget.date,
+          why: newReason.isEmpty ? widget.reason : newReason,
+          feedback: newFeedback.isEmpty ? widget.feedback : newFeedback,
+          storageImagesPath: storageImagesPath,
+        )
+        .then((value) => onComplete.call());
   }
 
   @override

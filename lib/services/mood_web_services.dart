@@ -38,8 +38,8 @@ class MoodWebServices {
     List<String?> imagesDbPaths = [];
 
     if (imagesPath.isNotEmpty) {
-      imagesDbPaths = await uploadImage(
-          paths: imagesPath, date: date, timestamp: timestamp);
+      imagesDbPaths = await uploadImages(
+          localPaths: imagesPath, date: date, timestamp: timestamp);
     }
 
     // useful when searching, since firebase allows query for specific word in text
@@ -65,9 +65,9 @@ class MoodWebServices {
         .catchError((error) => log("Failed to add user: $error"));
   }
 
-  // Responsible for uploading images and returns the location of images
-  Future<List<String?>> uploadImage({
-    required List<String?> paths,
+  /// Responsible for uploading images and returns the location of images
+  Future<List<String>> uploadImages({
+    required List<String?> localPaths,
     required String date,
     required int timestamp,
   }) async {
@@ -75,12 +75,26 @@ class MoodWebServices {
     User? user = FirebaseAuth.instance.currentUser;
     int index = 1;
 
-    // Location of images
-    List<String?> imagesDbPaths = [];
+    // getting the last index within the folder
+    final listResult = await FirebaseStorage.instance
+        .ref()
+        .child("moodsImages/${user?.uid}/$date/$timestamp/")
+        .listAll();
 
-    for (var path in paths) {
+    // result may be empty
+    try {
+      index = int.parse(listResult.items.last.name.split(".").first) + 1;
+    } catch (e) {
+      index = 1;
+    }
+
+    // Location of images
+    List<String> imagesDbPaths = [];
+
+    for (var path in localPaths) {
       File file = File(path!);
 
+      // multiple images can be inserted at a single timestamp
       String location = "moodsImages/${user?.uid}/$date/$timestamp/$index.jpg";
       imagesDbPaths.add(location);
 
@@ -102,7 +116,8 @@ class MoodWebServices {
     required List<String> deletingImagePaths,
     required String date,
     required int timestamp,
-    required List<dynamic> updatedImagesPath,
+    List<dynamic> updatedImagesPath = const [],
+    bool updateToFirestore = true,
   }) async {
     // creating references
     final storageRef = FirebaseStorage.instance.ref();
@@ -123,8 +138,11 @@ class MoodWebServices {
 
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
-    //2. updating to firestore
-    await moodsRef.doc(docId).update({'imagesPath': updatedImagesPath});
+
+    if (updateToFirestore) {
+      //2. updating to firestore
+      await moodsRef.doc(docId).update({'imagesPath': updatedImagesPath});
+    }
   }
 
   // Responsible for getting images
@@ -267,7 +285,8 @@ class MoodWebServices {
       required int timestamp,
       required String date,
       String? why = "",
-      String? feedback = ""}) async {
+      String? feedback = "",
+      List<String?>? storageImagesPath}) async {
     var moodsRef = FirebaseFirestore.instance
         .collection('Mood')
         .doc(date)
@@ -290,6 +309,7 @@ class MoodWebServices {
       "rating": rating,
       "timestamp": timestamp,
       "why": why,
+      "imagesPath": storageImagesPath,
     });
   }
 }
