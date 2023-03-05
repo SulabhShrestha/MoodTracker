@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
+import 'package:mood_tracker/view_models/share_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 
 import '../feedback_sheet/feedback_sheet.dart';
@@ -41,6 +42,13 @@ class HomeDrawer extends StatelessWidget {
                 context: context,
                 builder: (_) => const FeedbackSheet(),
               );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.share),
+            title: const Text('Share this app'),
+            onTap: () {
+              ShareViewModel().shareApp();
             },
           ),
           const Divider(

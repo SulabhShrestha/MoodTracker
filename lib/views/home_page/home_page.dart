@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const AddNewMood()));
