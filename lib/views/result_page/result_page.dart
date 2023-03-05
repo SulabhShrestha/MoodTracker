@@ -61,6 +61,7 @@ class _ResultPageState extends State<ResultPage> {
               keyword: widget.keyword,
               additionalDeleteAction: () {
                 setState(() {
+                  // deleting from [localResultMoods] using index position
                   localResultMoods[values.first.date].removeAt(index);
                 });
               },
@@ -102,6 +103,8 @@ class _ResultPageState extends State<ResultPage> {
               keywordsIncludesIn: keywordsIncludesIn,
               additionalDeleteAction: (timestamp) {
                 setState(() {
+                  // deleting from [localResultMoods] using timestamp which is unique
+                  // [timestamp] is passed from [MultiItemCard]
                   localResultMoods[values.first.date]?.removeWhere(
                       (mood) => mood.timestamp.timestamp == timestamp);
                 });

@@ -19,9 +19,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
-        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: (){
-          Navigator.of(context).pop();
-        },),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: showLoading
           ? const CircularProgressIndicator()
@@ -44,18 +47,19 @@ class _SearchPageState extends State<SearchPage> {
                         showLoading = true;
                       });
                       var keyword = _textController.text.trim();
-                      await MoodListViewModel()
-                          .searchMoodsByKeyword(searchKeyword: keyword)
-                          .then((value) {
-                        if (value.isNotEmpty) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => ResultPage(
-                                    resultMoods: value,
-                                    keyword: keyword,
-                                  )));
-                        }
-                      });
-
+                      if (keyword.isNotEmpty) {
+                        await MoodListViewModel()
+                            .searchMoodsByKeyword(searchKeyword: keyword)
+                            .then((value) {
+                          if (value.isNotEmpty) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => ResultPage(
+                                      resultMoods: value,
+                                      keyword: keyword,
+                                    )));
+                          }
+                        });
+                      }
                       setState(() {
                         showLoading = false;
                       });
