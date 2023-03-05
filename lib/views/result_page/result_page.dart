@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/mood.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
@@ -8,7 +6,7 @@ import 'package:mood_tracker/views/core/single_item_card.dart';
 
 import '../home_page/widgets/multi_item_card.dart';
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
   final Map<String, List<Mood>> resultMoods;
   final String keyword;
 
@@ -19,20 +17,38 @@ class ResultPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ResultPage> createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  var localResultMoods = {};
+
+  @override
+  void initState() {
+    localResultMoods = widget.resultMoods;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(keyword),
+        title: Text(widget.keyword),
       ),
       body: ListView(
-        children: List.generate(resultMoods.entries.length, (index) {
-          List<Mood> values = resultMoods.entries.elementAt(index).value;
+        children: List.generate(localResultMoods.entries.length, (index) {
+          List<Mood> values = localResultMoods.entries.elementAt(index).value;
+
+          // after deleting [localResultMoods] may looks like this
+          // 'date": [], so no further process after this
+          if (values.isEmpty) {
+            return const Text("Nothing to display");
+          }
 
           // Labelling date {today, yesterday, tomorrow }
           var dateLabel = DateHelperUtils().getDateLabel(values.first.date);
 
           if (values.length == 1) {
-            log("Keyword Includes in: ${values.first.keywordIncludesIn}, $keyword");
             return SingleItemCard(
               date: values.first.date,
               dateLabel: dateLabel,
@@ -42,7 +58,12 @@ class ResultPage extends StatelessWidget {
               feedback: values.first.feedback,
               dbImagesPath: values.first.imagesPath,
               keywordIncludesIn: values.first.keywordIncludesIn,
-              keyword: keyword,
+              keyword: widget.keyword,
+              additionalDeleteAction: () {
+                setState(() {
+                  localResultMoods[values.first.date].removeAt(index);
+                });
+              },
             );
           }
 
@@ -77,8 +98,14 @@ class ResultPage extends StatelessWidget {
               reasons: reasons,
               timeStamps: timestamps,
               imagesStoragePaths: imagesStoragePaths,
-              keyword: keyword,
+              keyword: widget.keyword,
               keywordsIncludesIn: keywordsIncludesIn,
+              additionalDeleteAction: (timestamp) {
+                setState(() {
+                  localResultMoods[values.first.date]?.removeWhere(
+                      (mood) => mood.timestamp.timestamp == timestamp);
+                });
+              },
             );
           }
         }),
