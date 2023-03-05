@@ -7,7 +7,7 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
-        android:label="mood_tracker"
+        android:label="Mood Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
        <activity

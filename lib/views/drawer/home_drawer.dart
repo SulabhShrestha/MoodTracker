@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 
+import '../feedback_sheet/feedback_sheet.dart';
+
 /// Responsible for displaying drawer in the homepage
 ///
 
@@ -34,7 +36,12 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.feedback),
             title: const Text('Send feedback'),
-            onTap: () {},
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (_) => const FeedbackSheet(),
+              );
+            },
           ),
           const Divider(
             height: 4,
