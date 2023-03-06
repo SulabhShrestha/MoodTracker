@@ -12,8 +12,12 @@ class AuthDeciding extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (_, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData &&
+            snapshot.data != null &&
+            snapshot.connectionState == ConnectionState.active) {
           return const RootPage();
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
         }
         return const ContinueWithPage();
       },

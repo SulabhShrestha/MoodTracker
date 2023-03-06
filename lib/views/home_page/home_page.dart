@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
-import 'package:mood_tracker/views/drawer/home_drawer.dart';
 import 'package:mood_tracker/views/home_page/widgets/get_user_name.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
 import 'package:mood_tracker/views/search_page/search_page.dart';
@@ -45,7 +44,6 @@ class _HomePageState extends State<HomePage> {
               MaterialPageRoute(builder: (context) => const AddNewMood()));
         },
       ),
-      drawer: const HomeDrawer(),
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (_, isScrolled) {

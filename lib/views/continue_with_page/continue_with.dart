@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 
@@ -9,6 +11,7 @@ class ContinueWithPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Inside of continue with page");
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
