@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
@@ -33,7 +32,10 @@ class _AddNewMoodState extends State<AddNewMood> {
   double imageMinSize =
       200; // the size of the image when the user adds the image
 
+  bool isAdding = false; // for loading indicator when mood is added
+
   Future<void> addStuffs({required VoidCallback onComplete}) async {
+    setState(() => isAdding = true);
     await moodListViewModel.addNewMoodDB(
       rating: rating,
       why: _whyController.text.trim(),
@@ -42,6 +44,32 @@ class _AddNewMoodState extends State<AddNewMood> {
     );
 
     onComplete.call();
+    setState(() => isAdding = false);
+  }
+
+  _actionIcon() {
+    if (isAdding) {
+      return const Padding(
+        padding: EdgeInsets.all(12.0),
+        child: CircularProgressIndicator(
+          color: Colors.amberAccent,
+          strokeWidth: 2,
+        ),
+      );
+    } else {
+      return IconButton(
+        icon: const Icon(Icons.check),
+        onPressed: () async {
+          if (rating == 0) {
+            debugPrint("Rating is necessary");
+          } else {
+            await addStuffs(onComplete: () {
+              Navigator.pop(context);
+            });
+          }
+        },
+      );
+    }
   }
 
   @override
@@ -54,20 +82,7 @@ class _AddNewMoodState extends State<AddNewMood> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            onPressed: () async {
-              if (rating == 0) {
-                debugPrint("Rating is necessary");
-              } else {
-                await addStuffs(onComplete: () {
-                  Navigator.pop(context);
-                });
-              }
-            },
-          ),
-        ],
+        actions: [_actionIcon()],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -122,20 +137,20 @@ class _AddNewMoodState extends State<AddNewMood> {
                 children: [
                   const Text("Photo"),
 
-                  // Displaying images are selecting
-                  LayoutBuilder(builder: (context, constraints) {
-                    return SingleChildScrollView(
+                  // Displaying images that are selected
+                  Center(
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           if (imagesPath.isNotEmpty)
                             for (var path in imagesPath)
                               Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: ImageViewer(
-                                  size: math.max(
-                                      constraints.maxWidth / imagesPath.length,
-                                      imageMinSize),
+                                  size: imageMinSize,
                                   path: path!,
                                   isURL: false,
                                   callback: () {
@@ -147,8 +162,8 @@ class _AddNewMoodState extends State<AddNewMood> {
                               ),
                         ],
                       ),
-                    );
-                  }),
+                    ),
+                  ),
 
                   Visibility(
                     visible: imagesPath.length >= 4 ? false : true,

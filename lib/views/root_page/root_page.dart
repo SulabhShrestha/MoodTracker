@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mood_tracker/view_models/stats_list_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
+import 'package:mood_tracker/views/more_page/more_page.dart';
 import 'package:provider/provider.dart';
 
 import '../calendar_page/calendar_page.dart';
@@ -29,6 +30,7 @@ class _RootPageState extends State<RootPage> {
       create: (_) => StatsListViewModel(),
       child: const StatsPage(),
     ),
+    const MorePage(),
   ];
 
   PageController controller = PageController();
@@ -85,7 +87,11 @@ class _RootPageState extends State<RootPage> {
                 GButton(
                   icon: Icons.filter_alt_outlined,
                   text: 'Filter',
-                )
+                ),
+                GButton(
+                  icon: Icons.more_horiz,
+                  text: 'More',
+                ),
               ],
               selectedIndex: selectedIndex,
               onTabChange: (index) {

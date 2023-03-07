@@ -21,6 +21,8 @@ class SingleItemCard extends StatelessWidget {
   final String? keyword;
   final String? reason;
   final String? feedback;
+  final VoidCallback?
+      additionalDeleteAction; // for deleting mood from result page
 
   const SingleItemCard({
     Key? key,
@@ -35,6 +37,7 @@ class SingleItemCard extends StatelessWidget {
     this.keyword,
     this.reason,
     this.feedback,
+    this.additionalDeleteAction,
   }) : super(key: key);
 
   @override
@@ -98,6 +101,7 @@ class SingleItemCard extends StatelessWidget {
                     reason: reason,
                     feedback: feedback,
                     dbImagesPath: dbImagesPath,
+                    additionalDeleteAction: additionalDeleteAction,
                   ),
               ],
             ),

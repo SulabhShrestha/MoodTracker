@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_tracker/utils/text_utils.dart';
@@ -25,18 +23,22 @@ class MultiItemCard extends StatelessWidget {
   final List<String?>? keywordsIncludesIn;
   final String? keyword;
 
-  const MultiItemCard({
-    Key? key,
-    required this.date,
-    required this.dateLabel,
-    required this.feedbacks,
-    required this.ratings,
-    required this.timeStamps,
-    required this.reasons,
-    required this.imagesStoragePaths,
-    this.keywordsIncludesIn,
-    this.keyword,
-  }) : super(key: key);
+  // For deleting moods from result page, return timestamp
+  final ValueChanged<int>? additionalDeleteAction;
+
+  const MultiItemCard(
+      {Key? key,
+      required this.date,
+      required this.dateLabel,
+      required this.feedbacks,
+      required this.ratings,
+      required this.timeStamps,
+      required this.reasons,
+      required this.imagesStoragePaths,
+      this.keywordsIncludesIn,
+      this.keyword,
+      this.additionalDeleteAction})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +65,6 @@ class MultiItemCard extends StatelessWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(ratings.length, (index) {
-                log("Why and Feedback: '${reasons[index]?.isEmpty}' '${feedbacks[index]}'");
                 return Column(
                   children: [
                     // Item one
@@ -118,6 +119,10 @@ class MultiItemCard extends StatelessWidget {
                           feedback: feedbacks[index],
                           reason: reasons[index],
                           dbImagesPath: imagesStoragePaths[index],
+                          additionalDeleteAction: () {
+                            additionalDeleteAction
+                                ?.call(timeStamps[index].timestamp);
+                          },
                         ),
                       ],
                     ),
