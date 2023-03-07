@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
+import 'package:mood_tracker/views/core/delete_confirmation_dialog.dart';
 
 import '../edit_mood/edit_mood.dart';
 
@@ -13,17 +12,20 @@ class EditDeleteCardItem extends StatelessWidget {
   final String? reason;
   final String? feedback;
   final VoidCallback? additionalDeleteAction;
+  final GlobalKey<NavigatorState>?
+      mainParentNavigatorKey; // for displaying alert dialog
 
-  const EditDeleteCardItem(
-      {Key? key,
-      required this.timestamp,
-      required this.date,
-      required this.rating,
-      required this.dbImagesPath,
-      this.reason,
-      this.feedback,
-      this.additionalDeleteAction})
-      : super(key: key);
+  const EditDeleteCardItem({
+    Key? key,
+    required this.timestamp,
+    required this.date,
+    required this.rating,
+    required this.dbImagesPath,
+    this.mainParentNavigatorKey,
+    this.reason,
+    this.feedback,
+    this.additionalDeleteAction,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class EditDeleteCardItem extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          itemBuilder: (parentContext) {
+          itemBuilder: (context) {
             return [
               PopupMenuItem(
                 child: const Text('Edit'),
@@ -66,10 +68,19 @@ class EditDeleteCardItem extends StatelessWidget {
               PopupMenuItem(
                 child: const Text('Delete'),
                 onTap: () {
-                  log("I am to be deleting $timestamp");
-                  additionalDeleteAction?.call();
-                  MoodListViewModel()
-                      .deleteMood(timestamp: timestamp, date: date);
+                  final context = mainParentNavigatorKey?.currentContext;
+                  if (context != null) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => DeleteConfirmationDialog(
+                        onConfirm: () {
+                          additionalDeleteAction?.call();
+                          MoodListViewModel()
+                              .deleteMood(timestamp: timestamp, date: date);
+                        },
+                      ),
+                    );
+                  }
                 },
               ),
             ];

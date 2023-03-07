@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
-import 'package:mood_tracker/views/home_page/widgets/get_user_name.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
 import 'package:mood_tracker/views/search_page/search_page.dart';
 import 'package:provider/provider.dart';
@@ -23,68 +22,50 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _userID = FirebaseAuth.instance.currentUser!.uid;
-  final username = FirebaseAuth.instance.currentUser?.displayName ?? "";
-  late bool isDialogToShow;
-
-  @override
-  void initState() {
-    isDialogToShow = username.isEmpty ? true : false;
-    super.initState();
-  }
+  final GlobalKey<NavigatorState> homepageNavigatorKey = GlobalKey<
+      NavigatorState>(); // For displaying alert dialog using homepage buildContext
 
   @override
   Widget build(BuildContext context) {
-    log("User: ${FirebaseAuth.instance.currentUser}");
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const AddNewMood()));
-        },
-      ),
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (_, isScrolled) {
-          return [
-            SliverAppBar(
-              floating: true,
-              title: Consumer<UserViewModel>(
-                builder: ((context, value, child) {
-                  return Text(
-                    "Hey, ${value.getUserName.split(" ").first}!",
-                    style: const TextStyle(color: Colors.black),
-                  );
-                }),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SearchPage()));
-                  },
-                  icon: const Icon(Icons.search),
+    return Navigator(
+      key: homepageNavigatorKey,
+      onGenerateRoute: (settings) => MaterialPageRoute(
+        builder: (context) => Scaffold(
+          resizeToAvoidBottomInset: false,
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AddNewMood()));
+            },
+          ),
+          body: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (_, isScrolled) {
+              return [
+                SliverAppBar(
+                  floating: true,
+                  title: Consumer<UserViewModel>(
+                    builder: ((context, value, child) {
+                      return Text(
+                        "Hey, ${value.getUserName.split(" ").first}!",
+                        style: const TextStyle(color: Colors.black),
+                      );
+                    }),
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const SearchPage()));
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ];
-        },
-        body: Stack(
-          children: [
-            Builder(builder: (_) {
-              if (username.isEmpty && isDialogToShow) {
-                isDialogToShow = false;
-                Future.delayed(
-                    Duration.zero,
-                    () => GetUserName().ask(
-                          context: context,
-                          userViewModel: context.read<UserViewModel>(),
-                        ));
-              }
-              return Container();
-            }),
-            StreamBuilder<QuerySnapshot>(
+              ];
+            },
+            body: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collectionGroup('List')
                   .where("userID", isEqualTo: _userID)
@@ -131,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                           reason: values.first.get("why"),
                           feedback: values.first.get("feedback"),
                           dbImagesPath: values.first.get("imagesPath"),
+                          mainParentNavigatorKey: homepageNavigatorKey,
                         );
                       }
 
@@ -163,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                           reasons: reasons,
                           timeStamps: timestamps,
                           imagesStoragePaths: imagesStoragePaths,
+                          mainParentNavigatorKey: homepageNavigatorKey,
                         );
                       }
                     }),
@@ -172,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                 return const CircularProgressIndicator();
               },
             ),
-          ],
+          ),
         ),
       ),
     );

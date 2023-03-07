@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
+import 'package:mood_tracker/views/core/delete_confirmation_dialog.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
 
 /// This widget works with remote connection only
@@ -64,26 +65,32 @@ class _ImageCollectionRemotelyState extends State<ImageCollectionRemotely> {
                           isURL: true,
                           showImageDeleteBtn: widget.showImageDeleteBtn,
                           callback: () {
-                            log("Before: $dbImagesPath");
-                            // Received snapshot is the url path.
-                            // So, Getting the index of the path in the snapshot
-                            int index = snapshot.data!.indexOf(path);
+                            showDialog(
+                              context: context,
+                              builder: (_) =>
+                                  DeleteConfirmationDialog(onConfirm: () {
+                                log("Before: $dbImagesPath");
+                                // Received snapshot is the url path.
+                                // So, Getting the index of the path in the snapshot
+                                int index = snapshot.data!.indexOf(path);
 
-                            // Getting the db path using index
-                            var imageDbPath = dbImagesPath[index];
+                                // Getting the db path using index
+                                var imageDbPath = dbImagesPath[index];
 
-                            // removing the path from the list and sending the updated again to the db
-                            setState(() {
-                              dbImagesPath.remove(imageDbPath);
-                            });
+                                // removing the path from the list and sending the updated again to the db
+                                setState(() {
+                                  dbImagesPath.remove(imageDbPath);
+                                });
 
-                            MoodListViewModel().deleteImages(
-                              deletingImagePaths: [
-                                imageDbPath
-                              ], // since imageDbPath is a single string
-                              date: widget.date,
-                              timestamp: widget.timestamp,
-                              updatedImagesPath: dbImagesPath,
+                                MoodListViewModel().deleteImages(
+                                  deletingImagePaths: [
+                                    imageDbPath
+                                  ], // since imageDbPath is a single string
+                                  date: widget.date,
+                                  timestamp: widget.timestamp,
+                                  updatedImagesPath: dbImagesPath,
+                                );
+                              }),
                             );
                           },
                         ),

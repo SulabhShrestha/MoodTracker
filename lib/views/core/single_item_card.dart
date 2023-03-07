@@ -24,6 +24,9 @@ class SingleItemCard extends StatelessWidget {
   final VoidCallback?
       additionalDeleteAction; // for deleting mood from result page
 
+  final GlobalKey<NavigatorState>?
+      mainParentNavigatorKey; // for displaying alert dialog
+
   const SingleItemCard({
     Key? key,
     required this.date,
@@ -38,6 +41,7 @@ class SingleItemCard extends StatelessWidget {
     this.reason,
     this.feedback,
     this.additionalDeleteAction,
+    this.mainParentNavigatorKey,
   }) : super(key: key);
 
   @override
@@ -102,6 +106,7 @@ class SingleItemCard extends StatelessWidget {
                     feedback: feedback,
                     dbImagesPath: dbImagesPath,
                     additionalDeleteAction: additionalDeleteAction,
+                    mainParentNavigatorKey: mainParentNavigatorKey,
                   ),
               ],
             ),
