@@ -35,21 +35,12 @@ class _CalendarState extends State<Calendar> {
         key.day * 1000000 + key.month * 10000 + key.year,
   );
 
-  @override
-  void initState() {
-    super.initState();
+  // for making viewing spaces more by hiding calendar dates
+  CalendarFormat calendarFormat = CalendarFormat.month;
+  ScrollController _scrollController = ScrollController();
 
-    kEvents.addAll(widget.moods);
-
-    _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
-  }
-
-  @override
-  void dispose() {
-    _selectedEvents.dispose();
-    super.dispose();
-  }
+  // previous value of dy when it was scrolled
+  double _previousScrollDelta = 0.0;
 
   List<MoodViewModel> _getEventsForDay(DateTime date) {
     // if selected days has no event then return empty
@@ -67,11 +58,52 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
+  void _scrollListener() {
+    double currentScrollDelta = _scrollController.position.pixels;
+    double deltaDifference = currentScrollDelta - _previousScrollDelta;
+
+    // means it is scrolled up, time to hide
+    if (deltaDifference > 0) {
+      setState(() {
+        calendarFormat = CalendarFormat.week;
+      });
+    }
+    // time to un-hide
+    else if (deltaDifference < 0) {
+      setState(() {
+        calendarFormat = CalendarFormat.month;
+      });
+    }
+
+    _previousScrollDelta = currentScrollDelta;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    kEvents.addAll(widget.moods);
+
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _selectedEvents.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TableCalendar<MoodViewModel>(
+          calendarFormat: calendarFormat,
           firstDay: widget.moods.keys.first,
           rangeEndDay: kLastDay,
           headerStyle: const HeaderStyle(
@@ -109,6 +141,7 @@ class _CalendarState extends State<Calendar> {
             valueListenable: _selectedEvents,
             builder: (context, moodViewModels, _) {
               return ListView.builder(
+                controller: _scrollController,
                 itemCount: moodViewModels.length,
                 itemBuilder: (context, index) {
                   return SingleItemCard(
