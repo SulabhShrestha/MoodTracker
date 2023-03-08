@@ -38,6 +38,9 @@ class _StatsPageState extends State<StatsPage> {
     final statsListViewModel = Provider.of<StatsListViewModel>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Filter'),
+      ),
       body: SafeArea(
         child: SizedBox(
           width: double.infinity,
@@ -107,7 +110,7 @@ class _StatsPageState extends State<StatsPage> {
                   ],
                 );
               }
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

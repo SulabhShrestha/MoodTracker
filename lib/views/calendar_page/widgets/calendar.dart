@@ -69,72 +69,67 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Calendar'),
-      ),
-      body: Column(
-        children: [
-          TableCalendar<MoodViewModel>(
-            firstDay: kFirstDay,
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-            ),
-            calendarBuilders: CalendarBuilders(
-              defaultBuilder: (context, date, _) {
-                final isAfterToday = date.isAfter(DateTime.now());
+    return Column(
+      children: [
+        TableCalendar<MoodViewModel>(
+          firstDay: kFirstDay,
+          headerStyle: const HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+          ),
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (context, date, _) {
+              final isAfterToday = date.isAfter(DateTime.now());
 
-                return Center(
-                  child: Text(
-                    date.day.toString(),
-                    style: TextStyle(
-                      color: isAfterToday ? Colors.grey : Colors.black,
-                    ),
+              return Center(
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(
+                    color: isAfterToday ? Colors.grey : Colors.black,
                   ),
-                );
-              },
-            ),
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            eventLoader: _getEventsForDay,
-            startingDayOfWeek: StartingDayOfWeek.sunday,
-            calendarStyle: const CalendarStyle(
-              markerSize: 10,
-              markersMaxCount: 24,
-              outsideDaysVisible: false,
-              canMarkersOverflow: true,
-            ),
-            onDaySelected: _onDaySelected,
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 8.0),
-          Expanded(
-            child: ValueListenableBuilder<List<MoodViewModel>>(
-              valueListenable: _selectedEvents,
-              builder: (context, moodViewModels, _) {
-                return ListView.builder(
-                  itemCount: moodViewModels.length,
-                  itemBuilder: (context, index) {
-                    return SingleItemCard(
-                      date: moodViewModels[index].date,
-                      dateLabel: DateHelperUtils()
-                          .getDateLabel(moodViewModels[index].date),
-                      rating: moodViewModels[index].rating,
-                      timeStamp: moodViewModels[index].timestamp,
-                      feedback: moodViewModels[index].feedback,
-                      reason: moodViewModels[index].reason,
-                      showEditDeleteButton: false,
-                      dbImagesPath: moodViewModels[index].imagesURL,
-                      showImageDeleteBtn: false,
-                    );
-                  },
-                );
-              },
-            ),
+          lastDay: kLastDay,
+          focusedDay: _focusedDay,
+          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+          eventLoader: _getEventsForDay,
+          startingDayOfWeek: StartingDayOfWeek.sunday,
+          calendarStyle: const CalendarStyle(
+            markerSize: 10,
+            markersMaxCount: 24,
+            outsideDaysVisible: false,
+            canMarkersOverflow: true,
           ),
-        ],
-      ),
+          onDaySelected: _onDaySelected,
+        ),
+        const SizedBox(height: 8.0),
+        Expanded(
+          child: ValueListenableBuilder<List<MoodViewModel>>(
+            valueListenable: _selectedEvents,
+            builder: (context, moodViewModels, _) {
+              return ListView.builder(
+                itemCount: moodViewModels.length,
+                itemBuilder: (context, index) {
+                  return SingleItemCard(
+                    date: moodViewModels[index].date,
+                    dateLabel: DateHelperUtils()
+                        .getDateLabel(moodViewModels[index].date),
+                    rating: moodViewModels[index].rating,
+                    timeStamp: moodViewModels[index].timestamp,
+                    feedback: moodViewModels[index].feedback,
+                    reason: moodViewModels[index].reason,
+                    showEditDeleteButton: false,
+                    dbImagesPath: moodViewModels[index].imagesURL,
+                    showImageDeleteBtn: false,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

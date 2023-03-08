@@ -13,12 +13,17 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LinkedHashMap<DateTime, List<MoodViewModel>>>(
-        future: CalendarListViewModel().populateCalendar(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) return Calendar(moods: snapshot.data!);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calendar'),
+      ),
+      body: FutureBuilder<LinkedHashMap<DateTime, List<MoodViewModel>>>(
+          future: CalendarListViewModel().populateCalendar(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) return Calendar(moods: snapshot.data!);
 
-          return const CircularProgressIndicator();
-        });
+            return const Center(child: CircularProgressIndicator());
+          }),
+    );
   }
 }
