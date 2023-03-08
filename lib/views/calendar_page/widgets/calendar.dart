@@ -72,20 +72,19 @@ class _CalendarState extends State<Calendar> {
     return Column(
       children: [
         TableCalendar<MoodViewModel>(
-          firstDay: kFirstDay,
+          firstDay: widget.moods.keys.first,
+          rangeEndDay: kLastDay,
           headerStyle: const HeaderStyle(
             formatButtonVisible: false,
             titleCentered: true,
           ),
           calendarBuilders: CalendarBuilders(
             defaultBuilder: (context, date, _) {
-              final isAfterToday = date.isAfter(DateTime.now());
-
               return Center(
                 child: Text(
                   date.day.toString(),
-                  style: TextStyle(
-                    color: isAfterToday ? Colors.grey : Colors.black,
+                  style: const TextStyle(
+                    color: Colors.black,
                   ),
                 ),
               );
