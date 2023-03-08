@@ -303,6 +303,11 @@ class MoodWebServices {
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
 
+    // useful when searching, since firebase allows query for specific word in text
+    // lowercase cause don't know how to search for 'not' with 'NOt'
+    List<String> whyArray = why?.toLowerCase().split(" ") ?? [];
+    List<String> feedbackArray = feedback?.toLowerCase().split(" ") ?? [];
+
     await moodsRef.doc(docId).update({
       "date": date,
       "feedback": feedback,
@@ -310,6 +315,8 @@ class MoodWebServices {
       "timestamp": timestamp,
       "why": why,
       "imagesPath": storageImagesPath,
+      "feedbackArray": feedbackArray,
+      "whyArray": whyArray,
     });
   }
 }
