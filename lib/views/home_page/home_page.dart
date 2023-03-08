@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
+import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/add_new_mood/add_new_mood.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
@@ -74,10 +75,7 @@ class _HomePageState extends State<HomePage> {
               ];
             },
             body: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collectionGroup('List')
-                  .where("userID", isEqualTo: _userID)
-                  .snapshots(),
+              stream: MoodListViewModel().moodsStream,
               builder: (context, snapshot) {
                 log("data: ${snapshot.hasData} && ${snapshot.connectionState}, ${snapshot.data?.docs}");
 
@@ -85,10 +83,6 @@ class _HomePageState extends State<HomePage> {
                     snapshot.connectionState == ConnectionState.active) {
                   List<QueryDocumentSnapshot> listData =
                       snapshot.data!.docs.toList();
-
-                  // descending order
-                  listData.sort((a, b) =>
-                      b.get("timestamp").compareTo(a.get("timestamp")));
 
                   final groupedData =
                       <String, List<QueryDocumentSnapshot>>{}; // date: List

@@ -15,9 +15,9 @@ class MoodWebServices {
     var user = FirebaseAuth.instance.currentUser;
 
     return FirebaseFirestore.instance
-        .collection('Mood')
-        .doc(user!.uid)
-        .collection("Date")
+        .collectionGroup('List')
+        .where("userID", isEqualTo: user!.uid)
+        .orderBy("timestamp", descending: true)
         .snapshots();
   }
 
@@ -48,10 +48,12 @@ class MoodWebServices {
     List<String> feedbackArray = feedback?.toLowerCase().split(" ") ?? [];
 
     await moodRef
+        .doc(user!.uid)
+        .collection("Dates")
         .doc(date)
         .collection('List')
         .add({
-          'userID': user!.uid,
+          'userID': user.uid,
           'rating': rating,
           'why': why ?? "",
           'feedback': feedback ?? "",
@@ -119,12 +121,15 @@ class MoodWebServices {
     List<dynamic> updatedImagesPath = const [],
     bool updateToFirestore = true,
   }) async {
+    var user = FirebaseAuth.instance.currentUser;
     // creating references
     final storageRef = FirebaseStorage.instance.ref();
     var moodsRef = FirebaseFirestore.instance
         .collection('Mood')
+        .doc(user!.uid)
+        .collection("Dates")
         .doc(date)
-        .collection("List");
+        .collection('List');
 
     //1.  Removing from firebase storage
     for (String deletingImagePath in deletingImagePaths) {
@@ -191,7 +196,6 @@ class MoodWebServices {
       // Maybe in the future, db will be placed and instead of Object?, actual JSON be returned
       final Map<String, dynamic> json = jsonDecode(jsonEncode(element.data()));
 
-      log("firebase: $json");
       groupedKey = element.get("date");
 
       String keywordIncludesIn = "";
@@ -260,16 +264,18 @@ class MoodWebServices {
 
   Future<void> deleteMood(
       {required int timestamp, required String date}) async {
+    var user = FirebaseAuth.instance.currentUser;
+
     var moodsRef = FirebaseFirestore.instance
         .collection('Mood')
+        .doc(user!.uid)
+        .collection("Dates")
         .doc(date)
-        .collection("List");
-
-    final userID = FirebaseAuth.instance.currentUser!.uid;
+        .collection('List');
 
     // getting doc
     var firebaseData = await moodsRef
-        .where("userID", isEqualTo: userID)
+        .where("userID", isEqualTo: user.uid)
         .where("timestamp", isEqualTo: timestamp)
         .get();
 
@@ -287,16 +293,17 @@ class MoodWebServices {
       String? why = "",
       String? feedback = "",
       List<String?>? storageImagesPath}) async {
+    var user = FirebaseAuth.instance.currentUser;
     var moodsRef = FirebaseFirestore.instance
         .collection('Mood')
+        .doc(user!.uid)
+        .collection("Dates")
         .doc(date)
-        .collection("List");
-
-    final userID = FirebaseAuth.instance.currentUser!.uid;
+        .collection('List');
 
     // getting doc
     var firebaseData = await moodsRef
-        .where("userID", isEqualTo: userID)
+        .where("userID", isEqualTo: user.uid)
         .where("timestamp", isEqualTo: timestamp)
         .get();
 
