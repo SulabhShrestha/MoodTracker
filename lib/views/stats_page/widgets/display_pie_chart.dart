@@ -48,11 +48,17 @@ class PieChartState extends State<DisplayPieChart> {
 
   List<PieChartSectionData> showingSections(List<MoodStats> moodsStats) {
     return List.generate(moodsStats.length, (i) {
+      double value = moodsStats[i].percentage;
+
+      // 60.0 => 60, 60.66 => 60.66
+      var displayingValue = value.remainder(1) == 0
+          ? value.toInt()
+          : double.parse(value.toStringAsFixed(2)).removeDecimalZeroFormat;
+
       return PieChartSectionData(
         color: colors[i],
-        value: moodsStats[i].percentage,
-        title:
-            '${double.parse(moodsStats[i].percentage.toStringAsFixed(2)).removeDecimalZeroFormat}%',
+        value: value,
+        title: '$displayingValue%',
         radius: 50.0,
         titleStyle: const TextStyle(
           fontSize: 16.0,
