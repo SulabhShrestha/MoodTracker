@@ -18,7 +18,7 @@ class MoodStats {
     } else if (rating == 4) {
       return "Good";
     } else {
-      return "Awesome";
+      return "Excited";
     }
   }
 }

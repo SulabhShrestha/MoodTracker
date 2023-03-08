@@ -30,13 +30,13 @@ class EmojiUtils {
   static String getEmotion(int rating) {
     switch (rating) {
       case 1:
-        return "Sadness";
+        return "Terrible";
       case 2:
-        return "Disappointment";
+        return "Upset";
       case 3:
-        return "Blank";
+        return "Okay";
       case 4:
-        return "Satisfaction";
+        return "Good";
       case 5:
         return "Excited";
       default:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/utils/emoji_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/mood_stats.dart';
@@ -101,6 +102,7 @@ class _StatsPageState extends State<StatsPage> {
                         children: List.generate(
                             moodsStats.length, // currently 5
                             (index) => FeelingCard(
+                                  iconSvgPath: EmojiUtils.getSvgPath(index + 1),
                                   feeling: moodsStats[index].feeling,
                                   totalOccurrence: moodsStats[index].occurrence,
                                   color: colors[index],

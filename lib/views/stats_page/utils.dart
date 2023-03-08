@@ -10,7 +10,7 @@ enum Filters {
 List<MaterialColor> colors = [
   Colors.blue,
   Colors.green,
-  Colors.amber,
+  Colors.teal,
   Colors.deepPurple,
   Colors.cyan,
 ];
