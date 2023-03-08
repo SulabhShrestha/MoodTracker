@@ -7,3 +7,6 @@ List<IconData> navIconData = [
   Icons.summarize_outlined
 ];
 List<String> navValueData = ["Home", "Calendar", "Summary"];
+
+// for hiding navigation bar
+enum CurrentPage { search, other }

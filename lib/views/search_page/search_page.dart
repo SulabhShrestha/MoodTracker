@@ -4,7 +4,8 @@ import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import '../result_page/result_page.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final VoidCallback onSearchExit;
+  const SearchPage({super.key, required this.onSearchExit});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -22,6 +23,7 @@ class _SearchPageState extends State<SearchPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
+            widget.onSearchExit();
             Navigator.of(context).pop();
           },
         ),

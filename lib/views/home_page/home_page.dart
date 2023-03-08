@@ -5,16 +5,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
+import 'package:mood_tracker/views/add_new_mood/add_new_mood.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
 import 'package:mood_tracker/views/search_page/search_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/date_helper_utils.dart';
-import '../add_new_mood/add_new_mood.dart';
 import '../core/single_item_card.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final VoidCallback onSearchClick;
+  final VoidCallback onSearchExit;
+
+  const HomePage(
+      {Key? key, required this.onSearchClick, required this.onSearchExit})
+      : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -33,11 +38,11 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => Scaffold(
           resizeToAvoidBottomInset: false,
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const AddNewMood()));
             },
+            child: const Icon(Icons.add),
           ),
           body: NestedScrollView(
             floatHeaderSlivers: true,
@@ -56,8 +61,11 @@ class _HomePageState extends State<HomePage> {
                   actions: [
                     IconButton(
                       onPressed: () {
+                        widget.onSearchClick();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const SearchPage()));
+                            builder: (context) => SearchPage(
+                                  onSearchExit: widget.onSearchExit,
+                                )));
                       },
                       icon: const Icon(Icons.search),
                     ),
