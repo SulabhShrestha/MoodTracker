@@ -12,16 +12,26 @@ class DropDownButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: PopupMenuButton<String>(
+        tooltip: "Filter displaying result",
+        position: PopupMenuPosition.under,
+        padding: const EdgeInsets.all(16),
         onSelected: onChanged,
         itemBuilder: (context) {
-          return [
-            const PopupMenuItem(value: "All time", child: Text("All time")),
-            const PopupMenuItem(value: "This month", child: Text("This month")),
-            const PopupMenuItem(value: "Set date", child: Text("Set date")),
-          ];
+          return ["All time", "This month", "Set date"].map((value) {
+            return PopupMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList();
         },
-        child: Padding(
-          padding: EdgeInsets.zero,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: FittedBox(
             child: Row(
               mainAxisSize: MainAxisSize.max,

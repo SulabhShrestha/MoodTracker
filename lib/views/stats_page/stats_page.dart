@@ -60,43 +60,53 @@ class _StatsPageState extends State<StatsPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    DropDownButton(
-                      text: dropDownButtonText,
-                      onChanged: (value) async {
-                        if (value == "All time") {
-                          filter = Filters.allTime;
-                          dropDownButtonText = value;
-                          rebuildWidget = true;
-                        } else if (value == "This month") {
-                          filter = Filters.thisMonth;
-                          dropDownButtonText = value;
-                          rebuildWidget = true;
-                        } else {
-                          var res = await showDialog<dynamic>(
-                              context: context,
-                              builder: (_) {
-                                return const StartEndDatePicker();
-                              });
-
-                          if (res != null) {
-                            rebuildWidget = true;
-                            dropDownButtonText = value;
-                            filter = Filters.rangeDate;
-                            startTimestamp =
-                                res["startDate"].millisecondsSinceEpoch;
-                            endTimestamp =
-                                res["endDate"].millisecondsSinceEpoch;
-                          }
-                        }
-                        if (rebuildWidget) {
-                          rebuildWidget = false;
-                          setState(() {});
-                        }
-                      },
-                    ),
                     if (docsSize == 0) const Text("Nothing to display."),
                     if (docsSize > 0) ...[
-                      DisplayPieChart(moodsStats: snapshot.data!["data"]),
+                      Stack(
+                        children: [
+                          DisplayPieChart(moodsStats: snapshot.data!["data"]),
+                          Positioned(
+                            right: 8,
+                            top: 8,
+                            child: DropDownButton(
+                              text: dropDownButtonText,
+                              onChanged: (value) async {
+                                if (value == "All time") {
+                                  filter = Filters.allTime;
+                                  dropDownButtonText = value;
+                                  rebuildWidget = true;
+                                } else if (value == "This month") {
+                                  filter = Filters.thisMonth;
+                                  dropDownButtonText = value;
+                                  rebuildWidget = true;
+                                } else {
+                                  var res = await showDialog<dynamic>(
+                                      context: context,
+                                      builder: (_) {
+                                        return const StartEndDatePicker();
+                                      });
+
+                                  if (res != null) {
+                                    rebuildWidget = true;
+                                    dropDownButtonText = value;
+                                    filter = Filters.rangeDate;
+                                    startTimestamp =
+                                        res["startDate"].millisecondsSinceEpoch;
+                                    endTimestamp =
+                                        res["endDate"].millisecondsSinceEpoch;
+                                  }
+                                }
+                                if (rebuildWidget) {
+                                  rebuildWidget = false;
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Feelings card
                       Wrap(
                         alignment: WrapAlignment.center,
                         children: List.generate(
