@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -36,11 +38,9 @@ class _CalendarState extends State<Calendar> {
   );
 
   // for making viewing spaces more by hiding calendar dates
-  CalendarFormat calendarFormat = CalendarFormat.month;
   ScrollController _scrollController = ScrollController();
-
-  // previous value of dy when it was scrolled
-  double _previousScrollDelta = 0.0;
+  bool _isCalendarVisible = true;
+  CalendarFormat currentCalendarFormat = CalendarFormat.month;
 
   List<MoodViewModel> _getEventsForDay(DateTime date) {
     // if selected days has no event then return empty
@@ -58,26 +58,6 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
-  void _scrollListener() {
-    double currentScrollDelta = _scrollController.position.pixels;
-    double deltaDifference = currentScrollDelta - _previousScrollDelta;
-
-    // means it is scrolled up, time to hide
-    if (deltaDifference > 0) {
-      setState(() {
-        calendarFormat = CalendarFormat.week;
-      });
-    }
-    // time to un-hide
-    else if (deltaDifference < 0) {
-      setState(() {
-        calendarFormat = CalendarFormat.month;
-      });
-    }
-
-    _previousScrollDelta = currentScrollDelta;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -86,9 +66,6 @@ class _CalendarState extends State<Calendar> {
 
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
   }
 
   @override
@@ -103,13 +80,16 @@ class _CalendarState extends State<Calendar> {
     return Column(
       children: [
         TableCalendar<MoodViewModel>(
-          calendarFormat: calendarFormat,
+          calendarFormat: currentCalendarFormat,
           firstDay: widget.moods.keys.first,
           rangeEndDay: kLastDay,
           headerStyle: const HeaderStyle(
-            formatButtonVisible: false,
+            formatButtonVisible: true,
             titleCentered: true,
           ),
+          onFormatChanged: (format) {
+            setState(() => currentCalendarFormat = format);
+          },
           calendarBuilders: CalendarBuilders(
             defaultBuilder: (context, date, _) {
               return Center(
@@ -135,30 +115,46 @@ class _CalendarState extends State<Calendar> {
           ),
           onDaySelected: _onDaySelected,
         ),
-        const SizedBox(height: 8.0),
         Expanded(
-          child: ValueListenableBuilder<List<MoodViewModel>>(
-            valueListenable: _selectedEvents,
-            builder: (context, moodViewModels, _) {
-              return ListView.builder(
-                controller: _scrollController,
-                itemCount: moodViewModels.length,
-                itemBuilder: (context, index) {
-                  return SingleItemCard(
-                    date: moodViewModels[index].date,
-                    dateLabel: DateHelperUtils()
-                        .getDateLabel(moodViewModels[index].date),
-                    rating: moodViewModels[index].rating,
-                    timeStamp: moodViewModels[index].timestamp,
-                    feedback: moodViewModels[index].feedback,
-                    reason: moodViewModels[index].reason,
-                    showEditDeleteButton: false,
-                    dbImagesPath: moodViewModels[index].imagesURL,
-                    showImageDeleteBtn: false,
-                  );
-                },
-              );
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (scrollNotification) {
+              final offset = scrollNotification.metrics.pixels;
+              log("Offset: $offset, $currentCalendarFormat");
+              if (offset > 0) {
+                setState(() {
+                  _isCalendarVisible = false;
+                  currentCalendarFormat = CalendarFormat.week;
+                });
+              } else if (offset <= 0) {
+                setState(() {
+                  _isCalendarVisible = true;
+                  currentCalendarFormat = CalendarFormat.month;
+                });
+              }
+              return true;
             },
+            child: ValueListenableBuilder<List<MoodViewModel>>(
+              valueListenable: _selectedEvents,
+              builder: (context, moodViewModels, _) {
+                return ListView.builder(
+                  itemCount: moodViewModels.length,
+                  itemBuilder: (context, index) {
+                    return SingleItemCard(
+                      date: moodViewModels[index].date,
+                      dateLabel: DateHelperUtils()
+                          .getDateLabel(moodViewModels[index].date),
+                      rating: moodViewModels[index].rating,
+                      timeStamp: moodViewModels[index].timestamp,
+                      feedback: moodViewModels[index].feedback,
+                      reason: moodViewModels[index].reason,
+                      showEditDeleteButton: false,
+                      dbImagesPath: moodViewModels[index].imagesURL,
+                      showImageDeleteBtn: false,
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ],
