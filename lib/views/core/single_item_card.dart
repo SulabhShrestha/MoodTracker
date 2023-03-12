@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
-import 'package:mood_tracker/utils/text_utils.dart';
+import 'package:mood_tracker/views/core/highlight_text.dart';
 
 import '../../utils/emoji_utils.dart';
 import '../home_page/widgets/image_collection_remotely.dart';
@@ -80,17 +80,15 @@ class SingleItemCard extends StatelessWidget {
                         ),
                         if (reason?.isNotEmpty ==
                             true) // if '==' is not provided then it gives error
-                          TextUtils().returnText(
-                              type: "Because",
-                              text: reason ?? "",
-                              keyword: keyword,
-                              keywordIncludesIn: keywordIncludesIn),
+                          HighlightText(
+                              fullText: reason ?? '',
+                              keyword: keyword ?? '',
+                              heading: "Because "),
                         if (feedback?.isNotEmpty == true)
-                          TextUtils().returnText(
-                              text: feedback ?? "",
-                              type: "I could have",
-                              keyword: keyword,
-                              keywordIncludesIn: keywordIncludesIn)
+                          HighlightText(
+                              fullText: feedback ?? "",
+                              keyword: keyword ?? '',
+                              heading: "I could have ")
                       ],
                     ),
                   ),

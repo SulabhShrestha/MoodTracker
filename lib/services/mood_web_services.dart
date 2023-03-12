@@ -187,11 +187,30 @@ class MoodWebServices {
 
     var dataCollection = [...whyData.docs, ...feedbackData.docs];
 
+    // removing duplicate data from [dataCollection]
+
+    // Define a Set to store the unique document IDs
+    Set<String> uniqueIds = {};
+
+    // Define a List to store the unique snapshots
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> uniqueDataCollection = [];
+
+    // Iterate over the original list and add each snapshot to the unique list
+    // only if its documentID is not already in the Set of unique IDs
+    for (var snapshot in dataCollection) {
+      if (!uniqueIds.contains(snapshot.id)) {
+        uniqueIds.add(snapshot.id);
+        uniqueDataCollection.add(snapshot);
+      }
+    }
+
     // in descending order
-    dataCollection
+    uniqueDataCollection
         .sort((a, b) => b.get('timestamp').compareTo(a.get('timestamp')));
 
-    for (var element in dataCollection) {
+    for (var i = 0; i < uniqueDataCollection.length; i++) {
+      var element = uniqueDataCollection[i];
+
       // First converting to json, and decoding to json
       // Maybe in the future, db will be placed and instead of Object?, actual JSON be returned
       final Map<String, dynamic> json = jsonDecode(jsonEncode(element.data()));
@@ -202,7 +221,12 @@ class MoodWebServices {
 
       // stating where the keyword is
       List<dynamic> whyArray = element.get("whyArray");
-      if (whyArray.contains(searchKeyword)) {
+      List<dynamic> feedbackArray = element.get("feedbackArray");
+
+      if (whyArray.contains(searchKeyword) &&
+          feedbackArray.contains(searchKeyword)) {
+        keywordIncludesIn = "both";
+      } else if (whyArray.contains(searchKeyword)) {
         keywordIncludesIn = "why";
       }
       // that means feedback contains the keyword

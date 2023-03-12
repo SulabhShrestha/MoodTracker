@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 
@@ -16,6 +18,12 @@ class _SearchPageState extends State<SearchPage> {
   bool showLoading = false;
 
   @override
+  void dispose() {
+    log("SEARCH PAGE DISPOSED");
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -23,8 +31,8 @@ class _SearchPageState extends State<SearchPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            widget.onSearchExit();
             Navigator.of(context).pop();
+            widget.onSearchExit();
           },
         ),
       ),
@@ -59,6 +67,10 @@ class _SearchPageState extends State<SearchPage> {
                                       resultMoods: value,
                                       keyword: keyword,
                                     )));
+                          }
+                          // Means that the value is empty
+                          else {
+                            log("Nothing to display");
                           }
                         });
                       }

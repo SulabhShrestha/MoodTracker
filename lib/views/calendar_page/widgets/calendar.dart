@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -21,10 +20,13 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   // for knowing if the selected days have any event to display
-  late final ValueNotifier<List<MoodViewModel>> _selectedEvents;
 
+  late final ValueNotifier<List<MoodViewModel>> _selectedEvents;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+
+  // for making viewing spaces more by hiding calendar dates
+  CalendarFormat currentCalendarFormat = CalendarFormat.month;
 
   var kEvents = LinkedHashMap<DateTime, List<MoodViewModel>>(
     equals: (DateTime? a, DateTime? b) {
@@ -36,11 +38,6 @@ class _CalendarState extends State<Calendar> {
     hashCode: (DateTime key) =>
         key.day * 1000000 + key.month * 10000 + key.year,
   );
-
-  // for making viewing spaces more by hiding calendar dates
-  ScrollController _scrollController = ScrollController();
-  bool _isCalendarVisible = true;
-  CalendarFormat currentCalendarFormat = CalendarFormat.month;
 
   List<MoodViewModel> _getEventsForDay(DateTime date) {
     // if selected days has no event then return empty
@@ -71,7 +68,6 @@ class _CalendarState extends State<Calendar> {
   @override
   void dispose() {
     _selectedEvents.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -122,12 +118,10 @@ class _CalendarState extends State<Calendar> {
               log("Offset: $offset, $currentCalendarFormat");
               if (offset > 0) {
                 setState(() {
-                  _isCalendarVisible = false;
                   currentCalendarFormat = CalendarFormat.week;
                 });
               } else if (offset <= 0) {
                 setState(() {
-                  _isCalendarVisible = true;
                   currentCalendarFormat = CalendarFormat.month;
                 });
               }

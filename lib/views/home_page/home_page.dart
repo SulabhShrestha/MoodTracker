@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
@@ -27,7 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _userID = FirebaseAuth.instance.currentUser!.uid;
   final GlobalKey<NavigatorState> homepageNavigatorKey = GlobalKey<
       NavigatorState>(); // For displaying alert dialog using homepage buildContext
 

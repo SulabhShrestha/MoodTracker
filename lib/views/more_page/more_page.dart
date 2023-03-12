@@ -30,7 +30,7 @@ class MorePage extends StatelessWidget {
                     maxRadius: 36,
                     backgroundImage: NetworkImage(userViewModel.getPhotoURL),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
