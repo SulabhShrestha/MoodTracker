@@ -1,9 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/extension/double_ext.dart';
+import 'package:mood_tracker/utils/emoji_utils.dart';
 import 'package:mood_tracker/views/stats_page/utils.dart';
 
 import '../../../models/mood_stats.dart';
+import 'feeling_card.dart';
 
 //https://github.com/imaNNeo/fl_chart/blob/master/example/lib/presentation/samples/pie/pie_chart_sample2.dart
 class DisplayPieChart extends StatefulWidget {
@@ -16,34 +18,60 @@ class DisplayPieChart extends StatefulWidget {
 }
 
 class PieChartState extends State<DisplayPieChart> {
-  int touchedIndex = -1;
-
+  int currentTouchIndex = -1;
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Stack(
-          children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
-            Center(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: PieChart(
-                  PieChartData(
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 40,
-                    sections: showingSections(widget.moodsStats),
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 1.3,
+          child: Card(
+            color: Colors.white,
+            child: Stack(
+              children: <Widget>[
+                const SizedBox(
+                  height: 18,
+                ),
+                Center(
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: PieChart(
+                      PieChartData(
+                        sectionsSpace: 0,
+                        centerSpaceRadius: 40,
+                        sections: showingSections(widget.moodsStats),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+
+        // Feelings card
+        Wrap(
+          alignment: WrapAlignment.center,
+          children: List.generate(
+              widget.moodsStats.length, // currently 5
+              (index) => GestureDetector(
+                    onTap: () {
+                      setState(() => currentTouchIndex = index);
+
+                      // Resetting the currentTouchIndex back to normal
+                      Future.delayed(const Duration(milliseconds: 700), () {
+                        setState(() => currentTouchIndex = -1);
+                      });
+                    },
+                    child: FeelingCard(
+                      iconSvgPath: EmojiUtils.getSvgPath(index + 1),
+                      feeling: widget.moodsStats[index].feeling,
+                      totalOccurrence: widget.moodsStats[index].occurrence,
+                      color: colors[index],
+                    ),
+                  )),
+        ),
+      ],
     );
   }
 
@@ -60,11 +88,11 @@ class PieChartState extends State<DisplayPieChart> {
         color: colors[i],
         value: value,
         title: '$displayingValue%',
-        radius: 50.0,
-        titleStyle: const TextStyle(
-          fontSize: 16.0,
+        radius: currentTouchIndex == i ? 60 : 50.0,
+        titleStyle: TextStyle(
+          fontSize: currentTouchIndex == i ? 24.0 : 16.0,
           fontWeight: FontWeight.bold,
-          color: Color(0xffffffff),
+          color: const Color(0xffffffff),
         ),
       );
     });
