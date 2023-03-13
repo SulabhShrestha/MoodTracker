@@ -86,7 +86,31 @@ class _CalendarState extends State<Calendar> {
           onFormatChanged: (format) {
             setState(() => currentCalendarFormat = format);
           },
+          availableCalendarFormats: const {
+            CalendarFormat.month: 'Month',
+            CalendarFormat.week: 'Week',
+          },
           calendarBuilders: CalendarBuilders(
+            markerBuilder: (context, date, events) {
+              if (events.isEmpty) {
+                return null;
+              }
+              return Positioned(
+                bottom: 1,
+                right: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    events.length.toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              );
+            },
             defaultBuilder: (context, date, _) {
               return Center(
                 child: Text(

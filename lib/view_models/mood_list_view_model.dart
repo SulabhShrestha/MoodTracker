@@ -31,7 +31,10 @@ class MoodListViewModel extends ChangeNotifier {
   }
 
   Future<Map<String, List<Mood>>> searchMoodsByKeyword(
-      {required String searchKeyword}) async {
+      {required String? searchKeyword}) async {
+    if (searchKeyword == null) {
+      return {};
+    }
     return await _moodWebServices.searchMoodsByKeyword(
         searchKeyword: searchKeyword.toLowerCase());
   }

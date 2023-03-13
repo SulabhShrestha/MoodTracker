@@ -14,6 +14,7 @@ class EditDeleteCardItem extends StatelessWidget {
   final VoidCallback? additionalDeleteAction;
   final GlobalKey<NavigatorState>?
       mainParentNavigatorKey; // for displaying alert dialog
+  final BuildContext? searchPageContext;
 
   const EditDeleteCardItem({
     Key? key,
@@ -25,10 +26,13 @@ class EditDeleteCardItem extends StatelessWidget {
     this.reason,
     this.feedback,
     this.additionalDeleteAction,
+    this.searchPageContext,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var parentContext = mainParentNavigatorKey?.currentContext;
+    BuildContext currentContext = searchPageContext ?? parentContext ?? context;
     return Row(
       children: [
         PopupMenuButton(
@@ -54,7 +58,7 @@ class EditDeleteCardItem extends StatelessWidget {
                 onTap: () async {
                   Future.delayed(
                       const Duration(seconds: 0),
-                      () => Navigator.of(context).push(MaterialPageRoute(
+                      () => Navigator.of(currentContext).push(MaterialPageRoute(
                           builder: (_) => EditMood(
                                 rating: rating,
                                 date: date,
@@ -68,10 +72,9 @@ class EditDeleteCardItem extends StatelessWidget {
               PopupMenuItem(
                 child: const Text('Delete'),
                 onTap: () {
-                  final context = mainParentNavigatorKey?.currentContext;
-                  if (context != null) {
+                  if (parentContext != null) {
                     showDialog(
-                      context: context,
+                      context: parentContext,
                       builder: (_) => DeleteConfirmationDialog(
                         onConfirm: () {
                           additionalDeleteAction?.call();

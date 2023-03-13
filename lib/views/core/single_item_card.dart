@@ -27,6 +27,8 @@ class SingleItemCard extends StatelessWidget {
   final GlobalKey<NavigatorState>?
       mainParentNavigatorKey; // for displaying alert dialog
 
+  final BuildContext? searchPageContext;
+
   const SingleItemCard({
     Key? key,
     required this.date,
@@ -42,6 +44,7 @@ class SingleItemCard extends StatelessWidget {
     this.feedback,
     this.additionalDeleteAction,
     this.mainParentNavigatorKey,
+    this.searchPageContext
   }) : super(key: key);
 
   @override
