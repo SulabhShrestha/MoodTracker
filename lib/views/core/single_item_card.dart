@@ -27,7 +27,7 @@ class SingleItemCard extends StatelessWidget {
   final GlobalKey<NavigatorState>?
       mainParentNavigatorKey; // for displaying alert dialog
 
-  final BuildContext? searchPageContext;
+  final VoidCallback? customEditAction;
 
   const SingleItemCard({
     Key? key,
@@ -44,7 +44,7 @@ class SingleItemCard extends StatelessWidget {
     this.feedback,
     this.additionalDeleteAction,
     this.mainParentNavigatorKey,
-    this.searchPageContext
+    this.customEditAction,
   }) : super(key: key);
 
   @override
@@ -108,6 +108,7 @@ class SingleItemCard extends StatelessWidget {
                     dbImagesPath: dbImagesPath,
                     additionalDeleteAction: additionalDeleteAction,
                     mainParentNavigatorKey: mainParentNavigatorKey,
+                    customEditAction: customEditAction,
                   ),
               ],
             ),

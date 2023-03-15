@@ -14,7 +14,8 @@ class EditDeleteCardItem extends StatelessWidget {
   final VoidCallback? additionalDeleteAction;
   final GlobalKey<NavigatorState>?
       mainParentNavigatorKey; // for displaying alert dialog
-  final BuildContext? searchPageContext;
+  final VoidCallback?
+      customEditAction; // for displaying edit page over search page
 
   const EditDeleteCardItem({
     Key? key,
@@ -26,13 +27,11 @@ class EditDeleteCardItem extends StatelessWidget {
     this.reason,
     this.feedback,
     this.additionalDeleteAction,
-    this.searchPageContext,
+    this.customEditAction,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var parentContext = mainParentNavigatorKey?.currentContext;
-    BuildContext currentContext = searchPageContext ?? parentContext ?? context;
     return Row(
       children: [
         PopupMenuButton(
@@ -56,25 +55,30 @@ class EditDeleteCardItem extends StatelessWidget {
               PopupMenuItem(
                 child: const Text('Edit'),
                 onTap: () async {
-                  Future.delayed(
-                      const Duration(seconds: 0),
-                      () => Navigator.of(currentContext).push(MaterialPageRoute(
-                          builder: (_) => EditMood(
-                                rating: rating,
-                                date: date,
-                                timestamp: timestamp,
-                                reason: reason,
-                                feedback: feedback,
-                                dbImagesPath: dbImagesPath,
-                              ))));
+                  if (customEditAction != null) {
+                    customEditAction!.call();
+                  } else {
+                    await Future.delayed(
+                        const Duration(seconds: 0),
+                        () => Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => EditMood(
+                                  rating: rating,
+                                  date: date,
+                                  timestamp: timestamp,
+                                  reason: reason,
+                                  feedback: feedback,
+                                  dbImagesPath: dbImagesPath,
+                                ))));
+                  }
                 },
               ),
               PopupMenuItem(
                 child: const Text('Delete'),
                 onTap: () {
-                  if (parentContext != null) {
+                  final context = mainParentNavigatorKey?.currentContext;
+                  if (context != null) {
                     showDialog(
-                      context: parentContext,
+                      context: context,
                       builder: (_) => DeleteConfirmationDialog(
                         onConfirm: () {
                           additionalDeleteAction?.call();

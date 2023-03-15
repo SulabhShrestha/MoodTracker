@@ -10,16 +10,12 @@ import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
 import 'package:mood_tracker/views/search_page/search_page.dart';
 import 'package:provider/provider.dart';
 
+import '../../bloc/bottom_navbar_bloc.dart';
 import '../../utils/date_helper_utils.dart';
 import '../core/single_item_card.dart';
 
 class HomePage extends StatefulWidget {
-  final VoidCallback onSearchClick;
-  final VoidCallback onSearchExit;
-
-  const HomePage(
-      {Key? key, required this.onSearchClick, required this.onSearchExit})
-      : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -60,11 +56,12 @@ class _HomePageState extends State<HomePage> {
                   actions: [
                     IconButton(
                       onPressed: () {
-                        widget.onSearchClick();
+                        // removing navbar
+                        Provider.of<BottomNavBarBloc>(context, listen: false)
+                            .counterSink
+                            .add(false);
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SearchPage(
-                                  onSearchExit: widget.onSearchExit,
-                                )));
+                            builder: (context) => const SearchPage()));
                       },
                       icon: const Icon(Icons.search),
                     ),
