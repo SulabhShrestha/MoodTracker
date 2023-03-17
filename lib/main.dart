@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mood_tracker/views/auth_deciding.dart';
 
 import 'firebase_options.dart';
@@ -18,9 +21,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Mood Tracker',
-      home: AuthDeciding(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: window.locales,
+      home: const AuthDeciding(),
     );
   }
 }

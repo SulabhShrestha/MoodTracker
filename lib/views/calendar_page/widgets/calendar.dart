@@ -7,7 +7,7 @@ import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../utils/date_helper_utils.dart';
-import '../utils.dart';
+import '../utils.dart' as utils;
 
 class Calendar extends StatefulWidget {
   final LinkedHashMap<DateTime, List<MoodViewModel>> moods;
@@ -59,6 +59,8 @@ class _CalendarState extends State<Calendar> {
   void initState() {
     super.initState();
 
+    utils.firstDayOfWeek();
+
     kEvents.addAll(widget.moods);
 
     _selectedDay = _focusedDay;
@@ -78,7 +80,8 @@ class _CalendarState extends State<Calendar> {
         TableCalendar<MoodViewModel>(
           calendarFormat: currentCalendarFormat,
           firstDay: widget.moods.keys.first,
-          rangeEndDay: kLastDay,
+          rangeStartDay: widget.moods.keys.first,
+          rangeEndDay: utils.kLastDay,
           headerStyle: const HeaderStyle(
             formatButtonVisible: true,
             titleCentered: true,
@@ -122,11 +125,11 @@ class _CalendarState extends State<Calendar> {
               );
             },
           ),
-          lastDay: kLastDay,
+          lastDay: utils.kLastDay,
           focusedDay: _focusedDay,
           selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
           eventLoader: _getEventsForDay,
-          startingDayOfWeek: StartingDayOfWeek.sunday,
+          startingDayOfWeek: utils.firstDayOfWeek(),
           calendarStyle: const CalendarStyle(
             markerSize: 10,
             markersMaxCount: 24,

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -99,6 +100,7 @@ class ShowDatePicker {
   Future<DateTime?> selectStartDate(BuildContext context) async {
     final DateTime? date = await showDatePicker(
       context: context,
+      locale: window.locale,
       initialDate: DateTime.now(),
       firstDate: DateTime(1970),
       lastDate: DateTime.now(),
@@ -109,6 +111,7 @@ class ShowDatePicker {
   Future<DateTime?> selectEndDate(BuildContext context) async {
     final DateTime? date = await showDatePicker(
       context: context,
+      locale: window.locale,
       initialDate: DateTime.now(),
       firstDate: DateTime(1970),
       lastDate: DateTime.now(),
