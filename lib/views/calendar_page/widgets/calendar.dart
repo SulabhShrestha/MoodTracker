@@ -59,8 +59,6 @@ class _CalendarState extends State<Calendar> {
   void initState() {
     super.initState();
 
-    utils.firstDayOfWeek();
-
     kEvents.addAll(widget.moods);
 
     _selectedDay = _focusedDay;
@@ -80,7 +78,6 @@ class _CalendarState extends State<Calendar> {
         TableCalendar<MoodViewModel>(
           calendarFormat: currentCalendarFormat,
           firstDay: widget.moods.keys.first,
-          rangeStartDay: widget.moods.keys.first,
           rangeEndDay: utils.kLastDay,
           headerStyle: const HeaderStyle(
             formatButtonVisible: true,
@@ -129,7 +126,7 @@ class _CalendarState extends State<Calendar> {
           focusedDay: _focusedDay,
           selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
           eventLoader: _getEventsForDay,
-          startingDayOfWeek: utils.firstDayOfWeek(),
+          startingDayOfWeek: DateHelperUtils().firstDayOfWeekString(),
           calendarStyle: const CalendarStyle(
             markerSize: 10,
             markersMaxCount: 24,

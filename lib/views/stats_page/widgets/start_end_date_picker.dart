@@ -1,7 +1,11 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
+
+import '../utils.dart' as utils;
 
 class StartEndDatePicker extends StatefulWidget {
   const StartEndDatePicker({Key? key}) : super(key: key);
@@ -16,6 +20,18 @@ class _StartEndDatePickerState extends State<StartEndDatePicker> {
 
   Map<String, DateTime> startEndTimes = {};
 
+  var firstDate = DateTime(1970); // dummy
+
+  @override
+  void initState() {
+    fetchNecessary();
+    super.initState();
+  }
+
+  void fetchNecessary() async {
+    firstDate = await CalendarListViewModel().getFirstEnteredMoodDateTime();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -25,9 +41,8 @@ class _StartEndDatePickerState extends State<StartEndDatePicker> {
           DatePicker(
               text: startText,
               onClick: () async {
-                var res = await ShowDatePicker().selectStartDate(context);
-                log("RES: $res");
-
+                var res =
+                    await ShowDatePicker().selectStartDate(context, firstDate);
                 if (res != null) {
                   startEndTimes["startDate"] = res;
                   setState(() {
@@ -38,7 +53,8 @@ class _StartEndDatePickerState extends State<StartEndDatePicker> {
           DatePicker(
               text: endText,
               onClick: () async {
-                var res = await ShowDatePicker().selectEndDate(context);
+                var res =
+                    await ShowDatePicker().selectEndDate(context, firstDate);
                 if (res != null) {
                   startEndTimes["endDate"] =
                       DateTime(res.year, res.month, res.day, 23, 59, 59, 999);
@@ -97,25 +113,57 @@ class DatePicker extends StatelessWidget {
 }
 
 class ShowDatePicker {
-  Future<DateTime?> selectStartDate(BuildContext context) async {
-    final DateTime? date = await showDatePicker(
-      context: context,
-      locale: window.locale,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1970),
-      lastDate: DateTime.now(),
-    );
+  Future<DateTime?> selectStartDate(
+      BuildContext context, DateTime firstDate) async {
+    final DateTime? date = await showDialog(
+        context: context,
+        builder: (_) {
+          return Dialog(
+            child: CalendarDatePicker2WithActionButtons(
+              onCancelTapped: () {
+                Navigator.of(context).pop(null);
+              },
+              onValueChanged: (datetime) {
+                Navigator.of(context).pop(datetime.first);
+              },
+              config: CalendarDatePicker2WithActionButtonsConfig(
+                calendarType: CalendarDatePicker2Type.single,
+                disableModePicker: true,
+                firstDate: firstDate,
+                lastDate: DateTime.now(),
+                firstDayOfWeek: utils.firstDayOfWeekInt(),
+              ),
+              initialValue: [DateTime.now()],
+            ),
+          );
+        });
     return date;
   }
 
-  Future<DateTime?> selectEndDate(BuildContext context) async {
-    final DateTime? date = await showDatePicker(
-      context: context,
-      locale: window.locale,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1970),
-      lastDate: DateTime.now(),
-    );
+  Future<DateTime?> selectEndDate(
+      BuildContext context, DateTime firstDate) async {
+    final DateTime? date = await showDialog(
+        context: context,
+        builder: (_) {
+          return Dialog(
+            child: CalendarDatePicker2WithActionButtons(
+              onCancelTapped: () {
+                Navigator.of(context).pop(null);
+              },
+              onValueChanged: (datetime) {
+                Navigator.of(context).pop(datetime.first);
+              },
+              config: CalendarDatePicker2WithActionButtonsConfig(
+                calendarType: CalendarDatePicker2Type.single,
+                disableModePicker: true,
+                firstDate: firstDate,
+                lastDate: DateTime.now(),
+                firstDayOfWeek: utils.firstDayOfWeekInt(),
+              ),
+              initialValue: [DateTime.now()],
+            ),
+          );
+        });
     return date;
   }
 }

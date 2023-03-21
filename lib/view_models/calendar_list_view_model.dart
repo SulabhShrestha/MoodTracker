@@ -23,4 +23,8 @@ class CalendarListViewModel {
 
     return moods;
   }
+
+  Future<DateTime> getFirstEnteredMoodDateTime() async {
+    return await _moodWebServices.getFirstEnteredMoodDateTime();
+  }
 }

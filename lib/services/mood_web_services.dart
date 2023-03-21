@@ -250,6 +250,19 @@ class MoodWebServices {
     return groupedData;
   }
 
+  Future<DateTime> getFirstEnteredMoodDateTime() async {
+    final userID = FirebaseAuth.instance.currentUser!.uid;
+
+    var firebaseData = await FirebaseFirestore.instance
+        .collectionGroup('List')
+        .where("userID", isEqualTo: userID)
+        .get();
+
+    var firstDate = firebaseData.docs.first.get("date");
+
+    return DateTime.parse(firstDate);
+  }
+
   /// returns Map<DateTime, List>
   Future<Map<DateTime, List<Mood>>> getAllMoodsDateTime() async {
     // Date : List<>

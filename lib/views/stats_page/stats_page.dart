@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/mood_stats.dart';
 import '../../view_models/stats_list_view_model.dart';
 import 'utils.dart';
 import 'widgets/display_pie_chart.dart';
@@ -54,7 +53,6 @@ class _StatsPageState extends State<StatsPage> {
             builder: (_, snapshot) {
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.done) {
-                List<MoodStats> moodsStats = snapshot.data!["data"];
                 int docsSize = snapshot.data!["docsSize"];
 
                 return Column(
@@ -77,6 +75,10 @@ class _StatsPageState extends State<StatsPage> {
                                   rebuildWidget = true;
                                 } else if (value == "This month") {
                                   filter = Filters.thisMonth;
+                                  dropDownButtonText = value;
+                                  rebuildWidget = true;
+                                } else if (value == "This week") {
+                                  filter = Filters.thisWeek;
                                   dropDownButtonText = value;
                                   rebuildWidget = true;
                                 } else {

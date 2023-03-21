@@ -17,7 +17,8 @@ class DropDownButton extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         onSelected: onChanged,
         itemBuilder: (context) {
-          return ["All time", "This month", "Set date"].map((value) {
+          return ["All time", "This month", "This week", "Set date"]
+              .map((value) {
             return PopupMenuItem<String>(
               value: value,
               child: Text(value),

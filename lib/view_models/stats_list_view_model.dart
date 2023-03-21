@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/services/stats_web_services.dart';
 
@@ -22,9 +20,12 @@ class StatsListViewModel extends ChangeNotifier {
         break;
 
       case Filters.rangeDate:
-        log("I came here: $startTimestamp $endTimestamp $filter");
         stats = await _statsWebServices.fetchRange(
             startTimestamp: startTimestamp!, endTimestamp: endTimestamp!);
+        break;
+
+      case Filters.thisWeek:
+        stats = await _statsWebServices.fetchThisWeek();
         break;
     }
 
