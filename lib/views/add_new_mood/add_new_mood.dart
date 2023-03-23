@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
+import 'package:provider/provider.dart';
 
 import '../../view_models/mood_list_view_model.dart';
 import '../core/bordered_container.dart';
@@ -64,6 +66,9 @@ class _AddNewMoodState extends State<AddNewMood> {
             debugPrint("Rating is necessary");
           } else {
             await addStuffs(onComplete: () {
+              Provider.of<BottomNavBarBloc>(context, listen: false)
+                  .counterSink
+                  .add(true);
               Navigator.pop(context);
             });
           }
@@ -79,6 +84,9 @@ class _AddNewMoodState extends State<AddNewMood> {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
+            Provider.of<BottomNavBarBloc>(context, listen: false)
+                .counterSink
+                .add(true);
             Navigator.pop(context);
           },
         ),

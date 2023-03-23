@@ -34,6 +34,9 @@ class _HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
+              Provider.of<BottomNavBarBloc>(context, listen: false)
+                  .counterSink
+                  .add(false);
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const AddNewMood()));
             },
