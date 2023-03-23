@@ -2,8 +2,10 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/models/first_day_of_week_model.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../utils/date_helper_utils.dart';
@@ -58,7 +60,6 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
-
     kEvents.addAll(widget.moods);
 
     _selectedDay = _focusedDay;
@@ -75,66 +76,77 @@ class _CalendarState extends State<Calendar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TableCalendar<MoodViewModel>(
-          calendarFormat: currentCalendarFormat,
-          firstDay: widget.moods.keys.first,
-          rangeEndDay: utils.kLastDay,
-          headerStyle: const HeaderStyle(
-            formatButtonVisible: true,
-            titleCentered: true,
-          ),
-          onFormatChanged: (format) {
-            setState(() => currentCalendarFormat = format);
-          },
-          availableCalendarFormats: const {
-            CalendarFormat.month: 'Month',
-            CalendarFormat.week: 'Week',
-          },
-          calendarBuilders: CalendarBuilders(
-            markerBuilder: (context, date, events) {
-              if (events.isEmpty) {
-                return null;
+        FutureBuilder(
+            future:
+                Provider.of<FirstDayOfWeekModel>(context).getFirstDayOfWeek(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(child: Text("Something went wrong"));
               }
-              return Positioned(
-                bottom: 1,
-                right: 1,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    events.length.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
+              return TableCalendar<MoodViewModel>(
+                calendarFormat: currentCalendarFormat,
+                firstDay: widget.moods.keys.first,
+                rangeEndDay: utils.kLastDay,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: true,
+                  titleCentered: true,
                 ),
-              );
-            },
-            defaultBuilder: (context, date, _) {
-              return Center(
-                child: Text(
-                  date.day.toString(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
+                onFormatChanged: (format) {
+                  setState(() => currentCalendarFormat = format);
+                },
+                availableCalendarFormats: const {
+                  CalendarFormat.month: 'Month',
+                  CalendarFormat.week: 'Week',
+                },
+                calendarBuilders: CalendarBuilders(
+                  markerBuilder: (context, date, events) {
+                    if (events.isEmpty) {
+                      return null;
+                    }
+                    return Positioned(
+                      bottom: 1,
+                      right: 1,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          events.length.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
+                  defaultBuilder: (context, date, _) {
+                    return Center(
+                      child: Text(
+                        date.day.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  },
                 ),
+                lastDay: utils.kLastDay,
+                focusedDay: _focusedDay,
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                eventLoader: _getEventsForDay,
+                startingDayOfWeek: DateHelperUtils()
+                    .firstDayOfWeekString(firstDayOfWeek: snapshot.data!),
+                calendarStyle: const CalendarStyle(
+                  markerSize: 10,
+                  markersMaxCount: 24,
+                  outsideDaysVisible: false,
+                  canMarkersOverflow: true,
+                ),
+                onDaySelected: _onDaySelected,
               );
-            },
-          ),
-          lastDay: utils.kLastDay,
-          focusedDay: _focusedDay,
-          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-          eventLoader: _getEventsForDay,
-          startingDayOfWeek: DateHelperUtils().firstDayOfWeekString(),
-          calendarStyle: const CalendarStyle(
-            markerSize: 10,
-            markersMaxCount: 24,
-            outsideDaysVisible: false,
-            canMarkersOverflow: true,
-          ),
-          onDaySelected: _onDaySelected,
-        ),
+            }),
         Expanded(
           child: NotificationListener<ScrollNotification>(
             onNotification: (scrollNotification) {

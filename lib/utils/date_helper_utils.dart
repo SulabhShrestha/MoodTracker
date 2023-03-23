@@ -6,27 +6,37 @@ import 'package:intl/date_symbols.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DateHelperUtils {
-  StartingDayOfWeek firstDayOfWeekString() {
-    Locale currentLocale = window.locale; // getting current locale
-    log("Current Locale: ${currentLocale.languageCode}");
+  StartingDayOfWeek firstDayOfWeekString({required String firstDayOfWeek}) {
+    if (firstDayOfWeek == "Auto") {
+      Locale currentLocale = window.locale; // getting current locale
+      log("Current Locale: ${currentLocale.languageCode}");
 
-    var dateSymbolMap = dateTimeSymbolMap();
-    DateSymbols dateSymbols =
-        dateSymbolMap[currentLocale.languageCode.toString()];
-    log("first day: ${dateSymbols.FIRSTDAYOFWEEK}");
+      var dateSymbolMap = dateTimeSymbolMap();
+      DateSymbols dateSymbols =
+          dateSymbolMap[currentLocale.languageCode.toString()];
+      log("first day: ${dateSymbols.FIRSTDAYOFWEEK}");
 
-    switch (dateSymbols.FIRSTDAYOFWEEK) {
-      case 0:
-        return StartingDayOfWeek.monday;
+      switch (dateSymbols.FIRSTDAYOFWEEK) {
+        case 0:
+          return StartingDayOfWeek.monday;
 
-      case 1:
-        return StartingDayOfWeek.tuesday;
+        case 1:
+          return StartingDayOfWeek.tuesday;
 
-      case 5:
-        return StartingDayOfWeek.saturday;
+        case 5:
+          return StartingDayOfWeek.saturday;
 
-      default:
-        return StartingDayOfWeek.sunday;
+        default:
+          return StartingDayOfWeek.sunday;
+      }
+    } else if (firstDayOfWeek == "Monday") {
+      return StartingDayOfWeek.monday;
+    } else if (firstDayOfWeek == "Tuesday") {
+      return StartingDayOfWeek.tuesday;
+    } else if (firstDayOfWeek == "Saturday") {
+      return StartingDayOfWeek.saturday;
+    } else {
+      return StartingDayOfWeek.sunday;
     }
   }
 

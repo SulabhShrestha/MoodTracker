@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/models/first_day_of_week_model.dart';
 import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
 
 import '../utils.dart' as utils;
@@ -20,7 +21,7 @@ class _StartEndDatePickerState extends State<StartEndDatePicker> {
 
   Map<String, DateTime> startEndTimes = {};
 
-  var firstDate = DateTime(1970); // dummy
+  late DateTime firstDate;
 
   @override
   void initState() {
@@ -34,57 +35,68 @@ class _StartEndDatePickerState extends State<StartEndDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          DatePicker(
-              text: startText,
-              onClick: () async {
-                var res =
-                    await ShowDatePicker().selectStartDate(context, firstDate);
-                if (res != null) {
-                  startEndTimes["startDate"] = res;
-                  setState(() {
-                    startText = "${res.year}-${res.month}-${res.day}";
-                  });
-                }
-              }),
-          DatePicker(
-              text: endText,
-              onClick: () async {
-                var res =
-                    await ShowDatePicker().selectEndDate(context, firstDate);
-                if (res != null) {
-                  startEndTimes["endDate"] =
-                      DateTime(res.year, res.month, res.day, 23, 59, 59, 999);
-                  log(startEndTimes["endDate"].toString());
-                  setState(() {
-                    endText = "${res.year}-${res.month}-${res.day}";
-                  });
-                }
-              }),
-        ],
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (startText == endText) {
-              log("Same");
-            } else if (startText == "Start Date" || endText == "End Date") {
-              log("Empty date");
-            } else {
-              Navigator.pop<Map<String, DateTime>>(context, startEndTimes);
-            }
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    );
+    return FutureBuilder(
+        future: FirstDayOfWeekModel().getFirstDayOfWeek(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Something went wrong");
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return AlertDialog(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                DatePicker(
+                    text: startText,
+                    onClick: () async {
+                      var res = await ShowDatePicker()
+                          .selectStartDate(context, firstDate, snapshot.data!);
+                      if (res != null) {
+                        startEndTimes["startDate"] = res;
+                        setState(() {
+                          startText = "${res.year}-${res.month}-${res.day}";
+                        });
+                      }
+                    }),
+                DatePicker(
+                    text: endText,
+                    onClick: () async {
+                      var res = await ShowDatePicker()
+                          .selectEndDate(context, firstDate, snapshot.data!);
+                      if (res != null) {
+                        startEndTimes["endDate"] = DateTime(
+                            res.year, res.month, res.day, 23, 59, 59, 999);
+                        log(startEndTimes["endDate"].toString());
+                        setState(() {
+                          endText = "${res.year}-${res.month}-${res.day}";
+                        });
+                      }
+                    }),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (startText == endText) {
+                    log("Same");
+                  } else if (startText == "Start Date" ||
+                      endText == "End Date") {
+                    log("Empty date");
+                  } else {
+                    Navigator.pop<Map<String, DateTime>>(
+                        context, startEndTimes);
+                  }
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        });
   }
 }
 
@@ -114,7 +126,7 @@ class DatePicker extends StatelessWidget {
 
 class ShowDatePicker {
   Future<DateTime?> selectStartDate(
-      BuildContext context, DateTime firstDate) async {
+      BuildContext context, DateTime firstDate, String firstDayOfWeek) async {
     final DateTime? date = await showDialog(
         context: context,
         builder: (_) {
@@ -131,7 +143,8 @@ class ShowDatePicker {
                 disableModePicker: true,
                 firstDate: firstDate,
                 lastDate: DateTime.now(),
-                firstDayOfWeek: utils.firstDayOfWeekInt(),
+                firstDayOfWeek:
+                    utils.firstDayOfWeekInt(firstDayOfWeek: firstDayOfWeek),
               ),
               initialValue: [DateTime.now()],
             ),
@@ -141,7 +154,7 @@ class ShowDatePicker {
   }
 
   Future<DateTime?> selectEndDate(
-      BuildContext context, DateTime firstDate) async {
+      BuildContext context, DateTime firstDate, String firstDayOfWeek) async {
     final DateTime? date = await showDialog(
         context: context,
         builder: (_) {
@@ -158,7 +171,8 @@ class ShowDatePicker {
                 disableModePicker: true,
                 firstDate: firstDate,
                 lastDate: DateTime.now(),
-                firstDayOfWeek: utils.firstDayOfWeekInt(),
+                firstDayOfWeek:
+                    utils.firstDayOfWeekInt(firstDayOfWeek: firstDayOfWeek),
               ),
               initialValue: [DateTime.now()],
             ),

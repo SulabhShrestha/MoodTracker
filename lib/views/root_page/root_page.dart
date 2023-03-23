@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
+import 'package:mood_tracker/models/first_day_of_week_model.dart';
 import 'package:mood_tracker/view_models/stats_list_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/home_page/home_page.dart';
@@ -51,9 +52,13 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     log("Current page: $selectedIndex");
     return Scaffold(
-        body: Provider<BottomNavBarBloc>(
-          create: (context) => barBloc,
-          builder: (context, child) {
+        body: MultiProvider(
+          providers: [
+            Provider<BottomNavBarBloc>(create: (context) => barBloc),
+            Provider<FirstDayOfWeekModel>(
+                create: (context) => FirstDayOfWeekModel()),
+          ],
+          builder: (_, child) {
             return PageView.builder(
               onPageChanged: (page) {
                 setState(() {
@@ -108,7 +113,7 @@ class _RootPageState extends State<RootPage> {
                           text: 'Home',
                         ),
                         GButton(
-                          icon: Icons.calendar_today,
+                          icon: Icons.calendar_month,
                           text: 'Calendar',
                         ),
                         GButton(

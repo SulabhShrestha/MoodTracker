@@ -21,28 +21,41 @@ List<MaterialColor> colors = [
   Colors.cyan,
 ];
 
-int firstDayOfWeekInt() {
-  Locale currentLocale = window.locale; // getting current locale
-  log("Current Locale: ${currentLocale.languageCode}");
+int firstDayOfWeekInt({required String firstDayOfWeek}) {
+  if (firstDayOfWeek == "Auto") {
+    Locale currentLocale = window.locale; // getting current locale
+    log("Current Locale: ${currentLocale.languageCode}");
 
-  var dateSymbolMap = dateTimeSymbolMap();
-  DateSymbols dateSymbols =
-      dateSymbolMap[currentLocale.languageCode.toString()];
-  log("first day: ${dateSymbols.FIRSTDAYOFWEEK}");
+    var dateSymbolMap = dateTimeSymbolMap();
+    DateSymbols dateSymbols =
+        dateSymbolMap[currentLocale.languageCode.toString()];
+    log("first day: ${dateSymbols.FIRSTDAYOFWEEK}");
 
-  // 0 means monday in [dateSymbols.FIRSTDAYOFWEEK]
-  // but for [CalendarDatePicker2WithAction] 0 is sunday
-  switch (dateSymbols.FIRSTDAYOFWEEK) {
-    case 0: // monday
-      return 1;
+    // 0 means monday in [dateSymbols.FIRSTDAYOFWEEK]
+    // but for [CalendarDatePicker2WithAction] 0 is sunday
+    switch (dateSymbols.FIRSTDAYOFWEEK) {
+      case 0: // monday
+        return 1;
 
-    case 1: // tuesday
-      return 2;
+      case 1: // tuesday
+        return 2;
 
-    case 5: // saturday
-      return 6;
+      case 5: // saturday
+        return 6;
 
-    default: // sunday
-      return 0;
+      default: // sunday
+        return 0;
+    }
+  } else if (firstDayOfWeek == "Monday") {
+    return 1;
+  } else if (firstDayOfWeek == "Tuesday") {
+    return 2;
+  } else if (firstDayOfWeek == "Saturday") {
+    return 6;
+  }
+
+  // sunday
+  else {
+    return 0;
   }
 }

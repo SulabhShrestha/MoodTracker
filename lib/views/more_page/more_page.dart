@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/models/first_day_of_week_model.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
+import 'package:mood_tracker/views/more_page/widgets/first_day_selection.dart';
+import 'package:provider/provider.dart';
 
 import '../feedback_sheet/feedback_sheet.dart';
 import 'widgets/custom_box.dart';
@@ -43,6 +46,30 @@ class MorePage extends StatelessWidget {
             ),
 
             const SizedBox(height: 8),
+
+            CustomBox(
+              child: CustomListTile(
+                title: "Start of the week",
+                leadingIconData: Icons.calendar_today,
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return FirstDaySelection(
+                          onChanged: (day) async {
+                            Provider.of<FirstDayOfWeekModel>(context,
+                                    listen: false)
+                                .saveFirstDayOfWeek(day);
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      });
+                },
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
             // Other
             CustomBox(
               child: Column(
