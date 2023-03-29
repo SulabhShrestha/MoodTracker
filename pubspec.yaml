@@ -57,6 +57,7 @@ dependencies:
   firebase_app_check: ^0.1.1+14
   shared_preferences: ^2.0.18
   calendar_date_picker2: ^0.4.6
+  connectivity_plus: ^3.0.3
 
 dev_dependencies:
   flutter_test:

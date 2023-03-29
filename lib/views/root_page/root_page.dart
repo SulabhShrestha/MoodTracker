@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../calendar_page/calendar_page.dart';
 import '../stats_page/stats_page.dart';
+import 'utils/interaction_utils.dart';
 
 /// This page is the main page, that hols [HomePage], [Calendar] and [Stats] pages
 ///
@@ -32,8 +34,18 @@ class _RootPageState extends State<RootPage> {
 
   BottomNavBarBloc barBloc = BottomNavBarBloc();
 
+  ConnectivityResult? connectivityResult;
+  bool isDialogShown = false;
+
   @override
   void initState() {
+    _checkInternetConnection();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
+
     _pages = <Widget>[
       ChangeNotifierProvider(
           create: (BuildContext context) => UserViewModel(),
@@ -48,29 +60,28 @@ class _RootPageState extends State<RootPage> {
     super.initState();
   }
 
+  void _checkInternetConnection() async {
+    connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (connectivityResult == ConnectivityResult.none &&
+        connectivityResult != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+            context: context,
+            builder: (context) => noInternetConnection(context));
+      });
+    }
+
     log("Current page: $selectedIndex");
     return WillPopScope(
       onWillPop: () async {
         return await showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Confirm'),
-                content:
-                    const Text('Are you sure you want to close this screen?'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: const Text('Yes'),
-                  ),
-                ],
-              ),
-            ) ??
+                context: context,
+                builder: (context) => doYouWantToExit(context)) ??
             false;
       },
       child: Scaffold(

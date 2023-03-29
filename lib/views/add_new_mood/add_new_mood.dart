@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
+import 'package:mood_tracker/views/root_page/root_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_models/mood_list_view_model.dart';
@@ -21,6 +22,18 @@ class AddNewMood extends StatefulWidget {
 
   @override
   State<AddNewMood> createState() => _AddNewMoodState();
+
+  static Future<bool> handleBackButton(BuildContext context) async {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+      return true;
+    } else {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => const RootPage()));
+      // Handle back button press in the home page or exit the app
+      return false;
+    }
+  }
 }
 
 class _AddNewMoodState extends State<AddNewMood> {
@@ -92,153 +105,160 @@ class _AddNewMoodState extends State<AddNewMood> {
         ),
         actions: [_actionIcon()],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("How was your day?"),
-                  EmojiPanel(
-                    onSelected: (index) {
-                      rating = index + 1;
-                      log(rating.toString());
-                    },
-                  ),
-                ],
-              ),
-            ),
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Why did you feel this way?"),
-                  TextField(
-                    controller: _whyController,
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(),
+      body: WillPopScope(
+        onWillPop: () async {
+          Navigator.pop(context);
+          return Future.value(
+              false); // Prevent default behavior (closing the app)
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("How was your day?"),
+                    EmojiPanel(
+                      onSelected: (index) {
+                        rating = index + 1;
+                        log(rating.toString());
+                      },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("What could go better?"),
-                  TextField(
-                    controller: _feedbackController,
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(),
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Why did you feel this way?"),
+                    TextField(
+                      controller: _whyController,
+                      decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Photo"),
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("What could go better?"),
+                    TextField(
+                      controller: _feedbackController,
+                      decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Photo"),
 
-                  // Displaying images that are selected
-                  Center(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          if (imagesPath.isNotEmpty)
-                            for (var path in imagesPath)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 12),
-                                child: ImageViewer(
-                                  size: imageMinSize,
-                                  path: path!,
-                                  isURL: false,
-                                  callback: () {
-                                    setState(() {
-                                      imagesPath.remove(path);
-                                    });
-                                  },
+                    // Displaying images that are selected
+                    Center(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            if (imagesPath.isNotEmpty)
+                              for (var path in imagesPath)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: ImageViewer(
+                                    size: imageMinSize,
+                                    path: path!,
+                                    isURL: false,
+                                    callback: () {
+                                      setState(() {
+                                        imagesPath.remove(path);
+                                      });
+                                    },
+                                  ),
                                 ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: imagesPath.length >= 4 ? false : true,
+                      child: Row(
+                        children: [
+                          // Camera
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () async {
+                                String? path =
+                                    await LocalImage.pickImageFromCamera();
+
+                                if (path != null) {
+                                  setState(() {
+                                    imagesPath.add(path);
+
+                                    if (imagesPath.length == 3) {
+                                      imageMinSize = 180;
+                                    } else if (imagesPath.length == 4) {
+                                      imageMinSize = 160;
+                                    }
+                                  });
+                                }
+                              },
+                              style: ButtonStyle(
+                                side: MaterialStateProperty.all(
+                                    const BorderSide()),
                               ),
+                              child: const Text("From Camera"),
+                            ),
+                          ),
+
+                          const SizedBox(width: 16),
+
+                          // Gallery
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () async {
+                                String? path =
+                                    await LocalImage.pickImageFromGallery();
+
+                                if (path != null) {
+                                  setState(() {
+                                    imagesPath.add(path);
+
+                                    if (imagesPath.length == 3) {
+                                      imageMinSize = 180;
+                                    } else if (imagesPath.length == 4) {
+                                      imageMinSize = 160;
+                                    }
+                                  });
+                                }
+                              },
+                              style: ButtonStyle(
+                                side: MaterialStateProperty.all(
+                                    const BorderSide()),
+                              ),
+                              child: const Text("From Gallery"),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-
-                  Visibility(
-                    visible: imagesPath.length >= 4 ? false : true,
-                    child: Row(
-                      children: [
-                        // Camera
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () async {
-                              String? path =
-                                  await LocalImage.pickImageFromCamera();
-
-                              if (path != null) {
-                                setState(() {
-                                  imagesPath.add(path);
-
-                                  if (imagesPath.length == 3) {
-                                    imageMinSize = 180;
-                                  } else if (imagesPath.length == 4) {
-                                    imageMinSize = 160;
-                                  }
-                                });
-                              }
-                            },
-                            style: ButtonStyle(
-                              side:
-                                  MaterialStateProperty.all(const BorderSide()),
-                            ),
-                            child: const Text("From Camera"),
-                          ),
-                        ),
-
-                        const SizedBox(width: 16),
-
-                        // Gallery
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () async {
-                              String? path =
-                                  await LocalImage.pickImageFromGallery();
-
-                              if (path != null) {
-                                setState(() {
-                                  imagesPath.add(path);
-
-                                  if (imagesPath.length == 3) {
-                                    imageMinSize = 180;
-                                  } else if (imagesPath.length == 4) {
-                                    imageMinSize = 160;
-                                  }
-                                });
-                              }
-                            },
-                            style: ButtonStyle(
-                              side:
-                                  MaterialStateProperty.all(const BorderSide()),
-                            ),
-                            child: const Text("From Gallery"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
