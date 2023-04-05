@@ -1,16 +1,17 @@
 import 'dart:collection';
 
-import '../services/mood_web_services.dart';
+import 'package:mood_tracker/services/calendar_web_services.dart';
+
 import 'mood_view_model.dart';
 
 class CalendarListViewModel {
-  final _moodWebServices = MoodWebServices();
+  final _calendarWebServices = CalendarWebServices();
 
   Future<LinkedHashMap<DateTime, List<MoodViewModel>>>
       populateCalendar() async {
     LinkedHashMap<DateTime, List<MoodViewModel>> moods = LinkedHashMap();
 
-    var res = await _moodWebServices.getAllMoodsDateTime();
+    var res = await _calendarWebServices.getAllMoodsDateTime();
     for (var element in res.entries) {
       List<MoodViewModel> list = [];
 
@@ -25,6 +26,6 @@ class CalendarListViewModel {
   }
 
   Future<DateTime> getFirstEnteredMoodDateTime() async {
-    return await _moodWebServices.getFirstEnteredMoodDateTime();
+    return await _calendarWebServices.getFirstEnteredMoodDateTime();
   }
 }
