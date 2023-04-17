@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
+import 'package:mood_tracker/utils/pop_up.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
 import 'package:mood_tracker/views/root_page/root_page.dart';
@@ -76,7 +77,7 @@ class _AddNewMoodState extends State<AddNewMood> {
         icon: const Icon(Icons.check),
         onPressed: () async {
           if (rating == 0) {
-            debugPrint("Rating is necessary");
+            showSnackBar(context, "Rating not selected.");
           } else {
             await addStuffs(onComplete: () {
               Provider.of<BottomNavBarBloc>(context, listen: false)
