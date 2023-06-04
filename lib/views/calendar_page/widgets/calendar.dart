@@ -148,43 +148,27 @@ class _CalendarState extends State<Calendar> {
               );
             }),
         Expanded(
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (scrollNotification) {
-              final offset = scrollNotification.metrics.pixels;
-              log("Offset: $offset, $currentCalendarFormat");
-              if (offset > 0) {
-                setState(() {
-                  currentCalendarFormat = CalendarFormat.week;
-                });
-              } else if (offset <= 0) {
-                setState(() {
-                  currentCalendarFormat = CalendarFormat.month;
-                });
-              }
-              return true;
+          child: ValueListenableBuilder<List<MoodViewModel>>(
+            valueListenable: _selectedEvents,
+            builder: (context, moodViewModels, _) {
+              return ListView.builder(
+                itemCount: moodViewModels.length,
+                itemBuilder: (context, index) {
+                  return SingleItemCard(
+                    date: moodViewModels[index].date,
+                    dateLabel: DateHelperUtils()
+                        .getDateLabel(moodViewModels[index].date),
+                    rating: moodViewModels[index].rating,
+                    timeStamp: moodViewModels[index].timestamp,
+                    feedback: moodViewModels[index].feedback,
+                    reason: moodViewModels[index].reason,
+                    showEditDeleteButton: false,
+                    dbImagesPath: moodViewModels[index].imagesURL,
+                    showImageDeleteBtn: false,
+                  );
+                },
+              );
             },
-            child: ValueListenableBuilder<List<MoodViewModel>>(
-              valueListenable: _selectedEvents,
-              builder: (context, moodViewModels, _) {
-                return ListView.builder(
-                  itemCount: moodViewModels.length,
-                  itemBuilder: (context, index) {
-                    return SingleItemCard(
-                      date: moodViewModels[index].date,
-                      dateLabel: DateHelperUtils()
-                          .getDateLabel(moodViewModels[index].date),
-                      rating: moodViewModels[index].rating,
-                      timeStamp: moodViewModels[index].timestamp,
-                      feedback: moodViewModels[index].feedback,
-                      reason: moodViewModels[index].reason,
-                      showEditDeleteButton: false,
-                      dbImagesPath: moodViewModels[index].imagesURL,
-                      showImageDeleteBtn: false,
-                    );
-                  },
-                );
-              },
-            ),
           ),
         ),
       ],
