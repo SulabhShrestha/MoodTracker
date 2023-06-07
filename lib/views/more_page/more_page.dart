@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/first_day_of_week_model.dart';
+import 'package:mood_tracker/services/notification_services.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
@@ -93,9 +94,11 @@ class MorePage extends StatelessWidget {
                       ShareViewModel().shareApp();
                     },
                   ),
-                  const CustomListTile(
+                  CustomListTile(
                     title: "Rate us",
                     leadingIconData: Icons.star_outlined,
+                    onTap: (){
+                    },
                   ),
                   CustomListTile(
                     title: "Contact us",

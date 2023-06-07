@@ -10,11 +10,12 @@ class UserWebServices {
   }
 
   String get getUserName {
-    return _auth.currentUser!.displayName ?? "Invisible Character";
+    // name is never empty as it is from google auth
+    return _auth.currentUser!.displayName!;
   }
 
   String get firstLetters {
-    var fullName = _auth.currentUser!.displayName ?? "Invisible Character";
+    var fullName = _auth.currentUser!.displayName!;
     List<String> words = fullName.split(" ");
     String initials = "";
 
