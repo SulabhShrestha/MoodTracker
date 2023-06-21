@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:mood_tracker/services/user_web_services.dart';
 import 'package:mood_tracker/views/add_new_mood/add_new_mood.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 class NotificationService {
   static final NotificationService _notificationService =
@@ -19,26 +17,27 @@ class NotificationService {
   NotificationService._internal();
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   Future<void> initialize(GlobalKey<NavigatorState> navigatorKey) async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: initializationSettingsAndroid);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (NotificationResponse response) async {
-          await navigatorKey.currentState?.push(
-            MaterialPageRoute<void>(builder: (context) => const AddNewMood()),
-          );
-        });
+        onDidReceiveNotificationResponse:
+            (NotificationResponse response) async {
+      await navigatorKey.currentState?.push(
+        MaterialPageRoute<void>(builder: (context) => const AddNewMood()),
+      );
+    });
   }
 
   Future<void> showNotification() async {
     AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       DateTime.now().millisecondsSinceEpoch.toString(),
       "Enter your mood today", // User-visible name of the channel
       importance: Importance.max,
@@ -46,7 +45,7 @@ class NotificationService {
       ticker: 'ticker',
     );
     NotificationDetails notificationDetails =
-    NotificationDetails(android: androidNotificationDetails);
+        NotificationDetails(android: androidNotificationDetails);
     String username = UserWebServices().getUserName;
     await flutterLocalNotificationsPlugin.show(
       0,
@@ -55,9 +54,6 @@ class NotificationService {
       notificationDetails,
     );
   }
-
-
-
 
   Future<void> scheduleDailyNotification() async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -95,7 +91,8 @@ class NotificationService {
           channelDescription: 'your channel description',
         ),
       ),
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       payload: 'notification_payload',
       androidScheduleMode: AndroidScheduleMode.exact,
@@ -115,7 +112,8 @@ class NotificationService {
           channelDescription: 'your channel description',
         ),
       ),
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
       payload: 'notification_payload',
       androidScheduleMode: AndroidScheduleMode.exact,

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
 import 'package:mood_tracker/utils/pop_up.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
-import 'package:mood_tracker/views/home_page/home_page.dart';
 import 'package:mood_tracker/views/result_page/result_page.dart';
-import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -23,17 +20,6 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Provider.of<BottomNavBarBloc>(context, listen: false)
-                .counterSink
-                .add(true);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const HomePage()),
-                (route) => false);
-          },
-        ),
       ),
       body: showLoading
           ? const CircularProgressIndicator()

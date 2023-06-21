@@ -41,7 +41,12 @@ void callbackDispatcher() {
     log("Native called background task: $task");
     // Handle the background task here
     if (task == "notificationTask") {
-      await NotificationService().showNotification();
+
+      final now = DateTime.now();
+      if (now.hour == 18 && now.minute == 0) {
+        log("Showing notification");
+        await NotificationService().showNotification();
+      }
     }
     return Future.value(true);
   });
@@ -63,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     Workmanager().registerPeriodicTask(
       "notificationTask",
       "notificationTask",
-      frequency: const Duration(seconds: 20), // Interval between subsequent executions
+      frequency: const Duration(days: 1), // Interval between subsequent executions
     );
     super.initState();
   }

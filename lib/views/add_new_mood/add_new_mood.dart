@@ -1,12 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/bloc/bottom_navbar_bloc.dart';
 import 'package:mood_tracker/utils/pop_up.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
-import 'package:mood_tracker/views/root_page/root_page.dart';
-import 'package:provider/provider.dart';
 
 import '../../view_models/mood_list_view_model.dart';
 import '../core/bordered_container.dart';
@@ -23,18 +20,6 @@ class AddNewMood extends StatefulWidget {
 
   @override
   State<AddNewMood> createState() => _AddNewMoodState();
-
-  static Future<bool> handleBackButton(BuildContext context) async {
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-      return true;
-    } else {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => const RootPage()));
-      // Handle back button press in the home page or exit the app
-      return false;
-    }
-  }
 }
 
 class _AddNewMoodState extends State<AddNewMood> {
@@ -63,7 +48,7 @@ class _AddNewMoodState extends State<AddNewMood> {
     setState(() => isAdding = false);
   }
 
-  _actionIcon() {
+  Widget _actionIcon() {
     if (isAdding) {
       return const Padding(
         padding: EdgeInsets.all(12.0),
@@ -80,9 +65,6 @@ class _AddNewMoodState extends State<AddNewMood> {
             showSnackBar(context, "Rating not selected.");
           } else {
             await addStuffs(onComplete: () {
-              Provider.of<BottomNavBarBloc>(context, listen: false)
-                  .counterSink
-                  .add(true);
               Navigator.pop(context);
             });
           }
@@ -95,15 +77,6 @@ class _AddNewMoodState extends State<AddNewMood> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            Provider.of<BottomNavBarBloc>(context, listen: false)
-                .counterSink
-                .add(true);
-            Navigator.pop(context);
-          },
-        ),
         actions: [_actionIcon()],
       ),
       body: WillPopScope(

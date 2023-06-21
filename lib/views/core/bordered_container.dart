@@ -14,8 +14,10 @@ class BorderedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         border: Border.all(),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: child,
     );
