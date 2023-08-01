@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/utils/constant.dart';
 
 /// Responsible for displaying a single image
 class ImageViewer extends StatelessWidget {
@@ -32,19 +33,18 @@ class ImageViewer extends StatelessWidget {
         if (showImageDeleteBtn)
           Positioned(
             right: 0,
-            child: Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: callback,
-                splashRadius: 24,
-                splashColor: Colors.white24,
-                icon: const CircleAvatar(
-                  backgroundColor: Colors.red,
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.white,
-                  ),
-                ),
+            child: IconButton(
+              onPressed: callback,
+              splashRadius: 24,
+              splashColor: Constant().colors.white,
+              style: IconButton.styleFrom(
+                splashFactory: InkRipple.splashFactory,
+                backgroundColor: Constant().colors.darkRed,
+                highlightColor: Constant().colors.green.withOpacity(0.6),
+              ),
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
               ),
             ),
           )

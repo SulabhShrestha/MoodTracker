@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/first_day_of_week_model.dart';
+import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:provider/provider.dart';
@@ -89,9 +90,14 @@ class _CalendarState extends State<Calendar> {
                 calendarFormat: currentCalendarFormat,
                 firstDay: widget.moods.keys.first,
                 rangeEndDay: utils.kLastDay,
-                headerStyle: const HeaderStyle(
+                headerStyle: HeaderStyle(
                   formatButtonVisible: true,
                   titleCentered: true,
+                  formatButtonDecoration: BoxDecoration(
+                    color: Constant().colors.blue,
+                    border: Border.all(color: Constant().colors.primary),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
                 ),
                 onFormatChanged: (format) {
                   setState(() => currentCalendarFormat = format);
@@ -101,6 +107,24 @@ class _CalendarState extends State<Calendar> {
                   CalendarFormat.week: 'Week',
                 },
                 calendarBuilders: CalendarBuilders(
+                  // for displaying today
+                  todayBuilder: (context, date, _) {
+                    log("TODAY BUILDER: $date");
+                    return Container(
+                      margin: const EdgeInsets.all(4),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        date.day.toString(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
+
+                  // marker for how many events in that day
                   markerBuilder: (context, date, events) {
                     if (events.isEmpty) {
                       return null;
@@ -111,7 +135,7 @@ class _CalendarState extends State<Calendar> {
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Colors.green,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
@@ -121,13 +145,22 @@ class _CalendarState extends State<Calendar> {
                       ),
                     );
                   },
-                  defaultBuilder: (context, date, _) {
-                    return Center(
+
+                  // for displaying selected day
+                  selectedBuilder: (context, date, _) {
+                    log("SELECTED BUILDER: $date");
+
+                    return Container(
+                      margin: const EdgeInsets.all(4),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Constant().colors.yellow,
+                        border: Border.all(color: Constant().colors.primary),
+                        shape: BoxShape.circle,
+                      ),
                       child: Text(
                         date.day.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     );
                   },

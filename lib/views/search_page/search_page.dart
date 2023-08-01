@@ -20,6 +20,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_outlined),
+        ),
       ),
       body: showLoading
           ? const CircularProgressIndicator()

@@ -1,9 +1,8 @@
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/date_symbols.dart';
+import 'package:mood_tracker/utils/constant.dart';
 
 // Used for filtering stats pages
 enum Filters {
@@ -13,23 +12,21 @@ enum Filters {
   thisWeek,
 }
 
-List<MaterialColor> colors = [
-  Colors.blue,
-  Colors.green,
-  Colors.teal,
-  Colors.deepPurple,
-  Colors.cyan,
+List<Color> colors = [
+  Constant().colors.blue,
+  Constant().colors.green,
+  Constant().colors.orange,
+  Constant().colors.purple,
+  Constant().colors.red,
 ];
 
 int firstDayOfWeekInt({required String firstDayOfWeek}) {
   if (firstDayOfWeek == "Auto") {
     Locale currentLocale = window.locale; // getting current locale
-    log("Current Locale: ${currentLocale.languageCode}");
 
     var dateSymbolMap = dateTimeSymbolMap();
     DateSymbols dateSymbols =
         dateSymbolMap[currentLocale.languageCode.toString()];
-    log("first day: ${dateSymbols.FIRSTDAYOFWEEK}");
 
     // 0 means monday in [dateSymbols.FIRSTDAYOFWEEK]
     // but for [CalendarDatePicker2WithAction] 0 is sunday

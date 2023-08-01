@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/models/first_day_of_week_model.dart';
-import 'package:mood_tracker/services/notification_services.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
@@ -79,7 +78,7 @@ class MorePage extends StatelessWidget {
                   const SizedBox(height: 4),
                   CustomListTile(
                     title: "Send feedback",
-                    leadingIconData: Icons.feedback,
+                    leadingIconData: Icons.feedback_outlined,
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
@@ -97,8 +96,7 @@ class MorePage extends StatelessWidget {
                   CustomListTile(
                     title: "Rate us",
                     leadingIconData: Icons.star_outlined,
-                    onTap: (){
-                    },
+                    onTap: () {},
                   ),
                   CustomListTile(
                     title: "Contact us",
@@ -110,16 +108,12 @@ class MorePage extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 16),
             TextButton(
               onPressed: () async {
                 await AuthViewModel().signOut();
               },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red)),
-              child: const Text(
-                "Log out",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text("Log out"),
             ),
           ],
         ),

@@ -77,162 +77,161 @@ class _AddNewMoodState extends State<AddNewMood> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_outlined),
+        ),
         actions: [_actionIcon()],
       ),
-      body: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context);
-          return Future.value(
-              false); // Prevent default behavior (closing the app)
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BorderedContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("How was your day?"),
-                    EmojiPanel(
-                      onSelected: (index) {
-                        rating = index + 1;
-                        log(rating.toString());
-                      },
-                    ),
-                  ],
-                ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("How was your day?"),
+                  EmojiPanel(
+                    onSelected: (index) {
+                      rating = index + 1;
+                      log(rating.toString());
+                    },
+                  ),
+                ],
               ),
-              BorderedContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Why did you feel this way?"),
-                    TextField(
-                      controller: _whyController,
-                      decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
-                      ),
+            ),
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Why did you feel this way?"),
+                  TextField(
+                    controller: _whyController,
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              BorderedContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("What could go better?"),
-                    TextField(
-                      controller: _feedbackController,
-                      decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
-                      ),
+            ),
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("What could go better?"),
+                  TextField(
+                    controller: _feedbackController,
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              BorderedContainer(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Photo"),
+            ),
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Photo"),
 
-                    // Displaying images that are selected
-                    Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            if (imagesPath.isNotEmpty)
-                              for (var path in imagesPath)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: ImageViewer(
-                                    size: imageMinSize,
-                                    path: path!,
-                                    isURL: false,
-                                    callback: () {
-                                      setState(() {
-                                        imagesPath.remove(path);
-                                      });
-                                    },
-                                  ),
-                                ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    Visibility(
-                      visible: imagesPath.length >= 4 ? false : true,
+                  // Displaying images that are selected
+                  Center(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          // Camera
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () async {
-                                String? path =
-                                    await LocalImage.pickImageFromCamera();
-
-                                if (path != null) {
-                                  setState(() {
-                                    imagesPath.add(path);
-
-                                    if (imagesPath.length == 3) {
-                                      imageMinSize = 180;
-                                    } else if (imagesPath.length == 4) {
-                                      imageMinSize = 160;
-                                    }
-                                  });
-                                }
-                              },
-                              style: ButtonStyle(
-                                side: MaterialStateProperty.all(
-                                    const BorderSide()),
+                          if (imagesPath.isNotEmpty)
+                            for (var path in imagesPath)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: ImageViewer(
+                                  size: imageMinSize,
+                                  path: path!,
+                                  isURL: false,
+                                  callback: () {
+                                    setState(() {
+                                      imagesPath.remove(path);
+                                    });
+                                  },
+                                ),
                               ),
-                              child: const Text("From Camera"),
-                            ),
-                          ),
-
-                          const SizedBox(width: 16),
-
-                          // Gallery
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () async {
-                                String? path =
-                                    await LocalImage.pickImageFromGallery();
-
-                                if (path != null) {
-                                  setState(() {
-                                    imagesPath.add(path);
-
-                                    if (imagesPath.length == 3) {
-                                      imageMinSize = 180;
-                                    } else if (imagesPath.length == 4) {
-                                      imageMinSize = 160;
-                                    }
-                                  });
-                                }
-                              },
-                              style: ButtonStyle(
-                                side: MaterialStateProperty.all(
-                                    const BorderSide()),
-                              ),
-                              child: const Text("From Gallery"),
-                            ),
-                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  Visibility(
+                    visible: imagesPath.length >= 4 ? false : true,
+                    child: Row(
+                      children: [
+                        // Camera
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              String? path =
+                                  await LocalImage.pickImageFromCamera();
+
+                              if (path != null) {
+                                setState(() {
+                                  imagesPath.add(path);
+
+                                  if (imagesPath.length == 3) {
+                                    imageMinSize = 180;
+                                  } else if (imagesPath.length == 4) {
+                                    imageMinSize = 160;
+                                  }
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                              side:
+                                  MaterialStateProperty.all(const BorderSide()),
+                            ),
+                            child: const Text("From Camera"),
+                          ),
+                        ),
+
+                        const SizedBox(width: 16),
+
+                        // Gallery
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () async {
+                              String? path =
+                                  await LocalImage.pickImageFromGallery();
+
+                              if (path != null) {
+                                setState(() {
+                                  imagesPath.add(path);
+
+                                  if (imagesPath.length == 3) {
+                                    imageMinSize = 180;
+                                  } else if (imagesPath.length == 4) {
+                                    imageMinSize = 160;
+                                  }
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                              side:
+                                  MaterialStateProperty.all(const BorderSide()),
+                            ),
+                            child: const Text("From Gallery"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

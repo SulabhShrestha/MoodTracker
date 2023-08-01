@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/utils/constant.dart';
 
 /// Responsible for displaying dropdownbox
 ///
@@ -12,6 +13,7 @@ class DropDownButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: PopupMenuButton<String>(
+        offset: const Offset(0, 16),
         tooltip: "Filter displaying result",
         position: PopupMenuPosition.under,
         padding: const EdgeInsets.all(16),
@@ -28,9 +30,8 @@ class DropDownButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-            ),
+            color: Constant().colors.blue,
+            border: Border.all(width: 1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: FittedBox(

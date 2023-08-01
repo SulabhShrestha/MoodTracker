@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/utils/constant.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
   final VoidCallback onConfirm;
@@ -19,9 +20,13 @@ class DeleteConfirmationDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
+          style: TextButton.styleFrom(
+            backgroundColor: Constant().colors.white,
+            foregroundColor: Constant().colors.primary,
+          ),
           child: const Text('Cancel'),
         ),
-        ElevatedButton(
+        TextButton(
           onPressed: () {
             onConfirm();
             Navigator.of(context).pop();
