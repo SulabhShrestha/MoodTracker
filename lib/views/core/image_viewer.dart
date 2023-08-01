@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/utils/constant.dart';
 
@@ -29,7 +30,8 @@ class ImageViewer extends StatelessWidget {
             width: size,
             fit: BoxFit.cover,
           ),
-        if (isURL) Image.network(path, width: size, fit: BoxFit.cover),
+        if (isURL)
+          CachedNetworkImage(imageUrl: path, width: size, fit: BoxFit.cover),
         if (showImageDeleteBtn)
           Positioned(
             right: 0,

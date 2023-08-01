@@ -121,76 +121,78 @@ class _EditMoodState extends State<EditMood> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          BorderedContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("How was your day?"),
-                EmojiPanel(
-                  previousRating: widget.rating - 1,
-                  onSelected: (index) {
-                    rating = index + 1;
-                    log("New Rating: $rating");
-                  },
-                ),
-              ],
-            ),
-          ),
-          BorderedContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Why did you feel this way?"),
-                TextField(
-                  controller: _whyController,
-                  decoration: InputDecoration(
-                    hintText: widget.reason,
-                    enabledBorder: const OutlineInputBorder(),
-                    focusedBorder: const OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("How was your day?"),
+                  EmojiPanel(
+                    previousRating: widget.rating - 1,
+                    onSelected: (index) {
+                      rating = index + 1;
+                      log("New Rating: $rating");
+                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          BorderedContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("What could go better?"),
-                TextField(
-                  controller: _feedbackController,
-                  decoration: InputDecoration(
-                    hintText: widget.feedback,
-                    enabledBorder: const OutlineInputBorder(),
-                    focusedBorder: const OutlineInputBorder(),
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Why did you feel this way?"),
+                  TextField(
+                    controller: _whyController,
+                    decoration: InputDecoration(
+                      hintText: widget.reason,
+                      enabledBorder: const OutlineInputBorder(),
+                      focusedBorder: const OutlineInputBorder(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          BorderedContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Photo"),
-
-                // Displaying images are selecting
-                ImageHandlerLocally(
-                  dbImagesPath: widget.dbImagesPath,
-                  timestamp: widget.timestamp,
-                  date: widget.date,
-                  onChanged: (value) {
-                    editedPaths = value;
-
-                    log("EditedPaths: $editedPaths");
-                  },
-                ),
-              ],
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("What could go better?"),
+                  TextField(
+                    controller: _feedbackController,
+                    decoration: InputDecoration(
+                      hintText: widget.feedback,
+                      enabledBorder: const OutlineInputBorder(),
+                      focusedBorder: const OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            BorderedContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Photo"),
+
+                  // Displaying images are selecting
+                  ImageHandlerLocally(
+                    dbImagesPath: widget.dbImagesPath,
+                    timestamp: widget.timestamp,
+                    date: widget.date,
+                    onChanged: (value) {
+                      editedPaths = value;
+
+                      log("EditedPaths: $editedPaths");
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
