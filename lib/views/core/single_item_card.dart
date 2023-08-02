@@ -24,8 +24,7 @@ class SingleItemCard extends StatelessWidget {
   final VoidCallback?
       additionalDeleteAction; // for deleting mood from result page
 
-  final GlobalKey<NavigatorState>?
-      mainParentNavigatorKey; // for displaying alert dialog
+  final GlobalKey? mainParentNavigatorKey; // for displaying alert dialog
 
   final VoidCallback? customEditAction;
 
@@ -107,7 +106,7 @@ class SingleItemCard extends StatelessWidget {
                     feedback: feedback,
                     dbImagesPath: dbImagesPath,
                     additionalDeleteAction: additionalDeleteAction,
-                    mainParentNavigatorKey: mainParentNavigatorKey,
+                    // mainParentNavigatorKey: mainParentNavigatorKey,
                     customEditAction: customEditAction,
                   ),
               ],

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -72,8 +70,6 @@ class _RootPageState extends State<RootPage> {
             builder: (context) => noInternetConnection(context));
       });
     }
-
-    log("Current page: $selectedIndex");
     return WillPopScope(
       onWillPop: () async {
         return await showDialog(

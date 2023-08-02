@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/providers/homepage_key_provider.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/core/delete_confirmation_dialog.dart';
 
 import '../edit_mood/edit_mood.dart';
 
-class EditDeleteCardItem extends StatelessWidget {
+class EditDeleteCardItem extends ConsumerWidget {
   final String date;
   final int rating;
   final int timestamp;
@@ -31,7 +35,7 @@ class EditDeleteCardItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         PopupMenuButton(
@@ -75,10 +79,14 @@ class EditDeleteCardItem extends StatelessWidget {
               PopupMenuItem(
                 child: const Text('Delete'),
                 onTap: () {
-                  final context = mainParentNavigatorKey?.currentContext;
-                  if (context != null) {
+                  final parentContext =
+                      ref.watch(homePageKeyProvider).currentContext;
+
+                  log("Deleting: ${ref.watch(homePageKeyProvider).currentContext}");
+
+                  if (parentContext != null) {
                     showDialog(
-                      context: context,
+                      context: parentContext,
                       builder: (_) => DeleteConfirmationDialog(
                         onConfirm: () {
                           additionalDeleteAction?.call();

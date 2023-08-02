@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/models/mood.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
+import 'package:mood_tracker/providers/homepage_key_provider.dart';
 import 'package:mood_tracker/utils/date_helper_utils.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:mood_tracker/views/search_page/search_page.dart';
 
 import '../home_page/widgets/multi_item_card.dart';
 
-class ResultPage extends StatefulWidget {
+class ResultPage extends ConsumerStatefulWidget {
   final Map<String, List<Mood>> resultMoods;
   final String keyword;
 
@@ -18,10 +20,10 @@ class ResultPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ResultPage> createState() => _ResultPageState();
+  ConsumerState<ResultPage> createState() => _ResultPageState();
 }
 
-class _ResultPageState extends State<ResultPage> {
+class _ResultPageState extends ConsumerState<ResultPage> {
   var localResultMoods = {};
   GlobalKey<NavigatorState> mainParentNavigatorKey =
       GlobalKey<NavigatorState>();
@@ -29,7 +31,16 @@ class _ResultPageState extends State<ResultPage> {
   @override
   void initState() {
     localResultMoods = widget.resultMoods;
+    initializeProvider();
     super.initState();
+  }
+
+  void initializeProvider() {
+    Future(() {
+      // log("Homekey: ${homePageGlobalKey.currentContext}");
+      // For displaying alert dialog using homepage buildContext
+      ref.read(homePageKeyProvider.notifier).state = mainParentNavigatorKey;
+    });
   }
 
   @override
