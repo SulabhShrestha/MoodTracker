@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/core/bordered_container.dart';
 import 'package:mood_tracker/views/edit_mood/utils/images_editing_handler.dart';
@@ -122,76 +123,82 @@ class _EditMoodState extends State<EditMood> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("How was your day?"),
-                  EmojiPanel(
-                    previousRating: widget.rating - 1,
-                    onSelected: (index) {
-                      rating = index + 1;
-                      log("New Rating: $rating");
-                    },
-                  ),
-                ],
-              ),
-            ),
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Why did you feel this way?"),
-                  TextField(
-                    controller: _whyController,
-                    decoration: InputDecoration(
-                      hintText: widget.reason,
-                      enabledBorder: const OutlineInputBorder(),
-                      focusedBorder: const OutlineInputBorder(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            children: [
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("How was your day?"),
+                    EmojiPanel(
+                      previousRating: widget.rating - 1,
+                      onSelected: (index) {
+                        rating = index + 1;
+                        log("New Rating: $rating");
+                      },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("What could go better?"),
-                  TextField(
-                    controller: _feedbackController,
-                    decoration: InputDecoration(
-                      hintText: widget.feedback,
-                      enabledBorder: const OutlineInputBorder(),
-                      focusedBorder: const OutlineInputBorder(),
+              Constant().spaces.vertical12(),
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Why did you feel this way?"),
+                    TextField(
+                      controller: _whyController,
+                      decoration: InputDecoration(
+                        hintText: widget.reason,
+                        enabledBorder: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            BorderedContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Photo"),
-
-                  // Displaying images are selecting
-                  ImageHandlerLocally(
-                    dbImagesPath: widget.dbImagesPath,
-                    timestamp: widget.timestamp,
-                    date: widget.date,
-                    onChanged: (value) {
-                      editedPaths = value;
-
-                      log("EditedPaths: $editedPaths");
-                    },
-                  ),
-                ],
+              Constant().spaces.vertical12(),
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("What could go better?"),
+                    TextField(
+                      controller: _feedbackController,
+                      decoration: InputDecoration(
+                        hintText: widget.feedback,
+                        enabledBorder: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Constant().spaces.vertical12(),
+              BorderedContainer(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Photo"),
+
+                    // Displaying images are selecting
+                    ImageHandlerLocally(
+                      dbImagesPath: widget.dbImagesPath,
+                      timestamp: widget.timestamp,
+                      date: widget.date,
+                      onChanged: (value) {
+                        editedPaths = value;
+
+                        log("EditedPaths: $editedPaths");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
