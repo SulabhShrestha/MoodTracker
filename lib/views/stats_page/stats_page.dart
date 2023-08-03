@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../view_models/stats_list_view_model.dart';
 import 'utils.dart';
@@ -27,16 +26,7 @@ class _StatsPageState extends State<StatsPage> {
   int currentTouchIndex = -1;
 
   @override
-  void initState() {
-    Provider.of<StatsListViewModel>(context, listen: false)
-        .fetch(filter: filter);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final statsListViewModel = Provider.of<StatsListViewModel>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filter'),
@@ -45,7 +35,7 @@ class _StatsPageState extends State<StatsPage> {
         child: SizedBox(
           width: double.infinity,
           child: FutureBuilder<Map<String, dynamic>>(
-            future: statsListViewModel.fetch(
+            future: StatsListViewModel().fetch(
               filter: filter,
               startTimestamp: startTimestamp,
               endTimestamp: endTimestamp,

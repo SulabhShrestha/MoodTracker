@@ -1,10 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:mood_tracker/view_models/stats_list_view_model.dart';
 import 'package:mood_tracker/views/home_page/home_page.dart';
 import 'package:mood_tracker/views/more_page/more_page.dart';
-import 'package:provider/provider.dart';
 
 import '../calendar_page/calendar_page.dart';
 import '../stats_page/stats_page.dart';
@@ -42,10 +40,7 @@ class _RootPageState extends State<RootPage> {
     _pages = <Widget>[
       const HomePage(),
       const CalendarPage(),
-      ChangeNotifierProvider(
-        create: (_) => StatsListViewModel(),
-        child: const StatsPage(),
-      ),
+      const StatsPage(),
       const MorePage(),
     ];
     super.initState();
