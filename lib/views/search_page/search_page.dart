@@ -13,7 +13,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _textController = TextEditingController();
   bool showLoading = false;
-  bool searchButtonDisable = true; // for disabling button
+  String keyword = ""; // what the user wants to search
 
   @override
   Widget build(BuildContext context) {
@@ -28,70 +28,58 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: showLoading
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          onChanged: (str) {
-                            setState(() {
-                              searchButtonDisable = str.isEmpty;
-                            });
-                          },
-                          controller: _textController,
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: searchButtonDisable
-                            ? null
-                            : () async {
-                                setState(() {
-                                  showLoading = true;
-                                });
-                                var keyword = _textController.text.trim();
-                                if (keyword.isEmpty) {
-                                  showSnackBar(context, "Nothing to display");
-                                } else {
-                                  await MoodListViewModel()
-                                      .searchMoodsByKeyword(
-                                          searchKeyword: keyword)
-                                      .then((value) {
-                                    if (value.isNotEmpty) {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                              builder: (_) => ResultPage(
-                                                    resultMoods: value,
-                                                    keyword: keyword,
-                                                  )));
-                                    } else {
-                                      showSnackBar(context, "No result found.");
-                                    }
-                                  });
-                                }
-                                setState(() {
-                                  showLoading = false;
-                                });
-                              },
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                searchButtonDisable
-                                    ? Colors.grey
-                                    : Colors.blue)),
-                        child: const Text("Search",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    ],
-                  ),
-                ],
+              child: TextField(
+                controller: _textController,
+                textInputAction: TextInputAction.search,
+                onChanged: (str) => setState(() => keyword = str),
+                onSubmitted: (str) => handleSearch(),
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  suffixIcon: keyword.isEmpty ? null : clearTextButton(),
+                ),
               ),
             ),
     );
+  }
+
+  // deletes the text from textfield
+  Widget clearTextButton() {
+    return IconButton(
+      onPressed: () {
+        _textController.clear();
+        setState(() {});
+      },
+      icon: const Icon(Icons.close),
+    );
+  }
+
+  void handleSearch() async {
+    setState(() {
+      showLoading = true;
+    });
+    var keyword = _textController.text.trim();
+    if (keyword.isEmpty) {
+      showSnackBar(context, "Nothing to display");
+    } else {
+      await MoodListViewModel()
+          .searchMoodsByKeyword(searchKeyword: keyword)
+          .then((value) {
+        if (value.isNotEmpty) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => ResultPage(
+                    resultMoods: value,
+                    keyword: keyword,
+                  )));
+        } else {
+          showSnackBar(context, "No result found.");
+        }
+      });
+    }
+    setState(() {
+      showLoading = false;
+    });
   }
 }

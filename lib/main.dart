@@ -65,6 +65,15 @@ class MyApp extends StatelessWidget {
                 MaterialStateProperty.all(Constant().colors.darkRed),
           ),
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Constant().colors.primary),
+          ),
+        ),
         listTileTheme: ListTileThemeData(
           iconColor: Constant().colors.primary,
         ),
