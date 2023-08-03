@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/models/first_day_of_week_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/providers/first_day_of_week_provider.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/more_page/widgets/first_day_selection.dart';
-import 'package:provider/provider.dart';
 
 import '../feedback_sheet/feedback_sheet.dart';
 import 'widgets/custom_box.dart';
@@ -14,11 +14,11 @@ import 'widgets/custom_list_tile.dart';
 /// Responsible for displaying drawer in the homepage
 ///
 
-class MorePage extends StatelessWidget {
+class MorePage extends ConsumerWidget {
   const MorePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final userViewModel = UserViewModel();
     return Scaffold(
       body: SafeArea(
@@ -57,8 +57,8 @@ class MorePage extends StatelessWidget {
                       builder: (_) {
                         return FirstDaySelection(
                           onChanged: (day) async {
-                            Provider.of<FirstDayOfWeekModel>(context,
-                                    listen: false)
+                            ref
+                                .watch(firstDayOfWeekModelProvider)
                                 .saveFirstDayOfWeek(day);
                             Navigator.of(context).pop();
                           },

@@ -1,7 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:mood_tracker/models/first_day_of_week_model.dart';
 import 'package:mood_tracker/view_models/stats_list_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/views/home_page/home_page.dart';
@@ -78,21 +77,16 @@ class _RootPageState extends State<RootPage> {
             false;
       },
       child: Scaffold(
-        body: Provider<FirstDayOfWeekModel>(
-          create: (context) => FirstDayOfWeekModel(),
-          builder: (_, child) {
-            return PageView.builder(
-              onPageChanged: (page) {
-                setState(() {
-                  selectedIndex = page;
-                });
-              },
-              controller: controller,
-              itemCount: _pages.length,
-              itemBuilder: (context, index) {
-                return _pages[index];
-              },
-            );
+        body: PageView.builder(
+          onPageChanged: (page) {
+            setState(() {
+              selectedIndex = page;
+            });
+          },
+          controller: controller,
+          itemCount: _pages.length,
+          itemBuilder: (context, index) {
+            return _pages[index];
           },
         ),
         bottomNavigationBar: SafeArea(

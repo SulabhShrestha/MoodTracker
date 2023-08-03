@@ -2,26 +2,26 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/models/first_day_of_week_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/providers/first_day_of_week_provider.dart';
 import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../utils/date_helper_utils.dart';
 import '../utils.dart' as utils;
 
-class Calendar extends StatefulWidget {
+class Calendar extends ConsumerStatefulWidget {
   final LinkedHashMap<DateTime, List<MoodViewModel>> moods;
 
   const Calendar({super.key, required this.moods});
 
   @override
-  State<Calendar> createState() => _CalendarState();
+  ConsumerState<Calendar> createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar> {
+class _CalendarState extends ConsumerState<Calendar> {
   // for knowing if the selected days have any event to display
 
   late final ValueNotifier<List<MoodViewModel>> _selectedEvents;
@@ -78,8 +78,7 @@ class _CalendarState extends State<Calendar> {
     return Column(
       children: [
         FutureBuilder(
-            future:
-                Provider.of<FirstDayOfWeekModel>(context).getFirstDayOfWeek(),
+            future: ref.watch(firstDayOfWeekModelProvider).getFirstDayOfWeek(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
