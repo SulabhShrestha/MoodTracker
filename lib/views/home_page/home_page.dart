@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/models/time_stamp.dart';
 import 'package:mood_tracker/providers/homepage_key_provider.dart';
+import 'package:mood_tracker/providers/user_view_model_provider.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/add_new_mood/add_new_mood.dart';
 import 'package:mood_tracker/views/home_page/widgets/multi_item_card.dart';
@@ -52,9 +53,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                 return [
                   SliverAppBar(
                     floating: true,
-                    title: const Text(
-                      "Hey!",
-                      style: TextStyle(color: Colors.black),
+                    title: Text(
+                      "Hey! ${ref.watch(userViewModelProvider).getUserName.split(" ").first}",
+                      style: const TextStyle(color: Colors.black),
                     ),
                     actions: [
                       IconButton(
