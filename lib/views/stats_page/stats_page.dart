@@ -45,59 +45,57 @@ class _StatsPageState extends State<StatsPage> {
                   snapshot.connectionState == ConnectionState.done) {
                 int docsSize = snapshot.data!["docsSize"];
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    if (docsSize == 0) const Text("Nothing to display."),
-                    if (docsSize > 0) ...[
-                      Stack(
-                        children: [
-                          DisplayPieChart(moodsStats: snapshot.data!["data"]),
-                          Positioned(
-                            right: 8,
-                            top: 8,
-                            child: DropDownButton(
-                              text: dropDownButtonText,
-                              onChanged: (value) async {
-                                if (value == "All time") {
-                                  filter = Filters.allTime;
-                                  dropDownButtonText = value;
-                                  rebuildWidget = true;
-                                } else if (value == "This month") {
-                                  filter = Filters.thisMonth;
-                                  dropDownButtonText = value;
-                                  rebuildWidget = true;
-                                } else if (value == "This week") {
-                                  filter = Filters.thisWeek;
-                                  dropDownButtonText = value;
-                                  rebuildWidget = true;
-                                } else {
-                                  var res = await showDialog<dynamic>(
-                                      context: context,
-                                      builder: (_) {
-                                        return const StartEndDatePicker();
-                                      });
-
-                                  if (res != null) {
-                                    rebuildWidget = true;
-                                    dropDownButtonText = value;
-                                    filter = Filters.rangeDate;
-                                    startTimestamp =
-                                        res["startDate"].millisecondsSinceEpoch;
-                                    endTimestamp =
-                                        res["endDate"].millisecondsSinceEpoch;
-                                  }
-                                }
-                                if (rebuildWidget) {
-                                  rebuildWidget = false;
-                                  setState(() {});
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+                return Stack(
+                  children: [
+                    if (docsSize > 0)
+                      DisplayPieChart(moodsStats: snapshot.data!["data"]),
+                    if (docsSize == 0)
+                      const SizedBox(
+                        height: double.infinity,
+                        child: Center(child: Text("Nothing to display.")),
                       ),
-                    ],
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: DropDownButton(
+                        text: dropDownButtonText,
+                        onChanged: (value) async {
+                          if (value == "All time") {
+                            filter = Filters.allTime;
+                            dropDownButtonText = value;
+                            rebuildWidget = true;
+                          } else if (value == "This month") {
+                            filter = Filters.thisMonth;
+                            dropDownButtonText = value;
+                            rebuildWidget = true;
+                          } else if (value == "This week") {
+                            filter = Filters.thisWeek;
+                            dropDownButtonText = value;
+                            rebuildWidget = true;
+                          } else {
+                            var res = await showDialog<dynamic>(
+                                context: context,
+                                builder: (_) {
+                                  return const StartEndDatePicker();
+                                });
+
+                            if (res != null) {
+                              rebuildWidget = true;
+                              dropDownButtonText = value;
+                              filter = Filters.rangeDate;
+                              startTimestamp =
+                                  res["startDate"].millisecondsSinceEpoch;
+                              endTimestamp =
+                                  res["endDate"].millisecondsSinceEpoch;
+                            }
+                          }
+                          if (rebuildWidget) {
+                            rebuildWidget = false;
+                            setState(() {});
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 );
               }
