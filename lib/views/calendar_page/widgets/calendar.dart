@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,6 +57,9 @@ class _CalendarState extends ConsumerState<Calendar> {
     }
   }
 
+  // for showing header button
+  bool showHeaderButton = true;
+
   @override
   void initState() {
     super.initState();
@@ -90,7 +92,7 @@ class _CalendarState extends ConsumerState<Calendar> {
                 firstDay: widget.moods.keys.first,
                 rangeEndDay: utils.kLastDay,
                 headerStyle: HeaderStyle(
-                  formatButtonVisible: true,
+                  formatButtonVisible: showHeaderButton,
                   titleCentered: true,
                   formatButtonDecoration: BoxDecoration(
                     color: Constant().colors.blue,
@@ -108,11 +110,10 @@ class _CalendarState extends ConsumerState<Calendar> {
                 calendarBuilders: CalendarBuilders(
                   // for displaying today
                   todayBuilder: (context, date, _) {
-                    log("TODAY BUILDER: $date");
                     return Container(
                       margin: const EdgeInsets.all(4),
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.green,
                         shape: BoxShape.circle,
                       ),
@@ -147,8 +148,6 @@ class _CalendarState extends ConsumerState<Calendar> {
 
                   // for displaying selected day
                   selectedBuilder: (context, date, _) {
-                    log("SELECTED BUILDER: $date");
-
                     return Container(
                       margin: const EdgeInsets.all(4),
                       alignment: Alignment.center,
@@ -183,6 +182,12 @@ class _CalendarState extends ConsumerState<Calendar> {
           child: ValueListenableBuilder<List<MoodViewModel>>(
             valueListenable: _selectedEvents,
             builder: (context, moodViewModels, _) {
+              if (moodViewModels.isEmpty) {
+                showHeaderButton = false;
+              } else {
+                showHeaderButton = true;
+              }
+
               return ListView.builder(
                 itemCount: moodViewModels.length,
                 itemBuilder: (context, index) {

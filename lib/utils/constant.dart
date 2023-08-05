@@ -16,6 +16,7 @@ class _Colors {
   Color pink = const Color(0xFFe7bbcf);
   Color orange = const Color(0xffeca060);
   Color purple = const Color(0xffc18cc7);
+
   Color darkRed = const Color(0xFFed742e);
 }
 
