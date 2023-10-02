@@ -1,74 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/models/first_day_of_week_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/providers/week_first_day_provider.dart';
 
-class FirstDaySelection extends StatefulWidget {
-  final ValueChanged<String> onChanged;
+class FirstDaySelection extends ConsumerWidget {
+  final Function(String) onChanged;
 
   const FirstDaySelection({Key? key, required this.onChanged})
       : super(key: key);
 
   @override
-  State<FirstDaySelection> createState() => _FirstDaySelectionState();
-}
-
-class _FirstDaySelectionState extends State<FirstDaySelection> {
-  var currentSelectedOption = "Auto";
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: FirstDayOfWeekModel()
-            .getFirstDayOfWeek(), // No need of provider here
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Text("Something went wrong.");
-          }
-
-          return AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RadioListTile(
-                  title: const Text('Auto'),
-                  value: "Auto",
-                  groupValue: snapshot.data!,
-                  onChanged: (value) {
-                    setState(() => currentSelectedOption = value!);
-                    widget.onChanged(value!);
-                  },
-                ),
-                RadioListTile(
-                  title: const Text('Sunday'),
-                  value: "Sunday",
-                  groupValue: snapshot.data!,
-                  onChanged: (value) {
-                    setState(() => currentSelectedOption = value!);
-                    widget.onChanged(value!);
-                  },
-                ),
-                RadioListTile(
-                  title: const Text('Monday'),
-                  value: "Monday",
-                  groupValue: snapshot.data!,
-                  onChanged: (value) {
-                    setState(() => currentSelectedOption = value!);
-                    widget.onChanged(value!);
-                  },
-                ),
-                RadioListTile(
-                  title: const Text('Saturday'),
-                  value: "Saturday",
-                  groupValue: snapshot.data!,
-                  onChanged: (value) {
-                    setState(() => currentSelectedOption = value!);
-                    widget.onChanged(value!);
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+  Widget build(BuildContext context, WidgetRef ref) {
+    String firstDay = ref.read(weekFirstDayProvider);
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RadioListTile(
+            title: const Text('Auto'),
+            value: "Auto",
+            groupValue: firstDay,
+            onChanged: (value) {
+              Navigator.of(context).pop();
+              onChanged(value!);
+            },
+          ),
+          RadioListTile(
+            title: const Text('Sunday'),
+            value: "Sunday",
+            groupValue: firstDay,
+            onChanged: (value) {
+              Navigator.of(context).pop();
+              onChanged(value!);
+            },
+          ),
+          RadioListTile(
+            title: const Text('Monday'),
+            value: "Monday",
+            groupValue: firstDay,
+            onChanged: (value) {
+              Navigator.of(context).pop();
+              onChanged(value!);
+            },
+          ),
+          RadioListTile(
+            title: const Text('Saturday'),
+            value: "Saturday",
+            groupValue: firstDay,
+            onChanged: (value) {
+              Navigator.of(context).pop();
+              onChanged(value!);
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

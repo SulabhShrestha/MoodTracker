@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mood_tracker/providers/first_day_of_week_provider.dart';
+import 'package:mood_tracker/providers/week_first_day_provider.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
+import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
 import 'package:mood_tracker/views/more_page/widgets/first_day_selection.dart';
 
 import '../feedback_sheet/feedback_sheet.dart';
@@ -57,10 +58,9 @@ class MorePage extends ConsumerWidget {
                       builder: (_) {
                         return FirstDaySelection(
                           onChanged: (day) async {
-                            ref
-                                .watch(firstDayOfWeekModelProvider)
+                            await WeekFirstDayViewModel()
                                 .saveFirstDayOfWeek(day);
-                            Navigator.of(context).pop();
+                            ref.read(weekFirstDayProvider.notifier).state = day;
                           },
                         );
                       });
@@ -108,7 +108,7 @@ class MorePage extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextButton(
               onPressed: () async {
                 await AuthViewModel().signOut();

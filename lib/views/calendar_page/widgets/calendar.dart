@@ -2,9 +2,10 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mood_tracker/providers/first_day_of_week_provider.dart';
+import 'package:mood_tracker/providers/week_first_day_provider.dart';
 import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/mood_view_model.dart';
+import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
 import 'package:mood_tracker/views/core/single_item_card.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -79,105 +80,96 @@ class _CalendarState extends ConsumerState<Calendar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FutureBuilder(
-            future: ref.watch(firstDayOfWeekModelProvider).getFirstDayOfWeek(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(child: Text("Something went wrong"));
+        TableCalendar<MoodViewModel>(
+          calendarFormat: currentCalendarFormat,
+          firstDay: widget.moods.keys.first,
+          rangeEndDay: utils.kLastDay,
+          headerStyle: HeaderStyle(
+            formatButtonVisible: showHeaderButton,
+            titleCentered: true,
+            formatButtonDecoration: BoxDecoration(
+              color: Constant().colors.blue,
+              border: Border.all(color: Constant().colors.primary),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+          ),
+          onFormatChanged: (format) {
+            setState(() => currentCalendarFormat = format);
+          },
+          availableCalendarFormats: const {
+            CalendarFormat.month: 'Month',
+            CalendarFormat.week: 'Week',
+          },
+          calendarBuilders: CalendarBuilders(
+            // for displaying today
+            todayBuilder: (context, date, _) {
+              return Container(
+                margin: const EdgeInsets.all(4),
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  date.day.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            },
+
+            // marker for how many events in that day
+            markerBuilder: (context, date, events) {
+              if (events.isEmpty) {
+                return null;
               }
-              return TableCalendar<MoodViewModel>(
-                calendarFormat: currentCalendarFormat,
-                firstDay: widget.moods.keys.first,
-                rangeEndDay: utils.kLastDay,
-                headerStyle: HeaderStyle(
-                  formatButtonVisible: showHeaderButton,
-                  titleCentered: true,
-                  formatButtonDecoration: BoxDecoration(
-                    color: Constant().colors.blue,
-                    border: Border.all(color: Constant().colors.primary),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+              return Positioned(
+                bottom: 1,
+                right: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    events.length.toString(),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
-                onFormatChanged: (format) {
-                  setState(() => currentCalendarFormat = format);
-                },
-                availableCalendarFormats: const {
-                  CalendarFormat.month: 'Month',
-                  CalendarFormat.week: 'Week',
-                },
-                calendarBuilders: CalendarBuilders(
-                  // for displaying today
-                  todayBuilder: (context, date, _) {
-                    return Container(
-                      margin: const EdgeInsets.all(4),
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        date.day.toString(),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    );
-                  },
-
-                  // marker for how many events in that day
-                  markerBuilder: (context, date, events) {
-                    if (events.isEmpty) {
-                      return null;
-                    }
-                    return Positioned(
-                      bottom: 1,
-                      right: 1,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          events.length.toString(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    );
-                  },
-
-                  // for displaying selected day
-                  selectedBuilder: (context, date, _) {
-                    return Container(
-                      margin: const EdgeInsets.all(4),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Constant().colors.yellow,
-                        border: Border.all(color: Constant().colors.primary),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        date.day.toString(),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    );
-                  },
-                ),
-                lastDay: utils.kLastDay,
-                focusedDay: _focusedDay,
-                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                eventLoader: _getEventsForDay,
-                startingDayOfWeek: DateHelperUtils()
-                    .firstDayOfWeekString(firstDayOfWeek: snapshot.data!),
-                calendarStyle: const CalendarStyle(
-                  markerSize: 10,
-                  markersMaxCount: 24,
-                  outsideDaysVisible: false,
-                  canMarkersOverflow: true,
-                ),
-                onDaySelected: _onDaySelected,
               );
-            }),
+            },
+
+            // for displaying selected day
+            selectedBuilder: (context, date, _) {
+              return Container(
+                margin: const EdgeInsets.all(4),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Constant().colors.yellow,
+                  border: Border.all(color: Constant().colors.primary),
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  date.day.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            },
+          ),
+          lastDay: utils.kLastDay,
+          focusedDay: _focusedDay,
+          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+          eventLoader: _getEventsForDay,
+          startingDayOfWeek: DateHelperUtils().firstDayOfWeekString(
+              firstDayOfWeek: ref.watch(weekFirstDayProvider)),
+          calendarStyle: const CalendarStyle(
+            markerSize: 10,
+            markersMaxCount: 24,
+            outsideDaysVisible: false,
+            canMarkersOverflow: true,
+          ),
+          onDaySelected: _onDaySelected,
+        ),
         Expanded(
           child: ValueListenableBuilder<List<MoodViewModel>>(
             valueListenable: _selectedEvents,

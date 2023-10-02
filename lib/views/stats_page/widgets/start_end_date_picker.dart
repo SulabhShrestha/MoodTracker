@@ -3,19 +3,21 @@ import 'dart:ui';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:mood_tracker/models/first_day_of_week_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/providers/week_first_day_provider.dart';
 import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
+import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
 
 import '../utils.dart' as utils;
 
-class StartEndDatePicker extends StatefulWidget {
+class StartEndDatePicker extends ConsumerStatefulWidget {
   const StartEndDatePicker({Key? key}) : super(key: key);
 
   @override
-  State<StartEndDatePicker> createState() => _StartEndDatePickerState();
+  ConsumerState<StartEndDatePicker> createState() => _StartEndDatePickerState();
 }
 
-class _StartEndDatePickerState extends State<StartEndDatePicker> {
+class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
   var startText = "Start Date";
   var endText = "End Date";
 
@@ -35,68 +37,57 @@ class _StartEndDatePickerState extends State<StartEndDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: FirstDayOfWeekModel().getFirstDayOfWeek(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text("Something went wrong");
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return AlertDialog(
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                DatePicker(
-                    text: startText,
-                    onClick: () async {
-                      var res = await ShowDatePicker()
-                          .selectStartDate(context, firstDate, snapshot.data!);
-                      if (res != null) {
-                        startEndTimes["startDate"] = res;
-                        setState(() {
-                          startText = "${res.year}-${res.month}-${res.day}";
-                        });
-                      }
-                    }),
-                DatePicker(
-                    text: endText,
-                    onClick: () async {
-                      var res = await ShowDatePicker()
-                          .selectEndDate(context, firstDate, snapshot.data!);
-                      if (res != null) {
-                        startEndTimes["endDate"] = DateTime(
-                            res.year, res.month, res.day, 23, 59, 59, 999);
-                        log(startEndTimes["endDate"].toString());
-                        setState(() {
-                          endText = "${res.year}-${res.month}-${res.day}";
-                        });
-                      }
-                    }),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  if (startText == endText) {
-                    log("Same");
-                  } else if (startText == "Start Date" ||
-                      endText == "End Date") {
-                    log("Empty date");
-                  } else {
-                    Navigator.pop<Map<String, DateTime>>(
-                        context, startEndTimes);
-                  }
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        });
+    return AlertDialog(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          DatePicker(
+              text: startText,
+              onClick: () async {
+                var res = await ShowDatePicker().selectStartDate(
+                    context, firstDate, ref.watch(weekFirstDayProvider));
+                if (res != null) {
+                  startEndTimes["startDate"] = res;
+                  setState(() {
+                    startText = "${res.year}-${res.month}-${res.day}";
+                  });
+                }
+              }),
+          DatePicker(
+              text: endText,
+              onClick: () async {
+                var res = await ShowDatePicker().selectEndDate(
+                    context, firstDate, ref.watch(weekFirstDayProvider));
+                if (res != null) {
+                  startEndTimes["endDate"] =
+                      DateTime(res.year, res.month, res.day, 23, 59, 59, 999);
+                  log(startEndTimes["endDate"].toString());
+                  setState(() {
+                    endText = "${res.year}-${res.month}-${res.day}";
+                  });
+                }
+              }),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            if (startText == endText) {
+              log("Same");
+            } else if (startText == "Start Date" || endText == "End Date") {
+              log("Empty date");
+            } else {
+              Navigator.pop<Map<String, DateTime>>(context, startEndTimes);
+            }
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    );
   }
 }
 

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mood_tracker/providers/homepage_key_provider.dart';
+import 'package:mood_tracker/providers/week_first_day_provider.dart';
+import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
 import 'package:mood_tracker/views/home_page/home_page.dart';
 import 'package:mood_tracker/views/more_page/more_page.dart';
 
@@ -58,10 +60,13 @@ class _RootPageState extends ConsumerState<RootPage> {
   }
 
   void initializeProvider() {
-    Future(() {
-      log("Homekey: ${homePageGlobalKey.currentContext}");
+    Future(() async {
       // For displaying alert dialog using homepage buildContext
       ref.read(homePageKeyProvider.notifier).state = homePageGlobalKey;
+
+      // adding first day of the week
+      ref.read(weekFirstDayProvider.notifier).state =
+          await WeekFirstDayViewModel().getFirstDayOfWeek();
     });
   }
 
