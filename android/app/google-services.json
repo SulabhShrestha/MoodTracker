@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "348505891022-8c180mnaa4u6smt3afmq4hpsrah4v649.apps.googleusercontent.com",
+          "client_id": "348505891022-jisbga993kc37jen4paf1vac8ivgmvhm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mood_tracker",
+            "certificate_hash": "1a45a321ca55b0efafe8760b105014dff9d94dca"
+          }
+        },
+        {
+          "client_id": "348505891022-m3uh4gc803n9j02sedkn3vm855pm1r3s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

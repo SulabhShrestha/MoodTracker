@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:url_launcher/url_launcher.dart';
 
 /// Handles related to email
@@ -11,10 +13,11 @@ class EmailViewModel {
         'subject': subject,
       },
     );
-    if (await canLaunchUrl(emailLaunchUri)) {
+
+    try {
       await launchUrl(emailLaunchUri);
-    } else {
-      throw 'Could not launch email client';
+    } catch (e) {
+      log('Error launching email client: $e');
     }
   }
 }
