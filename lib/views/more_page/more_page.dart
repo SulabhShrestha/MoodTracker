@@ -6,6 +6,7 @@ import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
+import 'package:mood_tracker/views/more_page/pages/data_delete_page.dart';
 import 'package:mood_tracker/views/more_page/widgets/first_day_selection.dart';
 
 import '../feedback_sheet/feedback_sheet.dart';
@@ -60,7 +61,11 @@ class MorePage extends ConsumerWidget {
                 title: "Delete data",
                 leadingIconData: Icons.delete_forever,
                 onTap: () {
-                  // Show confirmation dialog for account and data deletion
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const DataDeletePage(),
+                    ),
+                  );
                 },
               ),
             ),

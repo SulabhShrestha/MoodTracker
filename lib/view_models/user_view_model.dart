@@ -24,4 +24,12 @@ class UserViewModel extends ChangeNotifier {
   String get getPhotoURL {
     return _userWebServices.userProfileURL;
   }
+
+  Future<void> deleteUser() async {
+    await _userWebServices.deleteUser();
+  }
+
+  Future<void> deleteUserData() async {
+    await _userWebServices.deleteUserData();
+  }
 }

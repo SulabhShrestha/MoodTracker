@@ -4,17 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/utils/constant.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
-  final VoidCallback onConfirm;
+  final Future<void> Function() onConfirm;
+  final Widget? content;
 
-  const DeleteConfirmationDialog({Key? key, required this.onConfirm})
+  const DeleteConfirmationDialog(
+      {Key? key, this.content, required this.onConfirm})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    log("delete confirmation dialog");
     return AlertDialog(
       title: const Text('Confirm Deletion'),
-      content: const Text('Are you sure you want to delete?'),
+      content: content ?? const Text('Are you sure you want to delete?'),
       actions: [
         TextButton(
           onPressed: () {
@@ -28,8 +29,9 @@ class DeleteConfirmationDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            onConfirm();
-            Navigator.of(context).pop();
+            onConfirm().then((value) {
+              Navigator.of(context).pop();
+            });
           },
           child: const Text('Delete'),
         ),

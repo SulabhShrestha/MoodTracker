@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// This web services handles everything related to user's settings
@@ -33,5 +36,25 @@ class UserWebServices {
   String get userProfileURL {
     return _auth.currentUser?.photoURL ??
         ""; // It won't affect in the building part as it will be checked before building
+  }
+
+  Future<void> deleteUser() async {
+    await deleteUserData();
+    await _auth.signOut();
+    await _auth.currentUser!.delete();
+  }
+
+  Future<void> deleteUserData() async {
+    FirebaseFirestore.instance
+        .collectionGroup('List')
+        .where('userID', isEqualTo: _auth.currentUser!.uid)
+        .get()
+        .then(
+      (querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          doc.reference.delete();
+        }
+      },
+    );
   }
 }

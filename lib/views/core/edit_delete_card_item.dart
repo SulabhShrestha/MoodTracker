@@ -88,7 +88,7 @@ class EditDeleteCardItem extends ConsumerWidget {
                     showDialog(
                       context: parentContext,
                       builder: (_) => DeleteConfirmationDialog(
-                        onConfirm: () {
+                        onConfirm: () async {
                           additionalDeleteAction?.call();
                           MoodListViewModel()
                               .deleteMood(timestamp: timestamp, date: date);

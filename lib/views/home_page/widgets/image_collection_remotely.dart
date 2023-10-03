@@ -68,7 +68,7 @@ class _ImageCollectionRemotelyState extends State<ImageCollectionRemotely> {
                             showDialog(
                               context: context,
                               builder: (_) =>
-                                  DeleteConfirmationDialog(onConfirm: () {
+                                  DeleteConfirmationDialog(onConfirm: () async {
                                 log("Before: $dbImagesPath");
                                 // Received snapshot is the url path.
                                 // So, Getting the index of the path in the snapshot
