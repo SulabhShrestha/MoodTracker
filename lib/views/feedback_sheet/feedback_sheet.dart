@@ -8,10 +8,11 @@ class FeedbackSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.4,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Header part
           Row(
@@ -20,7 +21,7 @@ class FeedbackSheet extends StatelessWidget {
                 onPressed: () => Navigator.of(context).pop(),
                 icon: const Icon(Icons.close),
                 padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
               ),
               const Expanded(
                 child: Padding(

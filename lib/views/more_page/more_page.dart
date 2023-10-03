@@ -22,6 +22,12 @@ class MorePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userViewModel = UserViewModel();
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Settings",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
