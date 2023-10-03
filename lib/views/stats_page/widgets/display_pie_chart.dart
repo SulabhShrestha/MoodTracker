@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/extension/double_ext.dart';
@@ -21,57 +23,63 @@ class PieChartState extends State<DisplayPieChart> {
   int currentTouchIndex = -1;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: 1.3,
-          child: Card(
-            color: Colors.white,
-            child: Stack(
-              children: <Widget>[
-                const SizedBox(
-                  height: 18,
-                ),
-                Center(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: PieChart(
-                      PieChartData(
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 40,
-                        sections: showingSections(widget.moodsStats),
+    final displayableMoodsStats =
+        widget.moodsStats.where((mood) => mood.occurrence > 0).toList();
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1.3,
+            child: Card(
+              color: Colors.white,
+              child: Stack(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Center(
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: PieChart(
+                        PieChartData(
+                          sectionsSpace: 0,
+                          centerSpaceRadius: 40,
+                          sections: showingSections(displayableMoodsStats),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
 
-        // Feelings card
-        Wrap(
-          alignment: WrapAlignment.center,
-          children: List.generate(
-              widget.moodsStats.length, // currently 5
-              (index) => GestureDetector(
-                    onTap: () {
-                      setState(() => currentTouchIndex = index);
+          // Feelings card
+          Wrap(
+            alignment: WrapAlignment.center,
+            children: List.generate(
+                displayableMoodsStats.length,
+                (index) => GestureDetector(
+                      onTap: () {
+                        setState(() => currentTouchIndex = index);
 
-                      // Resetting the currentTouchIndex back to normal
-                      Future.delayed(const Duration(milliseconds: 700), () {
-                        setState(() => currentTouchIndex = -1);
-                      });
-                    },
-                    child: FeelingCard(
-                      iconSvgPath: EmojiUtils.getSvgPath(index + 1),
-                      feeling: widget.moodsStats[index].feeling,
-                      totalOccurrence: widget.moodsStats[index].occurrence,
-                      color: colors[index],
-                    ),
-                  )),
-        ),
-      ],
+                        // Resetting the currentTouchIndex back to normal
+                        Future.delayed(const Duration(milliseconds: 700), () {
+                          setState(() => currentTouchIndex = -1);
+                        });
+                      },
+                      child: FeelingCard(
+                        iconSvgPath: EmojiUtils.getSvgPath(index + 1),
+                        feeling: displayableMoodsStats[index].feeling,
+                        totalOccurrence:
+                            displayableMoodsStats[index].occurrence,
+                        color: colors[index],
+                      ),
+                    )),
+          ),
+        ],
+      ),
     );
   }
 

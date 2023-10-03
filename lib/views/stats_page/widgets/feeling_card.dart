@@ -33,8 +33,40 @@ class FeelingCard extends StatelessWidget {
               height: 46,
               width: 46,
             ),
-            Text("$totalOccurrence times"),
-            Text("Feeling $feeling"),
+            Text.rich(
+              TextSpan(
+                text: 'Feeling ',
+                style:
+                    TextStyle(fontSize: 18, color: Constant().colors.primary),
+                children: [
+                  TextSpan(
+                    text: feeling,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      inherit: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text.rich(
+              TextSpan(
+                text: totalOccurrence.toString(),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Constant().colors.primary),
+                children: const [
+                  TextSpan(
+                    text: " times",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      inherit: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
