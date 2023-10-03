@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 /// This web services handles everything related to user's settings
 ///
@@ -38,10 +39,27 @@ class UserWebServices {
         ""; // It won't affect in the building part as it will be checked before building
   }
 
+  Future<void> _reauthenticateUser() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    await _auth.currentUser?.reauthenticateWithCredential(credential);
+  }
+
   Future<void> deleteUser() async {
+    await _reauthenticateUser();
     await deleteUserData();
-    await _auth.signOut();
     await _auth.currentUser!.delete();
+    await _auth.signOut();
   }
 
   Future<void> deleteUserData() async {

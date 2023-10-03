@@ -20,7 +20,12 @@ class CalendarPage extends StatelessWidget {
       body: FutureBuilder<LinkedHashMap<DateTime, List<MoodViewModel>>>(
           future: CalendarListViewModel().populateCalendar(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) return Calendar(moods: snapshot.data!);
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return const Center(child: Text("Nothing to display"));
+              }
+              return Calendar(moods: snapshot.data!);
+            }
 
             return const Center(child: CircularProgressIndicator());
           }),
