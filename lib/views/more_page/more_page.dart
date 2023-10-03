@@ -9,6 +9,7 @@ import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
 import 'package:mood_tracker/views/more_page/widgets/first_day_selection.dart';
 
 import '../feedback_sheet/feedback_sheet.dart';
+import 'pages/policy_web_view.dart';
 import 'widgets/custom_box.dart';
 import 'widgets/custom_list_tile.dart';
 
@@ -49,6 +50,18 @@ class MorePage extends ConsumerWidget {
                     ],
                   ),
                 ],
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            CustomBox(
+              child: CustomListTile(
+                title: "Delete data",
+                leadingIconData: Icons.delete_forever,
+                onTap: () {
+                  // Show confirmation dialog for account and data deletion
+                },
               ),
             ),
 
@@ -109,6 +122,17 @@ class MorePage extends ConsumerWidget {
                     leadingIconData: Icons.email_outlined,
                     onTap: () {
                       EmailViewModel().openEmailClient("Let's connect");
+                    },
+                  ),
+                  CustomListTile(
+                    title: "Privacy Policy",
+                    leadingIconData: Icons.privacy_tip,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const PolicyWebView(),
+                        ),
+                      );
                     },
                   ),
                 ],
