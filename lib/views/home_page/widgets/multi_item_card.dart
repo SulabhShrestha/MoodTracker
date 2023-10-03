@@ -26,9 +26,6 @@ class MultiItemCard extends StatelessWidget {
   // For deleting moods from result page, return timestamp
   final ValueChanged<int>? additionalDeleteAction;
 
-  final GlobalKey<NavigatorState>?
-      mainParentNavigatorKey; // for displaying alert dialog
-
   const MultiItemCard({
     Key? key,
     required this.date,
@@ -41,7 +38,6 @@ class MultiItemCard extends StatelessWidget {
     this.keywordsIncludesIn,
     this.keyword,
     this.additionalDeleteAction,
-    this.mainParentNavigatorKey,
   }) : super(key: key);
 
   @override
@@ -127,7 +123,6 @@ class MultiItemCard extends StatelessWidget {
                             additionalDeleteAction
                                 ?.call(timeStamps[index].timestamp);
                           },
-                          mainParentNavigatorKey: mainParentNavigatorKey,
                         ),
                       ],
                     ),

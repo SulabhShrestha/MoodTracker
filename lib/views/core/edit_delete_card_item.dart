@@ -16,8 +16,6 @@ class EditDeleteCardItem extends ConsumerWidget {
   final String? reason;
   final String? feedback;
   final VoidCallback? additionalDeleteAction;
-  final GlobalKey<NavigatorState>?
-      mainParentNavigatorKey; // for displaying alert dialog
   final VoidCallback?
       customEditAction; // for displaying edit page over search page
 
@@ -27,7 +25,6 @@ class EditDeleteCardItem extends ConsumerWidget {
     required this.date,
     required this.rating,
     required this.dbImagesPath,
-    this.mainParentNavigatorKey,
     this.reason,
     this.feedback,
     this.additionalDeleteAction,

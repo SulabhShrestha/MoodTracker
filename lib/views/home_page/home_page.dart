@@ -13,16 +13,13 @@ import 'package:mood_tracker/views/search_page/search_page.dart';
 import '../../utils/date_helper_utils.dart';
 import '../core/single_item_card.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends ConsumerState<HomePage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Stack(
       children: [
         // Content

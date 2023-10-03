@@ -106,7 +106,6 @@ class SingleItemCard extends StatelessWidget {
                     feedback: feedback,
                     dbImagesPath: dbImagesPath,
                     additionalDeleteAction: additionalDeleteAction,
-                    // mainParentNavigatorKey: mainParentNavigatorKey,
                     customEditAction: customEditAction,
                   ),
               ],

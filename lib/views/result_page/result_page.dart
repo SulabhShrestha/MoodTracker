@@ -129,7 +129,6 @@ class _ResultPageState extends ConsumerState<ResultPage> {
                         imagesStoragePaths: imagesStoragePaths,
                         keyword: widget.keyword,
                         keywordsIncludesIn: keywordsIncludesIn,
-                        mainParentNavigatorKey: mainParentNavigatorKey,
                         additionalDeleteAction: (timestamp) {
                           setState(() {
                             // deleting from [localResultMoods] using timestamp which is unique
