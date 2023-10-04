@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
+import 'package:mood_tracker/view_models/local_storage_view_model.dart';
 
 import '../core/button.dart';
 
@@ -26,6 +27,7 @@ class ContinueWithPage extends StatelessWidget {
               Button(
                   child: const Text("Continue with Google"),
                   onTap: () async {
+                    await LocalStorageViewModel().setIsAppLaunchedFirstTime();
                     await AuthViewModel().signInWithGoogle();
                   }),
             ],
