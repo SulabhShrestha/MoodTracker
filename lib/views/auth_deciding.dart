@@ -17,6 +17,7 @@ class AuthDeciding extends StatelessWidget {
       future: LocalStorageViewModel().isAppLaunchedFirstTime(),
       builder: (context, snapshot) {
         log("Data: ${snapshot.data}");
+        return OnboardingPage();
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           // If app is launched first time, show onboarding page

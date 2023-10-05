@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/local_storage_view_model.dart';
@@ -8,21 +9,59 @@ import 'package:mood_tracker/views/root_page/root_page.dart';
 class OnboardingPage extends StatelessWidget {
   OnboardingPage({super.key});
 
-  List<PageViewModel> pages = [
-    PageViewModel(
-      title: "Welcome to Mood Tracker",
-      body: "Start your journey to emotional well-being.",
-      image: Icon(Icons.waving_hand, size: 50.0),
+  List<Widget> pages = [
+    Padding(
+      padding: const EdgeInsets.only(bottom: 100),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AspectRatio(
+            aspectRatio: 1 / 1,
+            child: SvgPicture.asset(
+              'assets/person.svg',
+            ),
+          ),
+          Constant().spaces.vertical24(),
+          const Text(
+            "Welcome to Mood Tracker",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const Text("Start your journey to emotional well-being."),
+        ],
+      ),
     ),
-    PageViewModel(
-      title: "Track Your Moods",
-      body: "One-click mood tracking made easy.",
-      image: Icon(Icons.waving_hand, size: 50.0),
+    Padding(
+      padding: const EdgeInsets.only(bottom: 100),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AspectRatio(
+              aspectRatio: 1 / 1,
+              child: SvgPicture.asset('assets/spiderman.svg')),
+          Constant().spaces.vertical24(),
+          const Text(
+            "Track Your Moods",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const Text("One-click mood tracking made easy."),
+        ],
+      ),
     ),
-    PageViewModel(
-      title: "Gain Insights",
-      body: "Discover patterns, reflect, and grow.",
-      image: Icon(Icons.waving_hand, size: 50.0),
+    Padding(
+      padding: const EdgeInsets.only(bottom: 100),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AspectRatio(
+              aspectRatio: 1 / 1, child: SvgPicture.asset('assets/phone.svg')),
+          Constant().spaces.vertical24(),
+          const Text(
+            "Gain Insights",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const Text("Discover patterns, reflect, and grow."),
+        ],
+      ),
     ),
   ];
 
@@ -31,8 +70,8 @@ class OnboardingPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: IntroductionScreen(
-          pages: pages,
           showSkipButton: true,
+          rawPages: pages,
           skip: const Text("Skip"),
           next: const Text("Next"),
           done:
