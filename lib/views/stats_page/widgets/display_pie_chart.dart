@@ -70,7 +70,8 @@ class PieChartState extends State<DisplayPieChart> {
                         });
                       },
                       child: FeelingCard(
-                        iconSvgPath: EmojiUtils.getSvgPath(index + 1),
+                        iconSvgPath: EmojiUtils.getSvgPath(
+                            displayableMoodsStats[index].rating),
                         feeling: displayableMoodsStats[index].feeling,
                         totalOccurrence:
                             displayableMoodsStats[index].occurrence,
