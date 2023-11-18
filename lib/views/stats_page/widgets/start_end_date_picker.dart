@@ -137,7 +137,7 @@ class ShowDatePicker {
                 firstDayOfWeek:
                     utils.firstDayOfWeekInt(firstDayOfWeek: firstDayOfWeek),
               ),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
             ),
           );
         });
@@ -165,7 +165,7 @@ class ShowDatePicker {
                 firstDayOfWeek:
                     utils.firstDayOfWeekInt(firstDayOfWeek: firstDayOfWeek),
               ),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
             ),
           );
         });

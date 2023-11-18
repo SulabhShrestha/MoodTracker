@@ -17,11 +17,17 @@ import 'widgets/custom_list_tile.dart';
 /// Responsible for displaying drawer in the homepage
 ///
 
-class MorePage extends ConsumerWidget {
-  const MorePage({Key? key}) : super(key: key);
+class MorePage extends ConsumerStatefulWidget {
+  const MorePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MorePage> createState() => _MorePageState();
+}
+
+class _MorePageState extends ConsumerState<MorePage> {
+  bool isLoading = false;
+  @override
+  Widget build(BuildContext context) {
     final userViewModel = UserViewModel();
     return Scaffold(
       appBar: AppBar(
@@ -146,9 +152,12 @@ class MorePage extends ConsumerWidget {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () async {
-                await AuthViewModel().signOut();
+                setState((){
+                  isLoading = true;
+                });
+                await AuthViewModel().signOut().then((value) => setState(()=> isLoading=false));
               },
-              child: const Text("Log out"),
+              child: isLoading? const CircularProgressIndicator() : const Text("Log out"),
             ),
           ],
         ),

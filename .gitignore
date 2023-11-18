@@ -48,4 +48,6 @@ firebase*
 .firebaserc
 firestore*
 
+/android/key.properties
+
 
