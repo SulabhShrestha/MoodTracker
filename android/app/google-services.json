@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:348505891022:android:0682067a67ab72e034709f",
+        "mobilesdk_app_id": "1:348505891022:android:4bb7025e58f36c9934709f",
         "android_client_info": {
-          "package_name": "com.example.mood_tracker"
+          "package_name": "com.sulabhshrestha.mood_tracker"
         }
       },
       "oauth_client": [
@@ -42,6 +42,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "348505891022-k4n8ge7otkjf3s8u3abeni2hlnv5d66q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sulabhstha.mood_tracker",
+            "certificate_hash": "4240dbbf5bc057c3fc143f77af83f0acf7627591"
+          }
+        },
+        {
+          "client_id": "348505891022-pd6cd8fjg7huee7vdfl7ls55t3u0p8hq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sulabhstha.mood_tracker",
+            "certificate_hash": "7ecfca5802c013dc56c650ad5f27ddac7312c1de"
+          }
+        },
         {
           "client_id": "348505891022-m3uh4gc803n9j02sedkn3vm855pm1r3s.apps.googleusercontent.com",
           "client_type": 3
