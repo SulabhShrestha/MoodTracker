@@ -16,8 +16,8 @@ import 'utils.dart';
 
 class AddNewMood extends StatefulWidget {
   const AddNewMood({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AddNewMood> createState() => _AddNewMoodState();

@@ -6,6 +6,7 @@ import 'package:mood_tracker/view_models/email_view_model.dart';
 import 'package:mood_tracker/view_models/share_view_model.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
 import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
+import 'package:mood_tracker/views/continue_with_page/continue_with.dart';
 import 'package:mood_tracker/views/more_page/pages/data_delete_page.dart';
 import 'package:mood_tracker/views/more_page/widgets/first_day_selection.dart';
 
@@ -28,6 +29,7 @@ class _MorePageState extends ConsumerState<MorePage> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final userViewModel = UserViewModel();
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +71,7 @@ class _MorePageState extends ConsumerState<MorePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const DataDeletePage(),
+                      builder: (_) => DataDeletePage(),
                     ),
                   );
                 },
@@ -155,7 +157,10 @@ class _MorePageState extends ConsumerState<MorePage> {
                 setState((){
                   isLoading = true;
                 });
-                await AuthViewModel().signOut().then((value) => setState(()=> isLoading=false));
+                await AuthViewModel().signOut().then((value) {
+                  setState(()=> isLoading=false);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const ContinueWithPage()));
+                });
               },
               child: isLoading? const CircularProgressIndicator() : const Text("Log out"),
             ),

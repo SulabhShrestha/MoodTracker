@@ -55,6 +55,8 @@ class UserWebServices {
     await _auth.currentUser?.reauthenticateWithCredential(credential);
   }
 
+
+  /// deletes the current user and all the data associated with it
   Future<void> deleteUser() async {
     await _reauthenticateUser();
     await deleteUserData();

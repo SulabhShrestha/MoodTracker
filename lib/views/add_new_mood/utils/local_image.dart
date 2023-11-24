@@ -5,7 +5,7 @@ class LocalImage {
   // Open image gallery and pick an image
   static Future<String?> pickImageFromGallery() async {
     var pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 40);
 
     // return if user didn't select any
     if (pickedImage == null) {
@@ -25,7 +25,7 @@ class LocalImage {
 
   // Open camera and click image
   static Future<String?> pickImageFromCamera() async {
-    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 40);
 
     // return if user didn't select any
     if (pickedImage == null) {

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/auth_view_model.dart';
 import 'package:mood_tracker/view_models/local_storage_view_model.dart';
+import 'package:mood_tracker/views/root_page/root_page.dart';
 
 import '../core/button.dart';
 
@@ -38,7 +39,10 @@ class _ContinueWithPageState extends State<ContinueWithPage> {
                       isLoading = true;
                     });
                     await LocalStorageViewModel().setIsAppLaunchedFirstTime();
-                    await AuthViewModel().signInWithGoogle().onError((error, stackTrace){
+                    await AuthViewModel().signInWithGoogle().then((val){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const RootPage())); 
+                    }).onError((error, stackTrace){
+                      log("Sign in $error");
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Signing in failed"),));
                     });
                     setState(() {

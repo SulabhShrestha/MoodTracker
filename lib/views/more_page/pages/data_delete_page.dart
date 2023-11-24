@@ -1,17 +1,22 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/providers/homepage_key_provider.dart';
 import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/user_view_model.dart';
+import 'package:mood_tracker/views/continue_with_page/continue_with.dart';
 import 'package:mood_tracker/views/core/delete_confirmation_dialog.dart';
 import 'package:mood_tracker/views/more_page/widgets/custom_box.dart';
 import 'package:mood_tracker/views/more_page/widgets/custom_list_tile.dart';
 
-class DataDeletePage extends StatelessWidget {
-  const DataDeletePage({super.key});
+class DataDeletePage extends ConsumerWidget {
+  DataDeletePage({super.key});
+
+  final dataDeletePageKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Delete my data"),
@@ -20,6 +25,11 @@ class DataDeletePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
           children: [
+            TextButton(child: Text("Click"),onPressed: (){
+              // Navigating to
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const ContinueWithPage()));
+            }),
             CustomBox(
               child: Column(children: [
                 CustomListTile(
@@ -46,7 +56,18 @@ class DataDeletePage extends StatelessWidget {
                           ],
                         ),
                         onConfirm: () async {
-                          await UserViewModel().deleteUser();
+
+                          await UserViewModel().deleteUser().then((val){
+                            // First dialog, and then DataDeletePage
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            Navigator.of(ref.read(homePageKeyProvider).currentContext!).pushReplacement(MaterialPageRoute(builder: (context) => const ContinueWithPage()));
+
+                          }).onError((error, stackTrace) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Something went wrong")));
+                          });
                         },
                       ),
                     );

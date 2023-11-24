@@ -20,7 +20,7 @@ class EditDeleteCardItem extends ConsumerWidget {
       customEditAction; // for displaying edit page over search page
 
   const EditDeleteCardItem({
-    Key? key,
+    super.key,
     required this.timestamp,
     required this.date,
     required this.rating,
@@ -29,7 +29,7 @@ class EditDeleteCardItem extends ConsumerWidget {
     this.feedback,
     this.additionalDeleteAction,
     this.customEditAction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -11,7 +11,8 @@ import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
 import '../utils.dart' as utils;
 
 class StartEndDatePicker extends ConsumerStatefulWidget {
-  const StartEndDatePicker({Key? key}) : super(key: key);
+  final DateTime firstDate; // first date from the entered moods
+  const StartEndDatePicker({super.key, required this.firstDate});
 
   @override
   ConsumerState<StartEndDatePicker> createState() => _StartEndDatePickerState();
@@ -23,21 +24,11 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
 
   Map<String, DateTime> startEndTimes = {};
 
-  late DateTime firstDate;
-
-  @override
-  void initState() {
-    fetchNecessary();
-    super.initState();
-  }
-
-  void fetchNecessary() async {
-    firstDate = await CalendarListViewModel().getFirstEnteredMoodDateTime();
-  }
-
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
+
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -45,7 +36,7 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
               text: startText,
               onClick: () async {
                 var res = await ShowDatePicker().selectStartDate(
-                    context, firstDate, ref.watch(weekFirstDayProvider));
+                    context, widget.firstDate, ref.watch(weekFirstDayProvider));
                 if (res != null) {
                   startEndTimes["startDate"] = res;
                   setState(() {
@@ -57,7 +48,7 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
               text: endText,
               onClick: () async {
                 var res = await ShowDatePicker().selectEndDate(
-                    context, firstDate, ref.watch(weekFirstDayProvider));
+                    context, widget.firstDate, ref.watch(weekFirstDayProvider));
                 if (res != null) {
                   startEndTimes["endDate"] =
                       DateTime(res.year, res.month, res.day, 23, 59, 59, 999);
@@ -94,8 +85,7 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
 class DatePicker extends StatelessWidget {
   final String text;
   final VoidCallback onClick;
-  const DatePicker({Key? key, required this.text, required this.onClick})
-      : super(key: key);
+  const DatePicker({super.key, required this.text, required this.onClick});
 
   @override
   Widget build(BuildContext context) {

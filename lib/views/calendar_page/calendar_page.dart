@@ -9,10 +9,11 @@ import 'widgets/calendar.dart';
 /// This page is responsible for showing what happened in a specific month
 
 class CalendarPage extends StatelessWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+  const CalendarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar'),

@@ -7,35 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:348505891022:android:4bb7025e58f36c9934709f",
-        "android_client_info": {
-          "package_name": "com.sulabhshrestha.mood_tracker"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "348505891022-m3uh4gc803n9j02sedkn3vm855pm1r3s.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBxYO_eL7Tn7E3G8H24QZzj8dylyngZiT0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "348505891022-8c180mnaa4u6smt3afmq4hpsrah4v649.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:348505891022:android:f1cbc5fc417db70b34709f",
         "android_client_info": {
           "package_name": "com.sulabhstha.mood_tracker"
@@ -43,7 +14,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "348505891022-k4n8ge7otkjf3s8u3abeni2hlnv5d66q.apps.googleusercontent.com",
+          "client_id": "348505891022-135p7jaosctsdi7p9nr5msd4h1sd9qa5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sulabhstha.mood_tracker",
+            "certificate_hash": "e4c718b7fc27b97deb3dc15ccdfe61a1c128b484"
+          }
+        },
+        {
+          "client_id": "348505891022-1i3gu2d5k8cv2o478sat0g6qbs1j5m4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sulabhstha.mood_tracker",
+            "certificate_hash": "5b9064e769c7ace4e0863d396b30113ea86ed782"
+          }
+        },
+        {
+          "client_id": "348505891022-rbcaujtkpo7b09l6rvpn60puvbopl89j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sulabhstha.mood_tracker",
@@ -51,7 +38,7 @@
           }
         },
         {
-          "client_id": "348505891022-pd6cd8fjg7huee7vdfl7ls55t3u0p8hq.apps.googleusercontent.com",
+          "client_id": "348505891022-vjurnsb9ha2rkik4cb6c80ec8jk3tq62.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sulabhstha.mood_tracker",

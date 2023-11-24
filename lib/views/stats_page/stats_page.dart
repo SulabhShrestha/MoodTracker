@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
 
 import '../../view_models/stats_list_view_model.dart';
 import 'utils.dart';
@@ -73,21 +74,31 @@ class _StatsPageState extends State<StatsPage> {
                             dropDownButtonText = value;
                             rebuildWidget = true;
                           } else {
-                            var res = await showDialog<dynamic>(
-                                context: context,
-                                builder: (_) {
-                                  return const StartEndDatePicker();
-                                });
+                            CalendarListViewModel().getFirstEnteredMoodDateTime().then((date) async {
+                              var res = await showDialog<dynamic>(
+                                  context: context,
+                                  builder: (_) {
+                                    return StartEndDatePicker(
+                                      firstDate: date,
+                                    );
+                                  });
 
-                            if (res != null) {
-                              rebuildWidget = true;
-                              dropDownButtonText = value;
-                              filter = Filters.rangeDate;
-                              startTimestamp =
-                                  res["startDate"].millisecondsSinceEpoch;
-                              endTimestamp =
-                                  res["endDate"].millisecondsSinceEpoch;
-                            }
+                              if (res != null) {
+                                rebuildWidget = true;
+                                dropDownButtonText = value;
+                                filter = Filters.rangeDate;
+                                startTimestamp =
+                                    res["startDate"].millisecondsSinceEpoch;
+                                endTimestamp =
+                                    res["endDate"].millisecondsSinceEpoch;
+                              }
+                            }).onError((error, stackTrace){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Nothing to select."),
+                                ),
+                              );
+                            });
                           }
                           if (rebuildWidget) {
                             rebuildWidget = false;

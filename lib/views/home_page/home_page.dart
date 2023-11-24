@@ -14,12 +14,13 @@ import '../../utils/date_helper_utils.dart';
 import '../core/single_item_card.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(
     BuildContext context,
   ) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     return Stack(
       children: [
         // Content
@@ -55,6 +56,10 @@ class HomePage extends StatelessWidget {
                   snapshot.connectionState == ConnectionState.active) {
                 List<QueryDocumentSnapshot> listData =
                     snapshot.data!.docs.toList();
+
+                if(listData.isEmpty){
+                  return const Center(child: Text("Nothing to display"),);
+                }
 
                 final groupedData =
                     <String, List<QueryDocumentSnapshot>>{}; // date: List

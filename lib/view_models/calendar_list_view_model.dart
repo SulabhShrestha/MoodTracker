@@ -26,6 +26,12 @@ class CalendarListViewModel {
   }
 
   Future<DateTime> getFirstEnteredMoodDateTime() async {
-    return await _calendarWebServices.getFirstEnteredMoodDateTime();
+    try{
+      return await _calendarWebServices.getFirstEnteredMoodDateTime();
+    }
+    catch(e){
+      rethrow; // rethrowing the exception
+    }
+
   }
 }
