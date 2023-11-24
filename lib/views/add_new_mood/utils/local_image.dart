@@ -23,9 +23,8 @@ class LocalImage {
     }
   }
 
-  // Open camera and click image
   static Future<String?> pickImageFromCamera() async {
-    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 40);
+    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 70);
 
     // return if user didn't select any
     if (pickedImage == null) {
@@ -48,6 +47,7 @@ class LocalImage {
     return await ImageCropper().cropImage(
         sourcePath: filePath,
         aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+        compressQuality: 50,
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',

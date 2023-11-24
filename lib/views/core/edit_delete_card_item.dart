@@ -88,7 +88,9 @@ class EditDeleteCardItem extends ConsumerWidget {
                         onConfirm: () async {
                           additionalDeleteAction?.call();
                           MoodListViewModel()
-                              .deleteMood(timestamp: timestamp, date: date);
+                              .deleteMood(timestamp: timestamp, date: date).then((val){
+                                Navigator.of(context).pop();
+                          });
                         },
                       ),
                     );
