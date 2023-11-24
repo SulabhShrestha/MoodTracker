@@ -14,8 +14,6 @@ class MoodWebServices {
   Stream<QuerySnapshot<Map<String, dynamic>>> get moodsStream {
     var user = FirebaseAuth.instance.currentUser;
 
-    log("USER ID before sending: ${user?.uid}");
-
     return FirebaseFirestore.instance
         .collectionGroup('List')
         .where("userID", isEqualTo: user!.uid)
@@ -343,6 +341,6 @@ class MoodWebServices {
       "imagesPath": storageImagesPath,
       "feedbackArray": feedbackArray,
       "whyArray": whyArray,
-    });
+    }).then((value) => log("Mood Updated"));
   }
 }

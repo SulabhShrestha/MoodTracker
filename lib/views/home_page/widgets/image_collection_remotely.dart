@@ -101,6 +101,7 @@ class _ImageCollectionRemotelyState extends State<ImageCollectionRemotely> {
               );
             });
           } else if (snapshot.hasError) {
+            log("Error fetching images: ${snapshot.error}");
             return const Text("Something went wrong",
                 style: TextStyle(color: Colors.red, fontSize: 20));
           }

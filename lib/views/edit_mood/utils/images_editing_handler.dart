@@ -46,8 +46,9 @@ class ImagesEditingHandler {
       deletingImagePaths: deletingImagesPaths,
       date: date,
       timestamp: timestamp,
-      updateToFirestore: false,
     );
+
+    log("i might be the reason for your update");
 
     return saveImagesStoragePaths;
   }

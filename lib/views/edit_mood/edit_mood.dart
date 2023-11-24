@@ -64,6 +64,7 @@ class _EditMoodState extends State<EditMood> {
 
     if (imagesToSavePath.isNotEmpty) {
       // images is handled and updated to the firestore and storage
+      // firebase storage path is returned, which is to be added to the firestore
       storageImagesPath = await ImagesEditingHandler().handleImages(
           beforeImagesUrlPath: beforeImagesUrlPath,
           afterImagesPath: imagesToSavePath,
@@ -112,7 +113,12 @@ class _EditMoodState extends State<EditMood> {
             icon: const Icon(Icons.check),
             onPressed: () async {
               if (rating == 0) {
-                debugPrint("Rating is necessary");
+                // Showing snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Rating is necessary"),
+                  ),
+                );
               } else {
                 await editStuffs(onComplete: () {
                   Navigator.pop(context);
