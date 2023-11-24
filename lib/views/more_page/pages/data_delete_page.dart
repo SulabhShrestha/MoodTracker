@@ -25,11 +25,6 @@ class DataDeletePage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
           children: [
-            TextButton(child: Text("Click"),onPressed: (){
-              // Navigating to
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const ContinueWithPage()));
-            }),
             CustomBox(
               child: Column(children: [
                 CustomListTile(
@@ -68,6 +63,8 @@ class DataDeletePage extends ConsumerWidget {
                                 const SnackBar(
                                     content: Text("Something went wrong")));
                           });
+
+
                         },
                       ),
                     );
@@ -106,7 +103,12 @@ class DataDeletePage extends ConsumerWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Deleted successfully")));
+                          }).onError((error, stackTrace){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Something went wrong")));
                           });
+                          Navigator.of(context).pop();
                         },
                       ),
                     );
