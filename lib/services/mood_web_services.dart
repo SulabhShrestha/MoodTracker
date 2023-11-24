@@ -115,7 +115,7 @@ class MoodWebServices {
     return imagesDbPaths;
   }
 
-  // Responsible for removing images
+  /// Responsible for removing images
   Future<void> deleteImages({
     required List<String> deletingImagePaths,
     required String date,
@@ -272,8 +272,37 @@ class MoodWebServices {
     // There will be only one document having same timestamp
     String docId = firebaseData.docs.first.id;
 
-    await moodsRef.doc(docId).delete();
-    log("Deleted");
+    log("Deleting: ${firebaseData.docs.first.data()}");
+
+    try {
+      // Deleting images
+      List<dynamic> imagesPath = firebaseData.docs.first.get("imagesPath");
+      for (var path in imagesPath) {
+        log("Path: $path");
+        await _deleteFileFromStorage(path);
+      }
+
+      // Deleting document
+      await moodsRef.doc(docId).delete();
+      log("Deleted");
+    } catch (e) {
+      log("Error: $e");
+    }
+  }
+
+  Future<void> _deleteFileFromStorage(String fileLink) async {
+    // Extract the path from the provided link
+    String filePath = Uri.parse(fileLink).path;
+
+    // Get a reference to the storage instance
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    // Get a reference to the file
+    Reference fileReference = storage.ref().child(filePath);
+
+    // Delete the file
+    await fileReference.delete();
+    log('Image deleted successfully.');
   }
 
   Future<void> updateMood(
