@@ -6,9 +6,10 @@ import 'package:mood_tracker/utils/constant.dart';
 class DeleteConfirmationDialog extends StatefulWidget {
   final Future<void> Function() onConfirm;
   final Widget? content;
+  final bool? popAfterDelete;
 
   const DeleteConfirmationDialog(
-      {super.key, this.content, required this.onConfirm});
+      {super.key, this.content, required this.onConfirm, this.popAfterDelete = true});
 
   @override
   State<DeleteConfirmationDialog> createState() => _DeleteConfirmationDialogState();
@@ -39,7 +40,15 @@ class _DeleteConfirmationDialogState extends State<DeleteConfirmationDialog> {
             setState(() =>
               isLoading = true
             );
-            await widget.onConfirm();
+
+            await widget.onConfirm().then((val){
+
+              // might want to pop the dialog like in case of delete image from mood document
+              if(widget.popAfterDelete == true) {
+                Navigator.of(context).pop();
+              }
+            });
+
 
             setState(() => isLoading = false);
           },

@@ -67,30 +67,31 @@ class _ImageCollectionRemotelyState extends State<ImageCollectionRemotely> {
                           callback: () {
                             showDialog(
                               context: context,
-                              builder: (_) =>
-                                  DeleteConfirmationDialog(onConfirm: () async {
-                                log("Before: $dbImagesPath");
-                                // Received snapshot is the url path.
-                                // So, Getting the index of the path in the snapshot
-                                int index = snapshot.data!.indexOf(path);
+                              builder: (_) => DeleteConfirmationDialog(
+                                popAfterDelete: true,
+                                onConfirm: () async {
+                                  log("Before: $dbImagesPath");
+                                  // Received snapshot is the url path.
+                                  // So, Getting the index of the path in the snapshot
+                                  int index = snapshot.data!.indexOf(path);
 
-                                // Getting the db path using index
-                                var imageDbPath = dbImagesPath[index];
+                                  // Getting the db path using index
+                                  var imageDbPath = dbImagesPath[index];
 
-                                // removing the path from the list and sending the updated again to the db
-                                setState(() {
+                                  // removing the path from the list and sending the updated again to the db
                                   dbImagesPath.remove(imageDbPath);
-                                });
 
-                                MoodListViewModel().deleteImages(
-                                  deletingImagePaths: [
-                                    imageDbPath
-                                  ], // since imageDbPath is a single string
-                                  date: widget.date,
-                                  timestamp: widget.timestamp,
-                                  updatedImagesPath: dbImagesPath,
-                                );
-                              }),
+                                  MoodListViewModel().deleteImages(
+                                    deletingImagePaths: [
+                                      imageDbPath
+                                    ], // since imageDbPath is a single string
+                                    date: widget.date,
+                                    timestamp: widget.timestamp,
+                                    updatedImagesPath: dbImagesPath,
+                                  );
+
+                                },
+                              ),
                             );
                           },
                         ),
