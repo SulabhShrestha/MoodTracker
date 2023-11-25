@@ -26,10 +26,22 @@ class UserViewModel extends ChangeNotifier {
   }
 
   Future<void> deleteUser() async {
-    await _userWebServices.deleteUser();
+    try{
+      await _userWebServices.deleteUser();
+    }
+    catch(e){
+      rethrow;
+    }
   }
 
   Future<void> deleteUserData() async {
-    await _userWebServices.deleteUserData();
+    try{
+      await _userWebServices.deleteUserData();
+    }
+
+    catch(e){
+      rethrow;
+    }
+
   }
 }

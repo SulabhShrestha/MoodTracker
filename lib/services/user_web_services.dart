@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mood_tracker/services/mood_web_services.dart';
 
 /// This web services handles everything related to user's settings
 ///
@@ -65,16 +66,31 @@ class UserWebServices {
   }
 
   Future<void> deleteUserData() async {
-    FirebaseFirestore.instance
-        .collectionGroup('List')
-        .where('userID', isEqualTo: _auth.currentUser!.uid)
-        .get()
-        .then(
-      (querySnapshot) {
-        for (var doc in querySnapshot.docs) {
-          doc.reference.delete();
-        }
-      },
-    );
+    try{
+      FirebaseFirestore.instance
+          .collectionGroup('List')
+          .where('userID', isEqualTo: _auth.currentUser!.uid)
+          .get()
+          .then(
+            (querySnapshot) async{
+          for (var doc in querySnapshot.docs) {
+
+            // Deleting images first from the firestore storage
+            List<dynamic> imagesPathD = doc.get("imagesPath");
+            List<String> imagesPath = imagesPathD.map((e) => e.toString()).toList();
+
+            await MoodWebServices().deleteImages(deletingImagePaths: imagesPath, date: doc.get("date"), timestamp: doc.get("timestamp"));
+
+            // deleting the whole document
+            doc.reference.delete();
+          }
+        },
+      );
+    }
+
+    catch(e){
+      rethrow;
+    }
+
   }
 }
