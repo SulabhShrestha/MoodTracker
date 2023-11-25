@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/view_models/mood_list_view_model.dart';
 import 'package:mood_tracker/views/core/bordered_container.dart';
+import 'package:mood_tracker/views/core/required_field.dart';
 import 'package:mood_tracker/views/edit_mood/utils/images_editing_handler.dart';
 import 'package:mood_tracker/views/edit_mood/widgets/image_handler_locally.dart';
 
@@ -137,7 +138,7 @@ class _EditMoodState extends State<EditMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("How was your day?"),
+                    const RequiredField(),
                     EmojiPanel(
                       previousRating: widget.rating - 1,
                       onSelected: (index) {
@@ -153,7 +154,10 @@ class _EditMoodState extends State<EditMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Why did you feel this way?"),
+                    const Text(
+                      "Why did you feel this way?",
+                      style: TextStyle(fontSize: 20),
+                    ),
                     TextField(
                       controller: _whyController,
                       decoration: InputDecoration(
@@ -170,7 +174,10 @@ class _EditMoodState extends State<EditMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("What could go better?"),
+                    const Text(
+                      "What could go better?",
+                      style: TextStyle(fontSize: 20),
+                    ),
                     TextField(
                       controller: _feedbackController,
                       decoration: InputDecoration(
@@ -187,7 +194,10 @@ class _EditMoodState extends State<EditMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Photo"),
+                    const Text(
+                      "Photo",
+                      style: TextStyle(fontSize: 20),
+                    ),
 
                     // Displaying images are selecting
                     ImageHandlerLocally(

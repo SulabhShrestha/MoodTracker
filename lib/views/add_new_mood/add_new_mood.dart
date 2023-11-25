@@ -5,6 +5,7 @@ import 'package:mood_tracker/utils/constant.dart';
 import 'package:mood_tracker/utils/pop_up.dart';
 import 'package:mood_tracker/views/add_new_mood/utils/local_image.dart';
 import 'package:mood_tracker/views/core/image_viewer.dart';
+import 'package:mood_tracker/views/core/required_field.dart';
 
 import '../../view_models/mood_list_view_model.dart';
 import '../core/bordered_container.dart';
@@ -95,7 +96,7 @@ class _AddNewMoodState extends State<AddNewMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("How was your day?"),
+                    const RequiredField(),
                     EmojiPanel(
                       onSelected: (index) {
                         rating = index + 1;
@@ -110,7 +111,10 @@ class _AddNewMoodState extends State<AddNewMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Why did you feel this way?"),
+                    const Text(
+                      "Why did you feel this way?",
+                      style: TextStyle(fontSize: 20),
+                    ),
                     TextField(
                       controller: _whyController,
                     ),
@@ -122,7 +126,10 @@ class _AddNewMoodState extends State<AddNewMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("What could go better?"),
+                    const Text(
+                      "What could go better?",
+                      style: TextStyle(fontSize: 20),
+                    ),
                     TextField(
                       controller: _feedbackController,
                     ),
@@ -134,7 +141,10 @@ class _AddNewMoodState extends State<AddNewMood> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Photo"),
+                    const Text(
+                      "Photo",
+                      style: TextStyle(fontSize: 20),
+                    ),
 
                     // Displaying images that are selected
                     Center(
