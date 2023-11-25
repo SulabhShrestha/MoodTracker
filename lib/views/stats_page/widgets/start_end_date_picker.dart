@@ -1,12 +1,10 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/providers/week_first_day_provider.dart';
-import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
-import 'package:mood_tracker/view_models/week_first_day_view_model.dart';
+import 'package:mood_tracker/utils/constant.dart';
 
 import '../utils.dart' as utils;
 
@@ -26,9 +24,7 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
-
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -62,10 +58,16 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
       ),
       actions: <Widget>[
         TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Constant().colors.darkRed,
+          ),
           onPressed: () => Navigator.pop(context),
           child: const Text('Cancel'),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Constant().colors.blue,
+          ),
           onPressed: () {
             if (startText == endText) {
               log("Same");
@@ -91,14 +93,24 @@ class DatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onClick,
-      child: Container(
-        decoration: BoxDecoration(border: Border.all()),
-        child: Row(
-          children: [
-            const Icon(Icons.calendar_today),
-            const SizedBox(width: 4),
-            Text(text),
-          ],
+      child: Ink(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: onClick,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                const Icon(Icons.calendar_today),
+                const SizedBox(width: 4),
+                Text(text),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -112,6 +124,7 @@ class ShowDatePicker {
         context: context,
         builder: (_) {
           return Dialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16),
             child: CalendarDatePicker2WithActionButtons(
               onCancelTapped: () {
                 Navigator.of(context).pop(null);
@@ -140,6 +153,7 @@ class ShowDatePicker {
         context: context,
         builder: (_) {
           return Dialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16),
             child: CalendarDatePicker2WithActionButtons(
               onCancelTapped: () {
                 Navigator.of(context).pop(null);
