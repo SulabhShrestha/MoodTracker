@@ -128,7 +128,9 @@ class _MorePageState extends ConsumerState<MorePage> {
                   CustomListTile(
                     title: "Rate us",
                     leadingIconData: Icons.star_outlined,
-                    onTap: () {},
+                    onTap: () {
+                      ShareViewModel().rateApp();
+                    },
                   ),
                   CustomListTile(
                     title: "Contact us",
@@ -154,15 +156,18 @@ class _MorePageState extends ConsumerState<MorePage> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () async {
-                setState((){
+                setState(() {
                   isLoading = true;
                 });
                 await AuthViewModel().signOut().then((value) {
-                  setState(()=> isLoading=false);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const ContinueWithPage()));
+                  setState(() => isLoading = false);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const ContinueWithPage()));
                 });
               },
-              child: isLoading? const CircularProgressIndicator() : const Text("Log out"),
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text("Log out"),
             ),
           ],
         ),

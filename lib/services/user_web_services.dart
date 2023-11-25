@@ -59,10 +59,17 @@ class UserWebServices {
 
   /// deletes the current user and all the data associated with it
   Future<void> deleteUser() async {
-    await _reauthenticateUser();
-    await deleteUserData();
-    await _auth.currentUser!.delete();
-    await _auth.signOut();
+
+    try{
+      await _reauthenticateUser();
+      await deleteUserData();
+      await _auth.currentUser!.delete();
+      await _auth.signOut();
+    }
+
+    catch(e){
+      rethrow;
+    }
   }
 
   Future<void> deleteUserData() async {

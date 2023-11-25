@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/providers/homepage_key_provider.dart';
@@ -43,7 +41,7 @@ class DataDeletePage extends ConsumerWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "Warning: This will delete all your existing data and cannot be undone.",
+                              "Warning: This will delete all your existing data, account and cannot be undone.",
                               style: TextStyle(
                                 color: Constant().colors.red,
                               ),
@@ -51,20 +49,21 @@ class DataDeletePage extends ConsumerWidget {
                           ],
                         ),
                         onConfirm: () async {
-
-                          await UserViewModel().deleteUser().then((val){
+                          await UserViewModel().deleteUser().then((val) {
                             // First dialog, and then DataDeletePage
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
-                            Navigator.of(ref.read(homePageKeyProvider).currentContext!).pushReplacement(MaterialPageRoute(builder: (context) => const ContinueWithPage()));
-
+                            Navigator.of(ref
+                                    .read(homePageKeyProvider)
+                                    .currentContext!)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ContinueWithPage()));
                           }).onError((error, stackTrace) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Something went wrong")));
                           });
-
-
                         },
                       ),
                     );
@@ -91,7 +90,7 @@ class DataDeletePage extends ConsumerWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "Warning: This will delete all your existing data, account and cannot be undone.",
+                              "Warning: This will delete all your existing data and cannot be undone.",
                               style: TextStyle(
                                 color: Constant().colors.red,
                               ),
@@ -103,7 +102,7 @@ class DataDeletePage extends ConsumerWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Deleted successfully")));
-                          }).onError((error, stackTrace){
+                          }).onError((error, stackTrace) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Something went wrong")));
