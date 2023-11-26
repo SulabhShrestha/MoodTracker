@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
 
@@ -74,7 +76,9 @@ class _StatsPageState extends State<StatsPage> {
                             dropDownButtonText = value;
                             rebuildWidget = true;
                           } else {
-                            CalendarListViewModel().getFirstEnteredMoodDateTime().then((date) async {
+                            CalendarListViewModel()
+                                .getFirstEnteredMoodDateTime()
+                                .then((date) async {
                               var res = await showDialog<dynamic>(
                                   context: context,
                                   builder: (_) {
@@ -85,14 +89,20 @@ class _StatsPageState extends State<StatsPage> {
 
                               if (res != null) {
                                 rebuildWidget = true;
-                                dropDownButtonText = value;
+                                log("res: $res");
+                                String startDate = "", endDate = "";
+
+                                dropDownButtonText =
+                                    "${res["startDate"]} - ${res["endDate"]}"; // "2021-09-01 - 2021-09-30"
+
+                                log("Set Date: $dropDownButtonText");
                                 filter = Filters.rangeDate;
                                 startTimestamp =
                                     res["startDate"].millisecondsSinceEpoch;
                                 endTimestamp =
                                     res["endDate"].millisecondsSinceEpoch;
                               }
-                            }).onError((error, stackTrace){
+                            }).onError((error, stackTrace) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("Nothing to select."),

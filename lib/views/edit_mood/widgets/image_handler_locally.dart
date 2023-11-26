@@ -68,7 +68,6 @@ class _ImageHandlerLocallyState extends State<ImageHandlerLocally> {
       // and the changes made to the [localImagesPath] reflects to [urlImagePath]
       localImagesPath = List<String>.from(urlImagesPath);
 
-      log("URL: $urlImagesPath");
       setState(() {
         showLoading = false;
       });

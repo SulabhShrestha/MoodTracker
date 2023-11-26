@@ -67,16 +67,26 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
         TextButton(
           style: TextButton.styleFrom(
             backgroundColor: Constant().colors.blue,
+            disabledBackgroundColor: Colors.grey,
           ),
-          onPressed: () {
-            if (startText == endText) {
-              log("Same");
-            } else if (startText == "Start Date" || endText == "End Date") {
-              log("Empty date");
-            } else {
-              Navigator.pop<Map<String, DateTime>>(context, startEndTimes);
-            }
-          },
+          onPressed: (startText.contains("Date") || endText.contains("Date"))
+              ? null
+              : () {
+                  if (startText == endText) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content:
+                            Text("Start date and end date cannot be the same."),
+                      ),
+                    );
+                  } else if (startText == "Start Date" ||
+                      endText == "End Date") {
+                    log("Empty date");
+                  } else {
+                    Navigator.pop<Map<String, DateTime>>(
+                        context, startEndTimes);
+                  }
+                },
           child: const Text('OK'),
         ),
       ],

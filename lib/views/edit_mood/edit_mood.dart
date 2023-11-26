@@ -195,7 +195,7 @@ class _EditMoodState extends State<EditMood> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Photo",
+                      "Images",
                       style: TextStyle(fontSize: 20),
                     ),
 

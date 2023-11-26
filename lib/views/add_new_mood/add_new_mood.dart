@@ -142,7 +142,7 @@ class _AddNewMoodState extends State<AddNewMood> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Photo",
+                      "Images",
                       style: TextStyle(fontSize: 20),
                     ),
 
