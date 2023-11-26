@@ -79,9 +79,6 @@ class _StartEndDatePickerState extends ConsumerState<StartEndDatePicker> {
                             Text("Start date and end date cannot be the same."),
                       ),
                     );
-                  } else if (startText == "Start Date" ||
-                      endText == "End Date") {
-                    log("Empty date");
                   } else {
                     Navigator.pop<Map<String, DateTime>>(
                         context, startEndTimes);

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mood_tracker/view_models/calendar_list_view_model.dart';
 
@@ -88,19 +86,16 @@ class _StatsPageState extends State<StatsPage> {
                                   });
 
                               if (res != null) {
-                                rebuildWidget = true;
-                                log("res: $res");
-                                String startDate = "", endDate = "";
+                                setState(() {
+                                  dropDownButtonText =
+                                      "${res["startDate"].month}/${res["startDate"].day} - ${res["endDate"].month}/${res["endDate"].day}"; // "2021-09-01 - 2021-09-30"
 
-                                dropDownButtonText =
-                                    "${res["startDate"]} - ${res["endDate"]}"; // "2021-09-01 - 2021-09-30"
-
-                                log("Set Date: $dropDownButtonText");
-                                filter = Filters.rangeDate;
-                                startTimestamp =
-                                    res["startDate"].millisecondsSinceEpoch;
-                                endTimestamp =
-                                    res["endDate"].millisecondsSinceEpoch;
+                                  filter = Filters.rangeDate;
+                                  startTimestamp =
+                                      res["startDate"].millisecondsSinceEpoch;
+                                  endTimestamp =
+                                      res["endDate"].millisecondsSinceEpoch;
+                                });
                               }
                             }).onError((error, stackTrace) {
                               ScaffoldMessenger.of(context).showSnackBar(
